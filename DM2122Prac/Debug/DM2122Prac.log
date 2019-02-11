@@ -1,0 +1,8 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (DM2122Prac.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  FPSCamera.cpp
+d:\documents\github\sp2\dm2122prac\source\fpscamera.cpp(83): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\documents\github\sp2\dm2122prac\source\fpscamera.cpp(87): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\documents\github\sp2\dm2122prac\source\fpscamera.cpp(91): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\documents\github\sp2\dm2122prac\source\fpscamera.cpp(95): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  DM2122Prac.vcxproj -> D:\Documents\GitHub\SP2\Debug\Studio Project 2.exe
