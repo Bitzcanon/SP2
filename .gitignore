@@ -1,0 +1,9 @@
+
+*.opendb
+
+*.tlog
+
+*.log
+
+*.user
+*.suo
