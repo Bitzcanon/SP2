@@ -108,7 +108,7 @@ void SP2_TrackScene::Init()
 
 	//Initialise initial Camera position
 	//camera.Init(Vector3(0, 20, 1), Vector3(0, 20, 0), Vector3(0, 1, 0)); //For Camera3
-	camera.Init(Vector3(0, 20, 1)); //For FPS Camera (Only for NPCScene, testing in TrackScene
+	camera.Init(Vector3(0, 5, 5)); //For FPS Camera (Only for NPCScene, testing in TrackScene
 
 	//Light parameters
 	//Lower floor lighting

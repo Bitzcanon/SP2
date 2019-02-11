@@ -94,14 +94,12 @@ void FPSCamera::Update(double dt)
 	{
 		position -= front * FPSCamera_SPEED * dt;
 	}
-	if (Application::IsKeyPressed('Q'))
+
+	//To prevent the player from flying
+	/*if (position.y < 5 || position.y > 5)
 	{
-		position += Vector3(0, 1, 0) * 0.75f;
-	}
-	if (Application::IsKeyPressed('E'))
-	{
-		position += Vector3(0, -1, 0) * 0.75f;
-	}
+		position.y = 5;
+	}*/
 
 	UpdateMouse();
 
