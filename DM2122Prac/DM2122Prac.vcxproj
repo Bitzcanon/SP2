@@ -143,6 +143,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Buffs.cpp" />
+    <ClCompile Include="Car.cpp" />
+    <ClCompile Include="Coins.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\FPSCamera.cpp" />
     <ClCompile Include="Source\Music.cpp" />
@@ -157,8 +160,12 @@
     <ClCompile Include="Source\SP2_NPCScene.cpp" />
     <ClCompile Include="Source\SP2_TrackScene.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
+    <ClCompile Include="Traps.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Buffs.h" />
+    <ClInclude Include="Car.h" />
+    <ClInclude Include="Coins.h" />
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\FPSCamera.h" />
     <ClInclude Include="Source\Music.h" />
@@ -176,6 +183,7 @@
     <ClInclude Include="Source\SP2_TrackScene.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />
+    <ClInclude Include="Traps.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\Text.fragmentshader" />
