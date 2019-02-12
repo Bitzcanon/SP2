@@ -7,6 +7,7 @@
 #include "Utility.h"
 #include "LoadTGA.h"
 #include "LoadOBJ.h"
+#include "SpeedBuff.h"
 
 SP2_TrackScene::SP2_TrackScene()
 {
@@ -20,6 +21,7 @@ SP2_TrackScene::~SP2_TrackScene()
 
 void SP2_TrackScene::Init()
 {
+
 	//Set background color to dark blue (Before this are initialized variables, after is the rest)
 	glClearColor(0.0f, 0.0f, 0.3f, 0.0f);
 
@@ -186,19 +188,31 @@ void SP2_TrackScene::Init()
 	{
 		meshList[i] = NULL;
 	}
+
 	//Skyboxes: http://www.custommapmakers.org/skyboxes.php
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
+	
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("RIGHT", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
+	
 	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("TOP", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
+	
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("BOTTOM", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
+
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("FRONT", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
+
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
+	// End of skybox
+
+	//Buffs located here
+	/*meshList[GEO_SPEEDBUFF] = MeshBuilder::GenerateOBJ("Speed Boost", "OBJ//SpeedBoost.obj");
+	meshList[GEO_SPEEDBUFF]->textureID = LoadTGA("Image//SpeedBoostTexture.tga");*/
+	//
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
@@ -219,14 +233,25 @@ void SP2_TrackScene::Init()
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
 	projectionStack.LoadMatrix(projection);
+}
 
-	//Initialise variables and objects
-	isDrivingRight = false;
-	isDrivingLeft = false;
-	accelerationZ = 0;
-	accelerationX = 0;
-	velocityZ = 0;
-	velocityX = 0;
+void SP2_TrackScene::UpdateBuff(double dt)
+{
+	if (//code for boundary here to test if player has crossed the thing.)
+	{
+		SBuff.setTimer(10); //set the timer to 10 seconds.
+	}
+
+	if (SBuff.returnTimer() >= 0) // if buff still lasts
+	{
+		SBuff.setTimer(SBuff.returnTimer() - 10 * dt); // continue minusing the time
+		//player.acceleration = _ //player.speed = _
+	}
+	else
+	{
+		//player.acceleration = original acceleration // player.speed = original speed.
+	}
+	
 }
 
 void SP2_TrackScene::Update(double dt)
@@ -252,92 +277,7 @@ void SP2_TrackScene::Update(double dt)
 	}
 	UpdateFrameRate(FPS);
 
-	if (Application::IsKeyPressed(VK_UP))
-	{
-		isDrivingForward = true;
-		accelerationX += 0.1;
-		velocityX += (float)(accelerationX * dt);
-	}
-	if (isDrivingForward)
-	{
-		if (!Application::IsKeyPressed(VK_UP))
-		{
-			accelerationX -= 0.5;
-			velocityX += (float)(accelerationX * dt);
-			if (accelerationX < 0)
-			{
-				accelerationX = 0;
-				isDrivingForward = false;
-			}
-		}
-	}
-	if (Application::IsKeyPressed(VK_DOWN))
-	{
-		isDrivingBackward = true;
-		accelerationX -= 0.1;
-		velocityX += (float)(accelerationX * dt);
-	}
-	if (isDrivingBackward)
-	{
-		if (!Application::IsKeyPressed(VK_DOWN))
-		{
-			accelerationX += 0.5;
-			velocityX += (float)(accelerationX * dt);
-			if (accelerationX > 0)
-			{
-				accelerationX = 0;
-				isDrivingBackward = false;
-			}
-		}
-	}
-	if (accelerationX > 10)
-	{
-		accelerationX = 10;
-	}
-
-	if (Application::IsKeyPressed(VK_LEFT))
-	{
-		isDrivingLeft = true;
-		accelerationZ -= 0.1;
-		velocityZ += (float)(accelerationZ * dt);
-	}
-	if (isDrivingLeft)
-	{
-		if (!Application::IsKeyPressed(VK_LEFT))
-		{
-			accelerationZ += 0.5;
-			velocityZ += (float)(accelerationZ * dt);
-			if (accelerationZ > 0)
-			{
-				accelerationZ = 0;
-				isDrivingLeft = false;
-			}
-		}
-	}
-
-	if (Application::IsKeyPressed(VK_RIGHT))
-	{
-		isDrivingRight = true;
-		accelerationZ += 0.1;
-		velocityZ += (float)(accelerationZ * dt);
-	}
-	if (isDrivingRight)
-	{
-		if (!Application::IsKeyPressed(VK_RIGHT))
-		{
-			accelerationZ -= 0.5;
-			velocityZ += (float)(accelerationZ * dt);
-			if (accelerationZ < 0)
-			{
-				accelerationZ = 0;
-				isDrivingRight = false;
-			}
-		}
-	}
-	if (accelerationZ > 10)
-	{
-		accelerationZ = 10;
-	}
+	SceneCar.Update(dt);
 
 	//Check for camera bounds on skybox
 	if (camera.position.x < 500.f && camera.position.x > -500.f && camera.position.z < 500.f && camera.position.z > -500.f && camera.position.y < 700 && camera.position.y > 0)
@@ -629,9 +569,10 @@ void SP2_TrackScene::Render()
 	//Draw Axes (For debugging purposes)
 	RenderMesh(meshList[GEO_AXES], false);
 	
+	//Draw Track
 	modelStack.PushMatrix();
 	{
-		modelStack.Scale(25, 25, 25);
+		modelStack.Scale(35, 25, 35);
 		modelStack.Translate(0, -0.495f, 0);
 
 		RenderMesh(meshList[GEO_TRACK], true);
@@ -643,7 +584,8 @@ void SP2_TrackScene::Render()
 	{
 		modelStack.Scale(10, 10, 10);
 		
-		modelStack.Translate(velocityX, 0, velocityZ);
+		modelStack.Translate(SceneCar.newXpos, SceneCar.newYpos, SceneCar.newZpos);
+		modelStack.Rotate(SceneCar.steerAngle, 0, 1, 0);
 
 		RenderMesh(meshList[GEO_TESTCAR], true);
 	}
@@ -672,6 +614,14 @@ void SP2_TrackScene::Render()
 
 	}
 	modelStack.PopMatrix();
+
+	//Generate OBJS AFTER HERE
+
+	modelStack.PushMatrix();
+	modelStack.Scale(10, 10, 10);
+	modelStack.Translate(0, 0, 0);
+	RenderMesh(meshList[GEO_SPEEDBUFF], true);
+
 }
 
 void SP2_TrackScene::Exit()

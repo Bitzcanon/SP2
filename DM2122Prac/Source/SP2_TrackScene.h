@@ -89,6 +89,7 @@ private:
 		GEO_FRONT,
 		GEO_BACK,
 
+		GEO_SPEEDBUFF,
 		GEO_TRACK,
 		GEO_TESTCAR,
 
@@ -101,6 +102,9 @@ public:
 
 	virtual void Init();
 	virtual void Update(double dt);
+
+	virtual void UpdateBuff(double dt);
+
 	virtual void Render();
 	virtual void Exit();
 
@@ -122,16 +126,13 @@ private:
 	
 	string UpdateFrameRate(float string);
 
+	//Declaration of buffs in the header file
+	SpeedBuff SBuff;
+
+
 	float FPS;
 
-	bool isDrivingForward;
-	bool isDrivingBackward;
-	bool isDrivingRight;
-	bool isDrivingLeft;
-	float accelerationZ;
-	float accelerationX;
-	float velocityZ;
-	float velocityX;
+	Car SceneCar;
 };
 
 #endif // ! SP2_TrackScene_H

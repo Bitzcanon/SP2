@@ -95,6 +95,20 @@ void FPSCamera::Update(double dt)
 		position -= front * FPSCamera_SPEED * dt;
 	}
 
+	//testing purposes
+	Vector3 view = (target - position).Normalized();
+	if (Application::IsKeyPressed('Q'))
+	{
+		position = position + up;
+		target = position + view;
+	}
+	if (Application::IsKeyPressed('E'))
+	{
+		position = position - up;
+		target = position + view;
+	}
+	//
+
 	//To prevent the player from flying
 	/*if (position.y < 5 || position.y > 5)
 	{
