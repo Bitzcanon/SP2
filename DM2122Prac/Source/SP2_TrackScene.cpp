@@ -7,6 +7,7 @@
 #include "Utility.h"
 #include "LoadTGA.h"
 #include "LoadOBJ.h"
+#include "SpeedBuff.h"
 
 SP2_TrackScene::SP2_TrackScene()
 {
@@ -20,6 +21,7 @@ SP2_TrackScene::~SP2_TrackScene()
 
 void SP2_TrackScene::Init()
 {
+
 	//Set background color to dark blue (Before this are initialized variables, after is the rest)
 	glClearColor(0.0f, 0.0f, 0.3f, 0.0f);
 
@@ -186,19 +188,31 @@ void SP2_TrackScene::Init()
 	{
 		meshList[i] = NULL;
 	}
+
 	//Skyboxes: http://www.custommapmakers.org/skyboxes.php
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
+	
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("RIGHT", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
+	
 	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("TOP", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
+	
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("BOTTOM", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
+
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("FRONT", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
+
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
+	// End of skybox
+
+	//Buffs located here
+	meshList[GEO_SPEEDBUFF] = MeshBuilder::GenerateOBJ("Speed Boost", "OBJ//SpeedBoost.obj");
+	meshList[GEO_SPEEDBUFF]->textureID = LoadTGA("Image//SpeedBoostTexture.tga");
+	//
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
@@ -215,6 +229,25 @@ void SP2_TrackScene::Init()
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
 	projectionStack.LoadMatrix(projection);
+}
+
+void SP2_TrackScene::UpdateBuff(double dt)
+{
+	if (//code for boundary here to test if player has crossed the thing.)
+	{
+		SBuff.setTimer(10); //set the timer to 10 seconds.
+	}
+
+	if (SBuff.returnTimer() >= 0) // if buff still lasts
+	{
+		SBuff.setTimer(SBuff.returnTimer() - 10 * dt); // continue minusing the time
+		//player.acceleration = _ //player.speed = _
+	}
+	else
+	{
+		//player.acceleration = original acceleration // player.speed = original speed.
+	}
+	
 }
 
 void SP2_TrackScene::Update(double dt)
@@ -554,6 +587,14 @@ void SP2_TrackScene::Render()
 
 	}
 	modelStack.PopMatrix();
+
+	//Generate OBJS AFTER HERE
+
+	modelStack.PushMatrix();
+	modelStack.Scale(10, 10, 10);
+	modelStack.Translate(0, 0, 0);
+	RenderMesh(meshList[GEO_SPEEDBUFF], true);
+
 }
 
 void SP2_TrackScene::Exit()

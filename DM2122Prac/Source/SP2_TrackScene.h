@@ -87,6 +87,8 @@ private:
 		GEO_FRONT,
 		GEO_BACK,
 
+		GEO_SPEEDBUFF,
+
 		NUM_GEOMETRY,
 	};
 
@@ -96,6 +98,9 @@ public:
 
 	virtual void Init();
 	virtual void Update(double dt);
+
+	virtual void UpdateBuff(double dt);
+
 	virtual void Render();
 	virtual void Exit();
 
@@ -116,6 +121,10 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	
 	string UpdateFrameRate(float string);
+
+	//Declaration of buffs in the header file
+	SpeedBuff SBuff;
+
 
 	float FPS;
 };

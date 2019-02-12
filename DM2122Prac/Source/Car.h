@@ -8,7 +8,7 @@ public:
 private:
 	float speed;
 	float acceleration;
-	float health
+	float health;
 	//float weight;
 
 };
