@@ -11,7 +11,7 @@
 
 SP2_TrackScene::SP2_TrackScene()
 {
-	
+
 }
 
 SP2_TrackScene::~SP2_TrackScene()
@@ -210,8 +210,8 @@ void SP2_TrackScene::Init()
 	// End of skybox
 
 	//Buffs located here
-	meshList[GEO_SPEEDBUFF] = MeshBuilder::GenerateOBJ("Speed Boost", "OBJ//SpeedBoost.obj");
-	meshList[GEO_SPEEDBUFF]->textureID = LoadTGA("Image//SpeedBoostTexture.tga");
+	/*meshList[GEO_SPEEDBUFF] = MeshBuilder::GenerateOBJ("Speed Boost", "OBJ//SpeedBoost.obj");
+	meshList[GEO_SPEEDBUFF]->textureID = LoadTGA("Image//SpeedBoostTexture.tga");*/
 	//
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
@@ -219,6 +219,10 @@ void SP2_TrackScene::Init()
 
 	meshList[GEO_PROMPT] = MeshBuilder::GenerateText("prompt", 16, 16);
 	meshList[GEO_PROMPT]->textureID = LoadTGA("Image//calibri.tga");
+
+	meshList[GEO_TESTCAR] = MeshBuilder::GenerateCube("Car", Color(0, 1, 0), 5, 1, 1);
+
+	meshList[GEO_TRACK] = MeshBuilder::GenerateOBJ("modelTrack", "OBJ//Track.obj");
 
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 
@@ -229,6 +233,14 @@ void SP2_TrackScene::Init()
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
 	projectionStack.LoadMatrix(projection);
+
+	//Initialise variables and objects
+	isDrivingRight = false;
+	isDrivingLeft = false;
+	accelerationZ = 0;
+	accelerationX = 0;
+	velocityZ = 0;
+	velocityX = 0;
 }
 
 void SP2_TrackScene::UpdateBuff(double dt)
@@ -271,8 +283,94 @@ void SP2_TrackScene::Update(double dt)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Toggle wireframe mode
 	}
-
 	UpdateFrameRate(FPS);
+
+	if (Application::IsKeyPressed(VK_UP) && isDrivingBackward == false)
+	{
+		isDrivingForward = true;
+		accelerationX += 0.1;
+		velocityX += (float)(accelerationX * dt);
+	}
+	if (isDrivingForward)
+	{
+		if (!Application::IsKeyPressed(VK_UP))
+		{
+			accelerationX -= 0.7;
+			velocityX += (float)(accelerationX * dt);
+			if (accelerationX < 0)
+			{
+				accelerationX = 0;
+				isDrivingForward = false;
+			}
+		}
+	}
+	if (Application::IsKeyPressed(VK_DOWN) && isDrivingForward == false)
+	{
+		isDrivingBackward = true;
+		accelerationX -= 0.1;
+		velocityX += (float)(accelerationX * dt);
+	}
+	if (isDrivingBackward)
+	{
+		if (!Application::IsKeyPressed(VK_DOWN))
+		{
+			accelerationX += 0.7;
+			velocityX += (float)(accelerationX * dt);
+			if (accelerationX > 0)
+			{
+				accelerationX = 0;
+				isDrivingBackward = false;
+			}
+		}
+	}
+	if (accelerationX > 10)
+	{
+		accelerationX = 10;
+	}
+
+	if (Application::IsKeyPressed(VK_LEFT) && isDrivingRight == false)
+	{
+		isDrivingLeft = true;
+		accelerationZ -= 0.1;
+		velocityZ += (float)(accelerationZ * dt);
+	}
+	if (isDrivingLeft)
+	{
+		if (!Application::IsKeyPressed(VK_LEFT))
+		{
+			accelerationZ += 0.7;
+			velocityZ += (float)(accelerationZ * dt);
+			if (accelerationZ > 0)
+			{
+				accelerationZ = 0;
+				isDrivingLeft = false;
+			}
+		}
+	}
+
+	if (Application::IsKeyPressed(VK_RIGHT) && isDrivingLeft == false)
+	{
+		isDrivingRight = true;
+		accelerationZ += 0.1;
+		velocityZ += (float)(accelerationZ * dt);
+	}
+	if (isDrivingRight)
+	{
+		if (!Application::IsKeyPressed(VK_RIGHT))
+		{
+			accelerationZ -= 0.7;
+			velocityZ += (float)(accelerationZ * dt);
+			if (accelerationZ < 0)
+			{
+				accelerationZ = 0;
+				isDrivingRight = false;
+			}
+		}
+	}
+	if (accelerationZ > 10)
+	{
+		accelerationZ = 10;
+	}
 
 	//Check for camera bounds on skybox
 	if (camera.position.x < 500.f && camera.position.x > -500.f && camera.position.z < 500.f && camera.position.z > -500.f && camera.position.y < 700 && camera.position.y > 0)
@@ -563,6 +661,27 @@ void SP2_TrackScene::Render()
 
 	//Draw Axes (For debugging purposes)
 	RenderMesh(meshList[GEO_AXES], false);
+	
+	//Draw Track
+	modelStack.PushMatrix();
+	{
+		modelStack.Scale(35, 25, 35);
+		modelStack.Translate(0, -0.495f, 0);
+
+		RenderMesh(meshList[GEO_TRACK], true);
+	}
+	modelStack.PopMatrix();
+
+	//Draw Test Car
+	modelStack.PushMatrix();
+	{
+		modelStack.Scale(10, 10, 10);
+		
+		modelStack.Translate(velocityX, 0, velocityZ);
+
+		RenderMesh(meshList[GEO_TESTCAR], true);
+	}
+	modelStack.PopMatrix();
 
 	//Draw Skybox
 	modelStack.PushMatrix();
