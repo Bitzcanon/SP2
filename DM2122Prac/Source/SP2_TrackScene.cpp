@@ -10,7 +10,7 @@
 
 SP2_TrackScene::SP2_TrackScene()
 {
-	
+
 }
 
 SP2_TrackScene::~SP2_TrackScene()
@@ -206,6 +206,10 @@ void SP2_TrackScene::Init()
 	meshList[GEO_PROMPT] = MeshBuilder::GenerateText("prompt", 16, 16);
 	meshList[GEO_PROMPT]->textureID = LoadTGA("Image//calibri.tga");
 
+	meshList[GEO_TESTCAR] = MeshBuilder::GenerateCube("Car", Color(0, 1, 0), 5, 1, 1);
+
+	meshList[GEO_TRACK] = MeshBuilder::GenerateOBJ("modelTrack", "OBJ//Track.obj");
+
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("Light Sphere", Color(1.f, 1.f, 1.f), 32, 36, 1.f);
@@ -215,6 +219,14 @@ void SP2_TrackScene::Init()
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
 	projectionStack.LoadMatrix(projection);
+
+	//Initialise variables and objects
+	isDrivingRight = false;
+	isDrivingLeft = false;
+	accelerationZ = 0;
+	accelerationX = 0;
+	velocityZ = 0;
+	velocityX = 0;
 }
 
 void SP2_TrackScene::Update(double dt)
@@ -238,8 +250,94 @@ void SP2_TrackScene::Update(double dt)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Toggle wireframe mode
 	}
-
 	UpdateFrameRate(FPS);
+
+	if (Application::IsKeyPressed(VK_UP))
+	{
+		isDrivingForward = true;
+		accelerationX += 0.1;
+		velocityX += (float)(accelerationX * dt);
+	}
+	if (isDrivingForward)
+	{
+		if (!Application::IsKeyPressed(VK_UP))
+		{
+			accelerationX -= 0.5;
+			velocityX += (float)(accelerationX * dt);
+			if (accelerationX < 0)
+			{
+				accelerationX = 0;
+				isDrivingForward = false;
+			}
+		}
+	}
+	if (Application::IsKeyPressed(VK_DOWN))
+	{
+		isDrivingBackward = true;
+		accelerationX -= 0.1;
+		velocityX += (float)(accelerationX * dt);
+	}
+	if (isDrivingBackward)
+	{
+		if (!Application::IsKeyPressed(VK_DOWN))
+		{
+			accelerationX += 0.5;
+			velocityX += (float)(accelerationX * dt);
+			if (accelerationX > 0)
+			{
+				accelerationX = 0;
+				isDrivingBackward = false;
+			}
+		}
+	}
+	if (accelerationX > 10)
+	{
+		accelerationX = 10;
+	}
+
+	if (Application::IsKeyPressed(VK_LEFT))
+	{
+		isDrivingLeft = true;
+		accelerationZ -= 0.1;
+		velocityZ += (float)(accelerationZ * dt);
+	}
+	if (isDrivingLeft)
+	{
+		if (!Application::IsKeyPressed(VK_LEFT))
+		{
+			accelerationZ += 0.5;
+			velocityZ += (float)(accelerationZ * dt);
+			if (accelerationZ > 0)
+			{
+				accelerationZ = 0;
+				isDrivingLeft = false;
+			}
+		}
+	}
+
+	if (Application::IsKeyPressed(VK_RIGHT))
+	{
+		isDrivingRight = true;
+		accelerationZ += 0.1;
+		velocityZ += (float)(accelerationZ * dt);
+	}
+	if (isDrivingRight)
+	{
+		if (!Application::IsKeyPressed(VK_RIGHT))
+		{
+			accelerationZ -= 0.5;
+			velocityZ += (float)(accelerationZ * dt);
+			if (accelerationZ < 0)
+			{
+				accelerationZ = 0;
+				isDrivingRight = false;
+			}
+		}
+	}
+	if (accelerationZ > 10)
+	{
+		accelerationZ = 10;
+	}
 
 	//Check for camera bounds on skybox
 	if (camera.position.x < 500.f && camera.position.x > -500.f && camera.position.z < 500.f && camera.position.z > -500.f && camera.position.y < 700 && camera.position.y > 0)
@@ -530,6 +628,26 @@ void SP2_TrackScene::Render()
 
 	//Draw Axes (For debugging purposes)
 	RenderMesh(meshList[GEO_AXES], false);
+	
+	modelStack.PushMatrix();
+	{
+		modelStack.Scale(25, 25, 25);
+		modelStack.Translate(0, -0.495f, 0);
+
+		RenderMesh(meshList[GEO_TRACK], true);
+	}
+	modelStack.PopMatrix();
+
+	//Draw Test Car
+	modelStack.PushMatrix();
+	{
+		modelStack.Scale(10, 10, 10);
+		
+		modelStack.Translate(velocityX, 0, velocityZ);
+
+		RenderMesh(meshList[GEO_TESTCAR], true);
+	}
+	modelStack.PopMatrix();
 
 	//Draw Skybox
 	modelStack.PushMatrix();

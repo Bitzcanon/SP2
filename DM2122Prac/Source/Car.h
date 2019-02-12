@@ -1,4 +1,8 @@
 #pragma once
+#include "Mtx44.h"
+#include "Application.h"
+#include "Utility.h"
+
 class Car
 {
 public:
@@ -8,7 +12,8 @@ public:
 private:
 	float speed;
 	float acceleration;
-	float health
+	float steerAngle;
+	float health;
 	//float weight;
 
 };
