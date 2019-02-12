@@ -60,16 +60,16 @@
     <ClCompile Include="Source\FPSCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Car.cpp">
+    <ClCompile Include="Source\Car.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Traps.cpp">
+    <ClCompile Include="Source\Coins.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Buffs.cpp">
+    <ClCompile Include="Source\Traps.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Coins.cpp">
+    <ClCompile Include="Source\Buffs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -125,16 +125,16 @@
     <ClInclude Include="Source\SP2_TrackScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Car.h">
+    <ClInclude Include="Source\Buffs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Traps.h">
+    <ClInclude Include="Source\Car.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Buffs.h">
+    <ClInclude Include="Source\Coins.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Coins.h">
+    <ClInclude Include="Source\Traps.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

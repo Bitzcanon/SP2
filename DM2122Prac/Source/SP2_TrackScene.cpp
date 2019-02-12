@@ -8,7 +8,6 @@
 #include "LoadTGA.h"
 #include "LoadOBJ.h"
 
-
 SP2_TrackScene::SP2_TrackScene()
 {
 	
