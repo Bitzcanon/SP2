@@ -5,7 +5,6 @@
 #include "MyMath.h"
 
 #include "Location.h"
-
 class Car
 {
 public:

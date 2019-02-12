@@ -254,6 +254,25 @@ void SP2_TrackScene::UpdateBuff(double dt)
 	
 }
 
+void SP2_TrackScene::UpdateBuff(double dt)
+{
+	if (//code for boundary here to test if player has crossed the thing.)
+	{
+		SBuff.setTimer(10); //set the timer to 10 seconds.
+	}
+
+	if (SBuff.returnTimer() >= 0) // if buff still lasts
+	{
+		SBuff.setTimer(SBuff.returnTimer() - 10 * dt); // continue minusing the time
+		//player.acceleration = _ //player.speed = _
+	}
+	else
+	{
+		//player.acceleration = original acceleration // player.speed = original speed.
+	}
+	
+}
+
 void SP2_TrackScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;

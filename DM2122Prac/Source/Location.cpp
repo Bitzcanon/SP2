@@ -15,6 +15,7 @@ float Location::returnXPos() const
 	return xPos;
 }
 
+
 float Location::returnYPos() const
 {
 	return yPos;
