@@ -252,7 +252,7 @@ void SP2_TrackScene::Update(double dt)
 	}
 	UpdateFrameRate(FPS);
 
-	if (Application::IsKeyPressed(VK_UP))
+	if (Application::IsKeyPressed(VK_UP) && isDrivingBackward == false)
 	{
 		isDrivingForward = true;
 		accelerationX += 0.1;
@@ -262,7 +262,7 @@ void SP2_TrackScene::Update(double dt)
 	{
 		if (!Application::IsKeyPressed(VK_UP))
 		{
-			accelerationX -= 0.5;
+			accelerationX -= 0.7;
 			velocityX += (float)(accelerationX * dt);
 			if (accelerationX < 0)
 			{
@@ -271,7 +271,7 @@ void SP2_TrackScene::Update(double dt)
 			}
 		}
 	}
-	if (Application::IsKeyPressed(VK_DOWN))
+	if (Application::IsKeyPressed(VK_DOWN) && isDrivingForward == false)
 	{
 		isDrivingBackward = true;
 		accelerationX -= 0.1;
@@ -281,7 +281,7 @@ void SP2_TrackScene::Update(double dt)
 	{
 		if (!Application::IsKeyPressed(VK_DOWN))
 		{
-			accelerationX += 0.5;
+			accelerationX += 0.7;
 			velocityX += (float)(accelerationX * dt);
 			if (accelerationX > 0)
 			{
@@ -295,7 +295,7 @@ void SP2_TrackScene::Update(double dt)
 		accelerationX = 10;
 	}
 
-	if (Application::IsKeyPressed(VK_LEFT))
+	if (Application::IsKeyPressed(VK_LEFT) && isDrivingRight == false)
 	{
 		isDrivingLeft = true;
 		accelerationZ -= 0.1;
@@ -305,7 +305,7 @@ void SP2_TrackScene::Update(double dt)
 	{
 		if (!Application::IsKeyPressed(VK_LEFT))
 		{
-			accelerationZ += 0.5;
+			accelerationZ += 0.7;
 			velocityZ += (float)(accelerationZ * dt);
 			if (accelerationZ > 0)
 			{
@@ -315,7 +315,7 @@ void SP2_TrackScene::Update(double dt)
 		}
 	}
 
-	if (Application::IsKeyPressed(VK_RIGHT))
+	if (Application::IsKeyPressed(VK_RIGHT) && isDrivingLeft == false)
 	{
 		isDrivingRight = true;
 		accelerationZ += 0.1;
@@ -325,7 +325,7 @@ void SP2_TrackScene::Update(double dt)
 	{
 		if (!Application::IsKeyPressed(VK_RIGHT))
 		{
-			accelerationZ -= 0.5;
+			accelerationZ -= 0.7;
 			velocityZ += (float)(accelerationZ * dt);
 			if (accelerationZ < 0)
 			{
@@ -629,9 +629,10 @@ void SP2_TrackScene::Render()
 	//Draw Axes (For debugging purposes)
 	RenderMesh(meshList[GEO_AXES], false);
 	
+	//Draw Track
 	modelStack.PushMatrix();
 	{
-		modelStack.Scale(25, 25, 25);
+		modelStack.Scale(35, 25, 35);
 		modelStack.Translate(0, -0.495f, 0);
 
 		RenderMesh(meshList[GEO_TRACK], true);
