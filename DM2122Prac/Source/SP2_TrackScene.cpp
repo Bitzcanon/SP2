@@ -548,7 +548,7 @@ void SP2_TrackScene::Render()
 	//Draw Track
 	modelStack.PushMatrix();
 	{
-		float trackScale = SceneCar.returnCarScale() * 3.5;
+		float trackScale = SceneCar.returnCarScale() * 2;
 		modelStack.Scale(trackScale, trackScale, trackScale);
 		modelStack.Translate(0, -0.495f, 0);
 
