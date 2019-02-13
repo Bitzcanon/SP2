@@ -33,6 +33,8 @@ private:
 	float acceleration;
 	float health;
 	//float weight;
+	bool isDrivingForward;
+	bool isDrivingBackward;
 
 	Location car;
 };
