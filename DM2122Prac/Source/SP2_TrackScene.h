@@ -104,7 +104,10 @@ public:
 	~SP2_TrackScene();
 
 	virtual void Init();
+
 	virtual void Update(double dt);
+	virtual void UpdateBuffs(double dt);
+
 	virtual void Render();
 	virtual void Exit();
 

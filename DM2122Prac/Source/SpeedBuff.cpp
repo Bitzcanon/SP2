@@ -12,7 +12,6 @@ SpeedBuff::SpeedBuff()
 	timer = 4;
 
 	//Storing coordinates in text file over into vector found in 
-	string line;
 	ifstream myfile("TextFiles//SpeedBuffCoordinates.txt"); // open text file
 
 	vector <float> TextStorage; // tmp vector to store stuff from text file 
@@ -34,10 +33,15 @@ SpeedBuff::SpeedBuff()
 	int counter = 1;
 	for (int i = 0; i < TextStorage.size(); i++) // loop through the 9 different TextStorages.
 	{
-		if (counter == 3) // if k = third number in the line
+		if (counter == 4)
+		{
+			rotateBy.push_back(TextStorage[i]);
+			counter = 1;
+		}
+		else if (counter == 3) // if k = third number in the line
 		{
 			zPos.push_back(TextStorage[i]);
-			counter = 1;
+			counter += 1;
 		}
 		else if (counter == 2) // if k = second number in line
 		{
@@ -50,7 +54,10 @@ SpeedBuff::SpeedBuff()
 			counter += 1;
 		}
 	}
-/*
+
+	speedBuffQuantity = (TextStorage.size() / 4);
+
+/* For testing purposes , prints out the values of x y and z
 	for (int i = 0; i < TextStorage.size() / 3; i++)
 	{
 		cout << "X value : " << xPos[i] << " Y value : " << yPos[i] << " Z Value : " << zPos[i] << endl;
@@ -62,17 +69,27 @@ SpeedBuff::~SpeedBuff()
 	
 }
 
-float SpeedBuff::returnxPos(int location)
+int SpeedBuff::returnSpeedBuffRotation(int angleNumber)
 {
-	return xPos[location];
+	return rotateBy[angleNumber];
 }
 
-float SpeedBuff::returnyPos(int location)
+int SpeedBuff::returnSpeedBuffQuantity()
 {
-	return yPos[location];
+	return speedBuffQuantity;
 }
 
-float SpeedBuff::returnzPos(int location)
+float SpeedBuff::returnxPos(int locationNumber)
 {
-	return zPos[location];
+	return xPos[locationNumber];
+}
+
+float SpeedBuff::returnyPos(int locationNumber)
+{
+	return yPos[locationNumber];
+}
+
+float SpeedBuff::returnzPos(int locationNumber)
+{
+	return zPos[locationNumber];
 }

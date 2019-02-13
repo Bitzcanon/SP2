@@ -211,6 +211,9 @@ void SP2_TrackScene::Init()
 
 	meshList[GEO_TRACK] = MeshBuilder::GenerateOBJ("modelTrack", "OBJ//Track.obj");
 
+	meshList[GEO_SPEEDBUFF] = MeshBuilder::GenerateOBJ("SpeedBuff", "OBJ//SpeedBoost.obj");
+	meshList[GEO_SPEEDBUFF]->textureID = LoadTGA("Image//SpeedBoostTexture.tga");
+
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("Light Sphere", Color(1.f, 1.f, 1.f), 32, 36, 1.f);
@@ -220,6 +223,11 @@ void SP2_TrackScene::Init()
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
 	projectionStack.LoadMatrix(projection);
+}
+
+void SP2_TrackScene::UpdateBuffs(double dt)
+{
+	//if (SceneCar.getXpos() )
 }
 
 void SP2_TrackScene::Update(double dt)
@@ -491,7 +499,6 @@ void SP2_TrackScene::Render()
 	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z, camera.target.x, camera.target.y, camera.target.z, camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
-
 	if (light[0].type == Light::LIGHT_DIRECTIONAL)
 	{
 		Vector3 lightDir(light[0].position.x, light[0].position.y, light[0].position.z);
@@ -541,7 +548,8 @@ void SP2_TrackScene::Render()
 	//Draw Track
 	modelStack.PushMatrix();
 	{
-		modelStack.Scale(35, 25, 35);
+		float trackScale = SceneCar.returnCarScale() * 3.5;
+		modelStack.Scale(trackScale, trackScale, trackScale);
 		modelStack.Translate(0, -0.495f, 0);
 
 		RenderMesh(meshList[GEO_TRACK], true);
@@ -551,7 +559,7 @@ void SP2_TrackScene::Render()
 	//Draw Test Car
 	modelStack.PushMatrix();
 	{
-		modelStack.Scale(10, 10, 10);
+		modelStack.Scale(SceneCar.returnCarScale() , SceneCar.returnCarScale(), SceneCar.returnCarScale());
 
 		modelStack.Translate(SceneCar.newXpos, SceneCar.newYpos, SceneCar.newZpos);
 		modelStack.Rotate(SceneCar.steerAngle, 0, 1, 0);
@@ -559,6 +567,17 @@ void SP2_TrackScene::Render()
 		RenderMesh(meshList[GEO_TESTCAR], true);
 	}
 	modelStack.PopMatrix();
+
+	for (int i = 0; i < SBuff.returnSpeedBuffQuantity(); i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Scale(SceneCar.returnCarScale(), SceneCar.returnCarScale(), SceneCar.returnCarScale());
+
+		modelStack.Translate(SBuff.returnxPos(i) , SBuff.returnyPos(i) , SBuff.returnzPos(i));
+		modelStack.Rotate(SBuff.returnSpeedBuffRotation(i), 0, 1, 0);
+		RenderMesh(meshList[GEO_SPEEDBUFF], false);
+		modelStack.PopMatrix();
+	}
 
 	//Draw Skybox
 	modelStack.PushMatrix();

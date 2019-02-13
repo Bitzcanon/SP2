@@ -12,6 +12,8 @@ Car::Car()
 	newYpos = 0;
 	newZpos = 0;
 
+	carScale = 10;
+
 	//Set default position of Car to 0,0,0
 	position.setLocation(0, 0, 0);
 }
@@ -152,4 +154,24 @@ void Car::Update(double dt)
 	{
 		accelerationZ = 10;
 	}*/
+}
+	
+void Car::setSpeed(float speedVal)
+{
+	speed = speedVal;
+}
+
+float Car::returnSpeed()
+{
+	return speed;
+}
+
+float Car::returnCarScale()
+{
+	return carScale;
+}
+
+void Car::setCarScale(float scale)
+{
+	carScale = scale;
 }

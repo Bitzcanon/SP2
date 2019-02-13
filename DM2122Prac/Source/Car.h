@@ -16,6 +16,12 @@ public:
 	float getYpos(void);
 	float getZpos(void);
 
+	float returnSpeed();
+	void setSpeed(float);
+
+	float returnCarScale();
+	void setCarScale(float);
+
 	float velocityX;
 	float velocityZ;
 
@@ -25,6 +31,8 @@ public:
 	float steerAngle;
 
 private:
+	float carScale;
+
 	float speed;
 	float acceleration;
 	float health;
