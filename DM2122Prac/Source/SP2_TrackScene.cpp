@@ -588,7 +588,7 @@ void SP2_TrackScene::Render()
 	{
 		modelStack.Scale(Vehicle.returnCarScale(), Vehicle.returnCarScale(), Vehicle.returnCarScale());
 
-		modelStack.Translate(Vehicle.newXpos, Vehicle.newYpos, Vehicle.newZpos);
+		modelStack.Translate(Vehicle.newPosition.x, Vehicle.newPosition.y, Vehicle.newPosition.z);
 		modelStack.Rotate(Vehicle.steerAngle, 0, 1, 0);
 
 		RenderMesh(meshList[GEO_TESTCAR], true);
@@ -617,9 +617,9 @@ void SP2_TrackScene::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], UpdateFrameRate(FPS), Color(1, 1, 0), 2, 72, 55);
 
 			//Player's Position (FOR DEBUG PURPOSES)
-			int cameraX = static_cast<int>(Vehicle.newXpos); //Convert x coordinate of the camera to 2 digits for display
-			int cameraY = static_cast<int>(Vehicle.newYpos); //Convert y coordinate of the camera to 2 digits for display
-			int cameraZ = static_cast<int>(Vehicle.newZpos); //Convert z coordinate of the camera to 2 digits for display
+			int cameraX = static_cast<int>(Vehicle.newPosition.x); //Convert x coordinate of the camera to 2 digits for display
+			int cameraY = static_cast<int>(Vehicle.newPosition.y); //Convert y coordinate of the camera to 2 digits for display
+			int cameraZ = static_cast<int>(Vehicle.newPosition.z); //Convert z coordinate of the camera to 2 digits for display
 /*
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraX), Color(1, 1, 0), 1, -1, 58);
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraY), Color(1, 1, 0), 1, -1, 56);
