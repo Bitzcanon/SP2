@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CAR_H
+#define CAR_H
 #include "Mtx44.h"
 #include "Application.h"
 #include "Utility.h"
@@ -22,12 +23,7 @@ public:
 	float returnCarScale();
 	void setCarScale(float);
 
-	float velocityX;
-	float velocityZ;
-
-	float newXpos;
-	float newYpos;
-	float newZpos;
+	Vector3 newPosition;
 	float steerAngle;
 
 private:
@@ -38,6 +34,7 @@ private:
 	float health;
 	//float weight;
 
-	Location position;
+	Location car;
 };
 
+#endif

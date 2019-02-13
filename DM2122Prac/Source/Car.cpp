@@ -8,14 +8,12 @@ Car::Car()
 	steerAngle = 0;
 	health = 0;
 
-	newXpos = 0;
-	newYpos = 0;
-	newZpos = 0;
+	newPosition = (0, 0, 0);
 
 	carScale = 10;
 
 	//Set default position of Car to 0,0,0
-	position.setLocation(0, 0, 0);
+	car.setLocation(0, 0, 0);
 }
 
 
@@ -25,39 +23,38 @@ Car::~Car()
 
 float Car::getXpos(void)
 {
-	return position.returnXPos();
+	return car.returnXPos();
 }
 
 float Car::getYpos(void)
 {
-	return position.returnYPos();
+	return car.returnYPos();
 }
 
 float Car::getZpos(void)
 {
-	return position.returnZPos();
+	return car.returnZPos();
 }
 
 void Car::Update(double dt)
 {
-
 	if (Application::IsKeyPressed(VK_UP))
 	{
 		speed += (float)(acceleration * dt);
 
-		newXpos = position.returnXPos() + (sin(Math::DegreeToRadian(steerAngle)) * speed);
-		newYpos = position.returnYPos();
-		newZpos = position.returnZPos() + (cos(Math::DegreeToRadian(steerAngle)) * speed);
-		position.setLocation(newXpos, position.returnYPos(), newZpos);
+		newPosition.x = car.returnXPos() + (sin(Math::DegreeToRadian(steerAngle)) * speed);
+		newPosition.y = car.returnYPos();
+		newPosition.z = car.returnZPos() + (cos(Math::DegreeToRadian(steerAngle)) * speed);
+		car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
 	}
 	if (Application::IsKeyPressed(VK_DOWN))
 	{
 		speed += (float)(acceleration * dt);
 
-		newXpos = position.returnXPos() - (sin(Math::DegreeToRadian(steerAngle)) * speed);
-		newYpos = position.returnYPos();
-		newZpos = position.returnZPos() - (cos(Math::DegreeToRadian(steerAngle)) * speed);
-		position.setLocation(newXpos, position.returnYPos(), newZpos);
+		newPosition.x = car.returnXPos() - (sin(Math::DegreeToRadian(steerAngle)) * speed);
+		newPosition.y = car.returnYPos();
+		newPosition.z = car.returnZPos() - (cos(Math::DegreeToRadian(steerAngle)) * speed);
+		car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
 	}
 	if (Application::IsKeyPressed(VK_RIGHT))
 	{
@@ -67,7 +64,6 @@ void Car::Update(double dt)
 	{
 		steerAngle += 2.f;
 	}
-
 	/*if (Application::IsKeyPressed(VK_UP) && isDrivingBackward == false)
 	{
 		isDrivingForward = true;

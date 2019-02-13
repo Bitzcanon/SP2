@@ -561,7 +561,7 @@ void SP2_TrackScene::Render()
 	{
 		modelStack.Scale(SceneCar.returnCarScale() , SceneCar.returnCarScale(), SceneCar.returnCarScale());
 
-		modelStack.Translate(SceneCar.newXpos, SceneCar.newYpos, SceneCar.newZpos);
+		modelStack.Translate(SceneCar.newPosition.x, SceneCar.newPosition.y, SceneCar.newPosition.z);
 		modelStack.Rotate(SceneCar.steerAngle, 0, 1, 0);
 
 		RenderMesh(meshList[GEO_TESTCAR], true);
