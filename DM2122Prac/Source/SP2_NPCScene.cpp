@@ -209,6 +209,18 @@ void SP2_NPCScene::Init()
 
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 
+	meshList[GEO_SURROUNDINGS] = MeshBuilder::GenerateOBJ("Surroundings", "OBJ//Placeholder NPC scene.obj");
+	meshList[GEO_SURROUNDINGS]->textureID = LoadTGA("Image//Texture.tga");
+
+	meshList[GEO_NPC_MECHANIC] = MeshBuilder::GenerateOBJ("mechanic", "OBJ//Placeholder sitting NPC.obj");
+	meshList[GEO_NPC_MECHANIC]->textureID = LoadTGA("Image//NPC texture.tga");
+
+	meshList[GEO_NPC1] = MeshBuilder::GenerateOBJ("randomNPC", "OBJ//Placeholder NPC.obj");
+	meshList[GEO_NPC1]->textureID = LoadTGA("Image//NPC texture.tga");
+
+	meshList[GEO_NPC2] = MeshBuilder::GenerateOBJ("randomNPC", "OBJ//Placeholder NPC.obj");
+	meshList[GEO_NPC2]->textureID = LoadTGA("Image//NPC texture.tga");
+
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("Light Sphere", Color(1.f, 1.f, 1.f), 32, 36, 1.f);
 
 
@@ -216,6 +228,10 @@ void SP2_NPCScene::Init()
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
 	projectionStack.LoadMatrix(projection);
+
+	NPCs[0].x = -5.582f; NPCs[0].z = 7.759f; NPCs[0].close = false;
+	NPCs[1].x = 5.5f; NPCs[1].z = 7.7f; NPCs[1].close = false;
+	NPCs[2].x = 5.5f; NPCs[2].z = -7.7f; NPCs[2].close = false;
 }
 
 void SP2_NPCScene::Update(double dt)
@@ -474,6 +490,18 @@ void SP2_NPCScene::RenderSkybox()
 	//Bottom of Skybox
 }
 
+bool SP2_NPCScene::CloseToNPC()
+{
+	if (camera.position.x >= -30.f - 20.f && camera.position.x <= -30.f + 20.f)
+	{
+		if (camera.position.z >= 40.f - 20.f && camera.position.z <= 40.f + 20.f)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 void SP2_NPCScene::Render()
 {
 	//Clear color & depth buffer every time
@@ -558,6 +586,35 @@ void SP2_NPCScene::Render()
 		modelStack.PopMatrix();
 	}
 	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Scale(5, 5, 5);
+	RenderMesh(meshList[GEO_SURROUNDINGS], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Scale(5, 5, 5);
+	modelStack.Translate(-5.582, -0.357, 7.759);
+	RenderMesh(meshList[GEO_NPC_MECHANIC], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(5, 5, 5);
+	modelStack.Translate(5.5, 0, 7.7);
+	RenderMesh(meshList[GEO_NPC1], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Scale(5, 5, 5);
+	modelStack.Translate(5.5, 0, -7.7);
+	RenderMesh(meshList[GEO_NPC2], false);
+	modelStack.PopMatrix();
+
+	if (CloseToNPC())
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press E to build car", Color(1, 1, 0), 1, -1, 10);
+	}
 }
 
 void SP2_NPCScene::Exit()

@@ -207,6 +207,10 @@ void SP2_TrackScene::Init()
 	meshList[GEO_PROMPT] = MeshBuilder::GenerateText("prompt", 16, 16);
 	meshList[GEO_PROMPT]->textureID = LoadTGA("Image//calibri.tga");
 
+	meshList[GEO_TESTCAR] = MeshBuilder::GenerateCube("Car", Color(0, 1, 0), 5, 1, 1);
+
+	meshList[GEO_TRACK] = MeshBuilder::GenerateOBJ("modelTrack", "OBJ//Track.obj");
+
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("Light Sphere", Color(1.f, 1.f, 1.f), 32, 36, 1.f);
@@ -241,6 +245,8 @@ void SP2_TrackScene::Update(double dt)
 	}
 
 	UpdateFrameRate(FPS);
+
+	SceneCar.Update(dt);
 
 	//Check for camera bounds on skybox
 	if (camera.position.x < 500.f && camera.position.x > -500.f && camera.position.z < 500.f && camera.position.z > -500.f && camera.position.y < 700 && camera.position.y > 0)
@@ -531,6 +537,28 @@ void SP2_TrackScene::Render()
 
 	//Draw Axes (For debugging purposes)
 	RenderMesh(meshList[GEO_AXES], false);
+
+	//Draw Track
+	modelStack.PushMatrix();
+	{
+		modelStack.Scale(35, 25, 35);
+		modelStack.Translate(0, -0.495f, 0);
+
+		RenderMesh(meshList[GEO_TRACK], true);
+	}
+	modelStack.PopMatrix();
+
+	//Draw Test Car
+	modelStack.PushMatrix();
+	{
+		modelStack.Scale(10, 10, 10);
+
+		modelStack.Translate(SceneCar.newXpos, SceneCar.newYpos, SceneCar.newZpos);
+		modelStack.Rotate(SceneCar.steerAngle, 0, 1, 0);
+
+		RenderMesh(meshList[GEO_TESTCAR], true);
+	}
+	modelStack.PopMatrix();
 
 	//Draw Skybox
 	modelStack.PushMatrix();

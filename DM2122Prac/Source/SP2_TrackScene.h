@@ -9,6 +9,10 @@
 #include "MatrixStack.h"
 #include "Light.h"
 
+#include "SpeedBuff.h"
+#include "Car.h"
+
+
 #include <string>
 using namespace std;
 
@@ -87,6 +91,11 @@ private:
 		GEO_FRONT,
 		GEO_BACK,
 
+		GEO_TRACK,
+		GEO_TESTCAR,
+
+		GEO_SPEEDBUFF,
+
 		NUM_GEOMETRY,
 	};
 
@@ -118,6 +127,9 @@ private:
 	string UpdateFrameRate(float string);
 
 	float FPS;
+
+	SpeedBuff SBuff;
+	Car SceneCar;
 };
 
 #endif // ! SP2_TrackScene_H

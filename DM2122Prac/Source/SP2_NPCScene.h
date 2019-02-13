@@ -86,6 +86,10 @@ private:
 		GEO_BOTTOM,
 		GEO_FRONT,
 		GEO_BACK,
+		GEO_SURROUNDINGS,
+		GEO_NPC_MECHANIC,
+		GEO_NPC1,
+		GEO_NPC2,
 
 		NUM_GEOMETRY,
 	};
@@ -114,10 +118,18 @@ private:
 	void RenderSkybox();
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	bool CloseToNPC();
+	struct NPC //To keep track of NPC positions
+	{
+		float x, z;
+		bool close;
+	};
 	
 	string UpdateFrameRate(float string);
 
 	float FPS;
+	bool interact;
+	NPC NPCs[3];
 };
 
 #endif // ! SP2_NPCScene_H
