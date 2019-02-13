@@ -12,7 +12,6 @@
 #include "SpeedBuff.h"
 #include "Car.h"
 
-
 #include <string>
 using namespace std;
 
@@ -131,8 +130,11 @@ private:
 
 	float FPS;
 
+	string condition;
+	bool conditionTester;
+
 	SpeedBuff SBuff;
-	Car SceneCar;
+	Car Vehicle;
 };
 
 #endif // ! SP2_TrackScene_H
