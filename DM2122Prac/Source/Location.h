@@ -1,6 +1,8 @@
 #ifndef Location_H
 #define Location_H
 
+#include "Vector3.h"
+
 class Location
 {
 public:
@@ -14,9 +16,7 @@ public:
 	void setLocation(float x, float y, float z);
 
 private:
-	float xPos;
-	float yPos;
-	float zPos;
+	Vector3 position;
 
 };
 

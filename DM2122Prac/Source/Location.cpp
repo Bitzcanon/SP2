@@ -12,22 +12,22 @@ Location::~Location()
 
 float Location::returnXPos() const
 {
-	return xPos;
+	return position.x;
 }
 
 float Location::returnYPos() const
 {
-	return yPos;
+	return position.y;
 }
 
 float Location::returnZPos() const
 {
-	return zPos;
+	return position.z;
 }
 
 void Location::setLocation(float x , float y , float z)
 {
-	xPos = x;
-	yPos = y;
-	zPos = z;
+	position.x = x;
+	position.y = y;
+	position.z = z;
 }
