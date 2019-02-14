@@ -56,9 +56,9 @@ void Car::Update(double dt)
 		{
 			acceleration = 0.5f;
 		}
-		if (speed > 0.3f)
+		if (speed > 0.2f)
 		{
-			speed = 0.3f;
+			speed = 0.2f;
 		}
 	}
 	if (isDrivingForward)
@@ -100,9 +100,9 @@ void Car::Update(double dt)
 		{
 			acceleration = -0.5f;
 		}
-		if (speed < -0.3f)
+		if (speed < -0.2f)
 		{
-			speed = -0.3f;
+			speed = -0.2f;
 		}
 	}
 	if (isDrivingBackward)
