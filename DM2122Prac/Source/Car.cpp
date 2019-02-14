@@ -4,6 +4,8 @@ Car::Car()
 {
 	//initialize values as 0
 	speed = 0.1f;
+	maxSpeed = 1;
+
 	acceleration = 0.01f;
 	steerAngle = 0;
 	health = 0;
@@ -160,6 +162,11 @@ void Car::setSpeed(float speedVal)
 float Car::returnSpeed()
 {
 	return speed;
+}
+
+float Car::returnMaxSpeed()
+{
+	return maxSpeed;
 }
 
 float Car::returnCarScale()

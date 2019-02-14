@@ -211,6 +211,10 @@ void SP2_TrackScene::Init()
 
 	meshList[GEO_TESTCAR] = MeshBuilder::GenerateCube("Car", Color(0, 1, 0), 5, 1, 1);
 
+	meshList[GEO_KART1] = MeshBuilder::GenerateOBJ("Car", "OBJ//Kart1.obj");
+	meshList[GEO_KART2] = MeshBuilder::GenerateOBJ("Car", "OBJ//Kart2.obj");
+
+
 	meshList[GEO_TRACK] = MeshBuilder::GenerateOBJ("modelTrack", "OBJ//Track.obj");
 
 	meshList[GEO_SPEEDBUFF] = MeshBuilder::GenerateOBJ("SpeedBuff", "OBJ//SpeedBoost.obj");
@@ -234,32 +238,56 @@ void SP2_TrackScene::UpdateBuffs(double dt)
 void SP2_TrackScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
-	
-	vector <float> boundXPos;
-	vector <float> boundXNeg;
-	vector <float> boundZPos;
-	vector <float> boundZNeg;
+	float length = 1;
 
-	int radius = 1;
+	vector <float> boundXMin;
+	vector <float> boundXMax;
+	vector <float> boundZMin;
+	vector <float> boundZMax;
+
+	float carXMin = Vehicle.newPosition.x;
+	float carXMax = Vehicle.newPosition.x + length;
+
+	float carZMin = Vehicle.newPosition.z;
+	float carZMax = Vehicle.newPosition.z + length;
 
 	for (int i = 0; i < SBuff.returnSpeedBuffQuantity(); i++)
 	{
-		boundXPos.push_back(SBuff.returnxPos(i) / Vehicle.returnCarScale() + radius);
-		boundXNeg.push_back(SBuff.returnxPos(i) / Vehicle.returnCarScale() - radius);
+		boundXMin.push_back(SBuff.returnxPos(i) / Vehicle.returnCarScale());
+		boundZMin.push_back(SBuff.returnzPos(i) / Vehicle.returnCarScale());
 
-		boundZPos.push_back(SBuff.returnzPos(i) / Vehicle.returnCarScale() + radius);
-		boundZNeg.push_back(SBuff.returnzPos(i) / Vehicle.returnCarScale() - radius);
+		boundXMax.push_back(SBuff.returnxPos(i) / Vehicle.returnCarScale() + length);
+		boundZMax.push_back(SBuff.returnzPos(i) / Vehicle.returnCarScale() + length);
 	}
 
 	for (int i = 0; i < SBuff.returnSpeedBuffQuantity(); i++)
 	{
-		if (Vehicle.getXpos() + 0.5 < boundXPos[i] && Vehicle.getXpos() + 0.5> boundXNeg[i]
-			&& (Vehicle.getZpos() + 0.5 < boundZPos[i] && Vehicle.getZpos() + 0.5 > boundZNeg[i]))
+		if (carXMax < boundXMin[i] || carXMin > boundXMax[i])
 		{
-			conditionTester = true;
+			cout << "No Collide" << endl;
+		}
+		else if (carZMax < boundZMin[i] || carZMin > boundZMax[i])
+		{
+			cout << "No Collide" << endl;
+		}
+		else
+		{
+			cout << "Collide" << endl;
 			break;
 		}
+
+		float vehSpeed = Vehicle.returnSpeed();
+
+		if (SBuff.returnTimer() > 0)
+		{
+			SBuff.setTimer(SBuff.returnTimer() - (1 * dt));
+		}
+		else
+		{
+			Vehicle.setSpeed(0.1);
+		}
 	}
+
 
 	//Miscellaneous controls
 	if (Application::IsKeyPressed('1'))
@@ -591,7 +619,7 @@ void SP2_TrackScene::Render()
 		modelStack.Translate(Vehicle.newPosition.x, Vehicle.newPosition.y, Vehicle.newPosition.z);
 		modelStack.Rotate(Vehicle.steerAngle, 0, 1, 0);
 
-		RenderMesh(meshList[GEO_TESTCAR], true);
+		RenderMesh(meshList[GEO_KART1], true);
 	}
 	modelStack.PopMatrix();
 
@@ -638,9 +666,9 @@ void SP2_TrackScene::Render()
 	}
 	modelStack.PopMatrix();
 
-	if (conditionTester == true)
+	if (SBuff.returnTimer() > 0)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], condition, Color(1, 1, 0), 3, 0, 0);
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string(SBuff.returnTimer()), Color(1, 1, 0), 3, 0, 0);
 	}
 }
 
