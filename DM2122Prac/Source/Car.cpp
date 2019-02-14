@@ -69,26 +69,10 @@ void Car::Update(double dt)
 	{
 		if (!Application::IsKeyPressed(VK_UP))
 		{
-			acceleration -= 0.1f;
-			speed += (float)(acceleration * dt);
-			newPosition.x = car.returnXPos() + (sin(Math::DegreeToRadian(steerAngle)) * speed);
-			newPosition.y = car.returnYPos();
-			newPosition.z = car.returnZPos() + (cos(Math::DegreeToRadian(steerAngle)) * speed);
-			car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
-
-			if(acceleration < 0.f)
-			{
-				acceleration = 0.f;
-				speed -= 0.025f;
-			}
-			if (speed < 0.f)
-			{
-				speed = 0.f;
-				isDrivingForward = false;
-			}
+			decelerateCar(dt);
 		}
 	}
-	if (Application::IsKeyPressed(VK_DOWN))
+	if (Application::IsKeyPressed(VK_DOWN) && isDrivingForward == false)
 	{
 		isDrivingForward = false;
 		isDrivingBackward = true;
@@ -111,25 +95,9 @@ void Car::Update(double dt)
 	}
 	if (isDrivingBackward)
 	{
-		if (!Application::IsKeyPressed(VK_DOWN) && isDrivingForward == false)
+		if (!Application::IsKeyPressed(VK_DOWN))
 		{
-			acceleration += 0.1f;
-			speed += (float)(acceleration * dt);
-			newPosition.x = car.returnXPos() + (sin(Math::DegreeToRadian(steerAngle)) * speed);
-			newPosition.y = car.returnYPos();
-			newPosition.z = car.returnZPos() + (cos(Math::DegreeToRadian(steerAngle)) * speed);
-			car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
-
-			if (acceleration > 0.f)
-			{
-				acceleration = 0.f;
-				speed += 0.025f;
-			}
-			if (speed > 0.f)
-			{
-				speed = 0.f;
-				isDrivingBackward = false;
-			}
+			decelerateCar(dt);
 		}
 	}
 	if (Application::IsKeyPressed(VK_RIGHT))
@@ -152,6 +120,50 @@ void Car::Update(double dt)
 		if (isDrivingBackward)
 		{
 			steerAngle -= 3.f;
+		}
+	}
+}
+
+void Car::decelerateCar(double dt)
+{
+	if (isDrivingForward)
+	{
+		acceleration -= 0.1f;
+		speed += (float)(acceleration * dt);
+		newPosition.x = car.returnXPos() + (sin(Math::DegreeToRadian(steerAngle)) * speed);
+		newPosition.y = car.returnYPos();
+		newPosition.z = car.returnZPos() + (cos(Math::DegreeToRadian(steerAngle)) * speed);
+		car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
+
+		if (acceleration < 0.f)
+		{
+			acceleration = 0.f;
+			speed -= 0.025f;
+		}
+		if (speed < 0.f)
+		{
+			speed = 0.f;
+			isDrivingForward = false;
+		}
+	}
+	if (isDrivingBackward)
+	{
+		acceleration += 0.1f;
+		speed += (float)(acceleration * dt);
+		newPosition.x = car.returnXPos() + (sin(Math::DegreeToRadian(steerAngle)) * speed);
+		newPosition.y = car.returnYPos();
+		newPosition.z = car.returnZPos() + (cos(Math::DegreeToRadian(steerAngle)) * speed);
+		car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
+
+		if (acceleration > 0.f)
+		{
+			acceleration = 0.f;
+			speed += 0.025f;
+		}
+		if (speed > 0.f)
+		{
+			speed = 0.f;
+			isDrivingBackward = false;
 		}
 	}
 }

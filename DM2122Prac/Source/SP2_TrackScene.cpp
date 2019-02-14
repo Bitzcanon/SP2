@@ -341,7 +341,7 @@ void SP2_TrackScene::Update(double dt)
 		camera.target.y = 0.f;
 	}
 }
-// x 0 z 50
+
 bool SP2_TrackScene::CollisionChecker(float objX, float objZ, float length, float width)
 {
 	float minimumXObj = objX / Vehicle.returnCarScale();
@@ -357,12 +357,6 @@ bool SP2_TrackScene::CollisionChecker(float objX, float objZ, float length, floa
 	float carZMin = Vehicle.newPosition.z;
 	float carZMax = Vehicle.newPosition.z + width;
 
-	/*boundXMin.push_back(minX / Vehicle.returnCarScale());
-	boundZMin.push_back(minZ / Vehicle.returnCarScale());
-
-	boundXMax.push_back(maxX / Vehicle.returnCarScale() + length);
-	boundZMax.push_back(maxZ / Vehicle.returnCarScale() + width);*/
-
 	if (carXMax < minimumXObj || carXMin > maximumXObj)
 	{
 		cout << "No Collide" << endl;
@@ -377,52 +371,7 @@ bool SP2_TrackScene::CollisionChecker(float objX, float objZ, float length, floa
 	{
 		cout << "Collide" << endl;
 		return true;
-	}
-
-
-	/*if (carXMax < boundXMin[i] || carXMin > boundXMax[i])
-	{
-		cout << "No Collide" << endl;
-	}
-	else if (carZMax < boundZMin[i] || carZMin > boundZMax[i])
-	{
-		cout << "No Collide" << endl;
-	}
-	else
-	{
-		cout << "Collide" << endl;
-		Vehicle.setSpeed(0.15);
-		SBuff.setTimer(4);
-		SBuff.setCondition(true);
-		break;
-	}*/
-
-	/*boundXMin.push_back(SBuff.returnxPos(i) / Vehicle.returnCarScale());
-	boundZMin.push_back(SBuff.returnzPos(i) / Vehicle.returnCarScale());
-
-	boundXMax.push_back(SBuff.returnxPos(i) / Vehicle.returnCarScale() + length);
-	boundZMax.push_back(SBuff.returnzPos(i) / Vehicle.returnCarScale() + length);
-
-
-	for (int i = 0; i < SBuff.returnSpeedBuffQuantity(); i++)
-	{
-		if (carXMax < boundXMin[i] || carXMin > boundXMax[i])
-		{
-			cout << "No Collide" << endl;
-		}
-		else if (carZMax < boundZMin[i] || carZMin > boundZMax[i])
-		{
-			cout << "No Collide" << endl;
-		}
-		else
-		{
-			cout << "Collide" << endl;
-			Vehicle.setSpeed(0.15);
-			SBuff.setTimer(4);
-			SBuff.setCondition(true);
-			break;
-		}
-	}*/
+	}	
 }
 
 static const float SKYBOXSIZE = 1000.f;
