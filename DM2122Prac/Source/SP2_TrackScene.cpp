@@ -233,6 +233,13 @@ void SP2_TrackScene::Init()
 
 	//Initialise variables
 	vehicleSpeed = 0;
+	cameraPosX = Vehicle.newPosition.x;
+	cameraPosY = Vehicle.newPosition.y;
+	cameraPosZ = Vehicle.newPosition.z;
+
+	cameraTargetX = Vehicle.newPosition.x + 1;
+	cameraTargetY = Vehicle.newPosition.y + 1;
+	cameraTargetZ = Vehicle.newPosition.z + 10;
 }
 
 void SP2_TrackScene::UpdateBuffs(double dt)
@@ -317,6 +324,14 @@ void SP2_TrackScene::Update(double dt)
 
 	Vehicle.Update(dt);
 	vehicleSpeed = Vehicle.returnSpeed();
+
+	cameraPosX = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * 10;
+	cameraPosY = Vehicle.newPosition.y + 20;
+	cameraPosZ = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * 10;
+
+	cameraTargetX = Vehicle.newPosition.x * 10 ;
+	cameraTargetY = Vehicle.newPosition.y;
+	cameraTargetZ = Vehicle.newPosition.z * 10;
 
 	//Check for camera bounds on skybox
 	if (camera.position.x < 500.f && camera.position.x > -500.f && camera.position.z < 500.f && camera.position.z > -500.f && camera.position.y < 700 && camera.position.y > 0)
@@ -559,8 +574,9 @@ void SP2_TrackScene::Render()
 	//Define the view/ camera lookat and load the view matrix
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z, camera.target.x, camera.target.y, camera.target.z, camera.up.x, camera.up.y, camera.up.z);
-	modelStack.LoadIdentity();
+	//viewStack.LookAt(cameraPosX, cameraPosY, cameraPosZ, cameraTargetX, cameraTargetY, cameraTargetZ, 0, 1, 0); //Switch to this once all implementations are done
 
+	modelStack.LoadIdentity();
 	if (light[0].type == Light::LIGHT_DIRECTIONAL)
 	{
 		Vector3 lightDir(light[0].position.x, light[0].position.y, light[0].position.z);
@@ -655,9 +671,13 @@ void SP2_TrackScene::Render()
 			int vehiclePosX = static_cast<int>(Vehicle.newPosition.x); //Convert x coordinate of the vehicle to 2 digits for display
 			int vehiclePosZ = static_cast<int>(Vehicle.newPosition.z); //Convert z coordinate of the vehicle to 2 digits for display
 
-			int cameraX = static_cast<int>(camera.position.x); //Convert x coordinate of the camera to 2 digits for display
-			int cameraY = static_cast<int>(camera.position.y); //Convert y coordinate of the camera to 2 digits for display
-			int cameraZ = static_cast<int>(camera.position.z); //Convert z coordinate of the camera to 2 digits for displa
+			//int cameraX = static_cast<int>(camera.position.x); //Convert x coordinate of the camera to 2 digits for display
+			//int cameraY = static_cast<int>(camera.position.y); //Convert y coordinate of the camera to 2 digits for display
+			//int cameraZ = static_cast<int>(camera.position.z); //Convert z coordinate of the camera to 2 digits for display
+
+			int cameraX = static_cast<int>(cameraPosX); //Convert x coordinate of the camera to 2 digits for display
+			int cameraY = static_cast<int>(cameraPosY); //Convert y coordinate of the camera to 2 digits for display
+			int cameraZ = static_cast<int>(cameraPosZ); //Convert z coordinate of the camera to 2 digits for display
 
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehicleSpeed), Color(1, 1, 0), 1, -1, 58);
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehiclePosX), Color(1, 1, 0), 1, -1, 56);
@@ -666,6 +686,10 @@ void SP2_TrackScene::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraX), Color(1, 0, 0), 1, -1, 52);
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraY), Color(1, 0, 0), 1, -1, 50);
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraZ), Color(1, 0, 0), 1, -1, 48);
+
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTargetX), Color(1, 0, 0), 1, -1, 46);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTargetY), Color(1, 0, 0), 1, -1, 44);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTargetZ), Color(1, 0, 0), 1, -1, 42);
 		}
 		modelStack.PopMatrix();
 
