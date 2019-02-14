@@ -25,6 +25,8 @@ public:
 	float returnCarScale();
 	void setCarScale(float);
 
+	void decelerateCar(double dt);
+
 	Vector3 newPosition;
 	float steerAngle;
 
@@ -36,6 +38,7 @@ private:
 	float acceleration;
 	float health;
 	//float weight;
+
 	bool isDrivingForward;
 	bool isDrivingBackward;
 

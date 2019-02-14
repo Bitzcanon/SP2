@@ -231,58 +231,33 @@ void SP2_TrackScene::UpdateBuffs(double dt)
 void SP2_TrackScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
-	float length = 1;
-
-	vector <float> boundXMin;
-	vector <float> boundXMax;
-	vector <float> boundZMin;
-	vector <float> boundZMax;
-
-	float carXMin = Vehicle.newPosition.x;
-	float carXMax = Vehicle.newPosition.x + length;
-
-	float carZMin = Vehicle.newPosition.z;
-	float carZMax = Vehicle.newPosition.z + length;
 
 	for (int i = 0; i < SBuff.returnSpeedBuffQuantity(); i++)
 	{
-		boundXMin.push_back(SBuff.returnxPos(i) / Vehicle.returnCarScale());
-		boundZMin.push_back(SBuff.returnzPos(i) / Vehicle.returnCarScale());
-
-		boundXMax.push_back(SBuff.returnxPos(i) / Vehicle.returnCarScale() + length);
-		boundZMax.push_back(SBuff.returnzPos(i) / Vehicle.returnCarScale() + length);
-	}
-
-	for (int i = 0; i < SBuff.returnSpeedBuffQuantity(); i++)
-	{
-		if (carXMax < boundXMin[i] || carXMin > boundXMax[i])
+		if (CollisionChecker(SBuff.returnxPos(i), SBuff.returnzPos(i), 1, 1) == true)
 		{
-			cout << "No Collide" << endl;
-		}
-		else if (carZMax < boundZMin[i] || carZMin > boundZMax[i])
-		{
-			cout << "No Collide" << endl;
-		}
-		else
-		{
-			cout << "Collide" << endl;
-			Vehicle.setSpeed(0.15);
 			SBuff.setTimer(4);
 			SBuff.setCondition(true);
-			break;
 		}
 	}
-
+	//Timer after stepping on SpeedBuff
 	if (SBuff.returnTimer() > 0)
 	{
 		SBuff.setTimer(SBuff.returnTimer() - 1 * dt);
+		Vehicle.setSpeed(0.2);
 	}
 	else if (SBuff.returnTimer() < 0 && SBuff.returnCondition() == true)
 	{
-		Vehicle.setSpeed(0.2);
 		SBuff.setCondition(false);
 	}
 
+	/*for (int i = 0; i < RoadBlock.returnBarrierQuantity(); i++)
+	{
+		if (CollisionChecker(RoadBlock.returnxPos(i), RoadBlock.returnzPos(i), 1, 2) == true)
+		{
+
+		}
+	}*/
 
 	//Miscellaneous controls
 	if (Application::IsKeyPressed('1'))
@@ -347,6 +322,38 @@ void SP2_TrackScene::Update(double dt)
 		camera.position.y = 698.f;
 		camera.target.y = 0.f;
 	}
+}
+
+bool SP2_TrackScene::CollisionChecker(float objX, float objZ, float length, float width)
+{
+	float minimumXObj = objX / Vehicle.returnCarScale();
+	float minimumZObj = objZ / Vehicle.returnCarScale();
+
+	float maximumXObj = objX / Vehicle.returnCarScale() + length;
+	float maximumZObj = objZ / Vehicle.returnCarScale() + width;
+
+	//tmp var for car pos
+	float carXMin = Vehicle.newPosition.x;
+	float carXMax = Vehicle.newPosition.x + length;
+
+	float carZMin = Vehicle.newPosition.z;
+	float carZMax = Vehicle.newPosition.z + width;
+
+	if (carXMax < minimumXObj || carXMin > maximumXObj)
+	{
+		cout << "No Collide" << endl;
+		return false;
+	}
+	else if (carZMax < minimumZObj || carZMin > maximumZObj)
+	{
+		cout << "No Collide" << endl;
+		return false;
+	}
+	else
+	{
+		cout << "Collide" << endl;
+		return true;
+	}	
 }
 
 static const float SKYBOXSIZE = 1000.f;
