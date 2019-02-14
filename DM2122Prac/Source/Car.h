@@ -20,6 +20,8 @@ public:
 	float returnSpeed();
 	void setSpeed(float);
 
+	float returnMaxSpeed();
+
 	float returnCarScale();
 	void setCarScale(float);
 
@@ -29,10 +31,13 @@ public:
 private:
 	float carScale;
 
+	float maxSpeed;
 	float speed;
 	float acceleration;
 	float health;
 	//float weight;
+	bool isDrivingForward;
+	bool isDrivingBackward;
 
 	Location car;
 };

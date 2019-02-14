@@ -211,6 +211,11 @@ void SP2_TrackScene::Init()
 
 	meshList[GEO_TESTCAR] = MeshBuilder::GenerateCube("Car", Color(0, 1, 0), 5, 1, 1);
 
+	meshList[GEO_KART1] = MeshBuilder::GenerateOBJ("Car", "OBJ//Kart1.obj");
+	meshList[GEO_KART2] = MeshBuilder::GenerateOBJ("Car", "OBJ//Kart2.obj");
+	meshList[GEO_KART3] = MeshBuilder::GenerateOBJ("Car", "OBJ//Kart3.obj");
+
+
 	meshList[GEO_TRACK] = MeshBuilder::GenerateOBJ("modelTrack", "OBJ//Track.obj");
 
 	meshList[GEO_SPEEDBUFF] = MeshBuilder::GenerateOBJ("SpeedBuff", "OBJ//SpeedBoost.obj");
@@ -225,6 +230,16 @@ void SP2_TrackScene::Init()
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
 	projectionStack.LoadMatrix(projection);
+
+	//Initialise variables
+	vehicleSpeed = 0;
+	cameraPosX = Vehicle.newPosition.x;
+	cameraPosY = Vehicle.newPosition.y;
+	cameraPosZ = Vehicle.newPosition.z;
+
+	cameraTargetX = Vehicle.newPosition.x + 1;
+	cameraTargetY = Vehicle.newPosition.y + 1;
+	cameraTargetZ = Vehicle.newPosition.z + 10;
 }
 
 void SP2_TrackScene::UpdateBuffs(double dt)
@@ -234,32 +249,58 @@ void SP2_TrackScene::UpdateBuffs(double dt)
 void SP2_TrackScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
-	
-	vector <float> boundXPos;
-	vector <float> boundXNeg;
-	vector <float> boundZPos;
-	vector <float> boundZNeg;
+	float length = 1;
 
-	int radius = 1;
+	vector <float> boundXMin;
+	vector <float> boundXMax;
+	vector <float> boundZMin;
+	vector <float> boundZMax;
+
+	float carXMin = Vehicle.newPosition.x;
+	float carXMax = Vehicle.newPosition.x + length;
+
+	float carZMin = Vehicle.newPosition.z;
+	float carZMax = Vehicle.newPosition.z + length;
 
 	for (int i = 0; i < SBuff.returnSpeedBuffQuantity(); i++)
 	{
-		boundXPos.push_back(SBuff.returnxPos(i) / Vehicle.returnCarScale() + radius);
-		boundXNeg.push_back(SBuff.returnxPos(i) / Vehicle.returnCarScale() - radius);
+		boundXMin.push_back(SBuff.returnxPos(i) / Vehicle.returnCarScale());
+		boundZMin.push_back(SBuff.returnzPos(i) / Vehicle.returnCarScale());
 
-		boundZPos.push_back(SBuff.returnzPos(i) / Vehicle.returnCarScale() + radius);
-		boundZNeg.push_back(SBuff.returnzPos(i) / Vehicle.returnCarScale() - radius);
+		boundXMax.push_back(SBuff.returnxPos(i) / Vehicle.returnCarScale() + length);
+		boundZMax.push_back(SBuff.returnzPos(i) / Vehicle.returnCarScale() + length);
 	}
 
 	for (int i = 0; i < SBuff.returnSpeedBuffQuantity(); i++)
 	{
-		if (Vehicle.getXpos() + 0.5 < boundXPos[i] && Vehicle.getXpos() + 0.5> boundXNeg[i]
-			&& (Vehicle.getZpos() + 0.5 < boundZPos[i] && Vehicle.getZpos() + 0.5 > boundZNeg[i]))
+		if (carXMax < boundXMin[i] || carXMin > boundXMax[i])
 		{
-			conditionTester = true;
+			cout << "No Collide" << endl;
+		}
+		else if (carZMax < boundZMin[i] || carZMin > boundZMax[i])
+		{
+			cout << "No Collide" << endl;
+		}
+		else
+		{
+			cout << "Collide" << endl;
+			Vehicle.setSpeed(0.15);
+			SBuff.setTimer(4);
+			SBuff.setCondition(true);
 			break;
 		}
 	}
+
+	if (SBuff.returnTimer() > 0)
+	{
+		SBuff.setTimer(SBuff.returnTimer() - 1 * dt);
+	}
+	else if (SBuff.returnTimer() < 0 && SBuff.returnCondition() == true)
+	{
+		Vehicle.setSpeed(0.2);
+		SBuff.setCondition(false);
+	}
+
 
 	//Miscellaneous controls
 	if (Application::IsKeyPressed('1'))
@@ -282,6 +323,15 @@ void SP2_TrackScene::Update(double dt)
 	UpdateFrameRate(FPS);
 
 	Vehicle.Update(dt);
+	vehicleSpeed = Vehicle.returnSpeed();
+
+	cameraPosX = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * 10;
+	cameraPosY = Vehicle.newPosition.y + 20;
+	cameraPosZ = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * 10;
+
+	cameraTargetX = Vehicle.newPosition.x * 10 ;
+	cameraTargetY = Vehicle.newPosition.y;
+	cameraTargetZ = Vehicle.newPosition.z * 10;
 
 	//Check for camera bounds on skybox
 	if (camera.position.x < 500.f && camera.position.x > -500.f && camera.position.z < 500.f && camera.position.z > -500.f && camera.position.y < 700 && camera.position.y > 0)
@@ -524,8 +574,9 @@ void SP2_TrackScene::Render()
 	//Define the view/ camera lookat and load the view matrix
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z, camera.target.x, camera.target.y, camera.target.z, camera.up.x, camera.up.y, camera.up.z);
-	modelStack.LoadIdentity();
+	//viewStack.LookAt(cameraPosX, cameraPosY, cameraPosZ, cameraTargetX, cameraTargetY, cameraTargetZ, 0, 1, 0); //Switch to this once all implementations are done
 
+	modelStack.LoadIdentity();
 	if (light[0].type == Light::LIGHT_DIRECTIONAL)
 	{
 		Vector3 lightDir(light[0].position.x, light[0].position.y, light[0].position.z);
@@ -591,7 +642,7 @@ void SP2_TrackScene::Render()
 		modelStack.Translate(Vehicle.newPosition.x, Vehicle.newPosition.y, Vehicle.newPosition.z);
 		modelStack.Rotate(Vehicle.steerAngle, 0, 1, 0);
 
-		RenderMesh(meshList[GEO_TESTCAR], true);
+		RenderMesh(meshList[GEO_KART3], true);
 	}
 	modelStack.PopMatrix();
 
@@ -617,30 +668,37 @@ void SP2_TrackScene::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], UpdateFrameRate(FPS), Color(1, 1, 0), 2, 72, 55);
 
 			//Player's Position (FOR DEBUG PURPOSES)
-			int cameraX = static_cast<int>(Vehicle.newPosition.x); //Convert x coordinate of the camera to 2 digits for display
-			int cameraY = static_cast<int>(Vehicle.newPosition.y); //Convert y coordinate of the camera to 2 digits for display
-			int cameraZ = static_cast<int>(Vehicle.newPosition.z); //Convert z coordinate of the camera to 2 digits for display
-/*
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraX), Color(1, 1, 0), 1, -1, 58);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraY), Color(1, 1, 0), 1, -1, 56);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraZ), Color(1, 1, 0), 1, -1, 54);*/
+			int vehiclePosX = static_cast<int>(Vehicle.newPosition.x); //Convert x coordinate of the vehicle to 2 digits for display
+			int vehiclePosZ = static_cast<int>(Vehicle.newPosition.z); //Convert z coordinate of the vehicle to 2 digits for display
 
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(Vehicle.getXpos()), Color(1, 1, 0), 1, -1, 58);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(Vehicle.getYpos()), Color(1, 1, 0), 1, -1, 56);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(Vehicle.getZpos()), Color(1, 1, 0), 1, -1, 54);
+			//int cameraX = static_cast<int>(camera.position.x); //Convert x coordinate of the camera to 2 digits for display
+			//int cameraY = static_cast<int>(camera.position.y); //Convert y coordinate of the camera to 2 digits for display
+			//int cameraZ = static_cast<int>(camera.position.z); //Convert z coordinate of the camera to 2 digits for display
 
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(camera.position.x), Color(1, 0, 0), 1, -1, 52);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(camera.position.y), Color(1, 0, 0), 1, -1, 50);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(camera.position.z), Color(1, 0, 0), 1, -1, 48);
+			int cameraX = static_cast<int>(cameraPosX); //Convert x coordinate of the camera to 2 digits for display
+			int cameraY = static_cast<int>(cameraPosY); //Convert y coordinate of the camera to 2 digits for display
+			int cameraZ = static_cast<int>(cameraPosZ); //Convert z coordinate of the camera to 2 digits for display
+
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehicleSpeed), Color(1, 1, 0), 1, -1, 58);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehiclePosX), Color(1, 1, 0), 1, -1, 56);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehiclePosZ), Color(1, 1, 0), 1, -1, 54);
+
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraX), Color(1, 0, 0), 1, -1, 52);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraY), Color(1, 0, 0), 1, -1, 50);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraZ), Color(1, 0, 0), 1, -1, 48);
+
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTargetX), Color(1, 0, 0), 1, -1, 46);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTargetY), Color(1, 0, 0), 1, -1, 44);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTargetZ), Color(1, 0, 0), 1, -1, 42);
 		}
 		modelStack.PopMatrix();
 
 	}
 	modelStack.PopMatrix();
 
-	if (conditionTester == true)
+	if (SBuff.returnTimer() > 0)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], condition, Color(1, 1, 0), 3, 0, 0);
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string(SBuff.returnTimer()), Color(1, 1, 0), 3, 0, 0);
 	}
 }
 
