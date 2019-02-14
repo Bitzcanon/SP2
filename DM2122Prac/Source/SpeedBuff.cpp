@@ -9,7 +9,7 @@ using namespace std;
 SpeedBuff::SpeedBuff()
 {
 	effect = 10;
-	timer = 4;
+	timer = 0;
 
 	//Storing coordinates in text file over into vector found in 
 	ifstream myfile("TextFiles//SpeedBuffCoordinates.txt"); // open text file

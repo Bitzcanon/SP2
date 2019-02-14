@@ -92,6 +92,10 @@ private:
 
 		GEO_TRACK,
 		GEO_TESTCAR,
+		GEO_KART1,
+		GEO_KART2,
+		GEO_KART3,
+		GEO_KART4,
 
 		GEO_SPEEDBUFF,
 

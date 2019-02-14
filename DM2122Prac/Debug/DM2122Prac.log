@@ -1,7 +1,6 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (DM2122Prac.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  SP2_NPCScene.cpp
-c:\users\muhda\onedrive\documents\github\sp2\dm2122prac\source\sp2_npcscene.cpp(302): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-c:\users\muhda\onedrive\documents\github\sp2\dm2122prac\source\sp2_npcscene.cpp(312): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-c:\users\muhda\onedrive\documents\github\sp2\dm2122prac\source\sp2_npcscene.cpp(322): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-c:\users\muhda\onedrive\documents\github\sp2\dm2122prac\source\sp2_npcscene.cpp(332): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-  DM2122Prac.vcxproj -> C:\Users\muhda\OneDrive\Documents\GitHub\SP2\Debug\Studio Project 2.exe
+﻿D:\visual studio 2017\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (DM2122Prac.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  SP2_TrackScene.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(283): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(287): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(632): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  DM2122Prac.vcxproj -> C:\Users\Gary Quah\Documents\GitHub\SP2\Debug\Studio Project 2.exe
