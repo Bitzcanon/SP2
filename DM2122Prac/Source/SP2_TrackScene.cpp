@@ -213,6 +213,7 @@ void SP2_TrackScene::Init()
 
 	meshList[GEO_KART1] = MeshBuilder::GenerateOBJ("Car", "OBJ//Kart1.obj");
 	meshList[GEO_KART2] = MeshBuilder::GenerateOBJ("Car", "OBJ//Kart2.obj");
+	meshList[GEO_KART3] = MeshBuilder::GenerateOBJ("Car", "OBJ//Kart3.obj");
 
 
 	meshList[GEO_TRACK] = MeshBuilder::GenerateOBJ("modelTrack", "OBJ//Track.obj");
@@ -276,19 +277,21 @@ void SP2_TrackScene::Update(double dt)
 		else
 		{
 			cout << "Collide" << endl;
+			Vehicle.setSpeed(0.15);
+			SBuff.setTimer(4);
+			SBuff.setCondition(true);
 			break;
 		}
+	}
 
-		float vehSpeed = Vehicle.returnSpeed();
-
-		if (SBuff.returnTimer() > 0)
-		{
-			SBuff.setTimer(SBuff.returnTimer() - (1 * dt));
-		}
-		else
-		{
-			Vehicle.setSpeed(0.1);
-		}
+	if (SBuff.returnTimer() > 0)
+	{
+		SBuff.setTimer(SBuff.returnTimer() - 1 * dt);
+	}
+	else if (SBuff.returnTimer() < 0 && SBuff.returnCondition() == true)
+	{
+		Vehicle.setSpeed(0.2);
+		SBuff.setCondition(false);
 	}
 
 
@@ -623,7 +626,7 @@ void SP2_TrackScene::Render()
 		modelStack.Translate(Vehicle.newPosition.x, Vehicle.newPosition.y, Vehicle.newPosition.z);
 		modelStack.Rotate(Vehicle.steerAngle, 0, 1, 0);
 
-		RenderMesh(meshList[GEO_KART1], true);
+		RenderMesh(meshList[GEO_KART3], true);
 	}
 	modelStack.PopMatrix();
 

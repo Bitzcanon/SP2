@@ -10,6 +10,7 @@ SpeedBuff::SpeedBuff()
 {
 	effect = 10;
 	timer = 0;
+	condition = false;
 
 	//Storing coordinates in text file over into vector found in 
 	ifstream myfile("TextFiles//SpeedBuffCoordinates.txt"); // open text file
@@ -67,6 +68,15 @@ SpeedBuff::SpeedBuff()
 SpeedBuff::~SpeedBuff()
 {
 	
+}
+void SpeedBuff::setCondition(bool x)
+{
+	condition = x;
+}
+
+bool SpeedBuff::returnCondition()
+{
+	return condition;
 }
 
 int SpeedBuff::returnSpeedBuffRotation(int angleNumber)

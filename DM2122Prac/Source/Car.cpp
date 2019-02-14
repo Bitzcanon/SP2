@@ -3,12 +3,12 @@
 Car::Car()
 {
 	//initialize values as 0
-	speed = 0.1f;
-	maxSpeed = 1;
+	speed = 0;
+	//maxSpeed = 1;
 
-	acceleration = 0.01f;
-	speed = 0.f;
-	acceleration = 0.f;
+	acceleration = 0;
+
+	acceleration = 0;
 	steerAngle = 0;
 	health = 0;
 	isDrivingForward = false;
