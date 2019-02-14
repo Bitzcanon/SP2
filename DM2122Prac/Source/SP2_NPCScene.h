@@ -119,17 +119,19 @@ private:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	bool CloseToNPC();
+	void MoveNPC(double dt);
 	struct NPC //To keep track of NPC positions
 	{
 		float x, z;
 		bool close;
+		float direction;
 	};
 	
 	string UpdateFrameRate(float string);
 
 	float FPS;
 	bool interact;
-	NPC NPCs[3];
+	NPC NPCs[2];
 };
 
 #endif // ! SP2_NPCScene_H

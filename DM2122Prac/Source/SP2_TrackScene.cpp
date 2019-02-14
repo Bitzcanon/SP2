@@ -229,6 +229,9 @@ void SP2_TrackScene::Init()
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
 	projectionStack.LoadMatrix(projection);
+
+	//Initialise variables
+	vehicleSpeed = 0;
 }
 
 void SP2_TrackScene::UpdateBuffs(double dt)
@@ -310,6 +313,7 @@ void SP2_TrackScene::Update(double dt)
 	UpdateFrameRate(FPS);
 
 	Vehicle.Update(dt);
+	vehicleSpeed = Vehicle.returnSpeed();
 
 	//Check for camera bounds on skybox
 	if (camera.position.x < 500.f && camera.position.x > -500.f && camera.position.z < 500.f && camera.position.z > -500.f && camera.position.y < 700 && camera.position.y > 0)
@@ -645,21 +649,20 @@ void SP2_TrackScene::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], UpdateFrameRate(FPS), Color(1, 1, 0), 2, 72, 55);
 
 			//Player's Position (FOR DEBUG PURPOSES)
-			int cameraX = static_cast<int>(Vehicle.newPosition.x); //Convert x coordinate of the camera to 2 digits for display
-			int cameraY = static_cast<int>(Vehicle.newPosition.y); //Convert y coordinate of the camera to 2 digits for display
-			int cameraZ = static_cast<int>(Vehicle.newPosition.z); //Convert z coordinate of the camera to 2 digits for display
-/*
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraX), Color(1, 1, 0), 1, -1, 58);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraY), Color(1, 1, 0), 1, -1, 56);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraZ), Color(1, 1, 0), 1, -1, 54);*/
+			int vehiclePosX = static_cast<int>(Vehicle.newPosition.x); //Convert x coordinate of the vehicle to 2 digits for display
+			int vehiclePosZ = static_cast<int>(Vehicle.newPosition.z); //Convert z coordinate of the vehicle to 2 digits for display
 
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(Vehicle.getXpos()), Color(1, 1, 0), 1, -1, 58);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(Vehicle.getYpos()), Color(1, 1, 0), 1, -1, 56);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(Vehicle.getZpos()), Color(1, 1, 0), 1, -1, 54);
+			int cameraX = static_cast<int>(camera.position.x); //Convert x coordinate of the camera to 2 digits for display
+			int cameraY = static_cast<int>(camera.position.y); //Convert y coordinate of the camera to 2 digits for display
+			int cameraZ = static_cast<int>(camera.position.z); //Convert z coordinate of the camera to 2 digits for displa
 
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(camera.position.x), Color(1, 0, 0), 1, -1, 52);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(camera.position.y), Color(1, 0, 0), 1, -1, 50);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(camera.position.z), Color(1, 0, 0), 1, -1, 48);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehicleSpeed), Color(1, 1, 0), 1, -1, 58);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehiclePosX), Color(1, 1, 0), 1, -1, 56);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehiclePosZ), Color(1, 1, 0), 1, -1, 54);
+
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraX), Color(1, 0, 0), 1, -1, 52);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraY), Color(1, 0, 0), 1, -1, 50);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraZ), Color(1, 0, 0), 1, -1, 48);
 		}
 		modelStack.PopMatrix();
 

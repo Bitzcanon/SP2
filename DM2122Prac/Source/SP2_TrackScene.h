@@ -139,6 +139,7 @@ private:
 
 	SpeedBuff SBuff;
 	Car Vehicle;
+	float vehicleSpeed;
 };
 
 #endif // ! SP2_TrackScene_H
