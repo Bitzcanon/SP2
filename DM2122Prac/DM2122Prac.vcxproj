@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\Barrier.cpp" />
     <ClCompile Include="Source\Buff.cpp" />
     <ClCompile Include="Source\Car.cpp" />
     <ClCompile Include="Source\Coins.cpp" />
@@ -169,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h" />
+    <ClInclude Include="Source\Barrier.h" />
     <ClInclude Include="Source\Buff.h" />
     <ClInclude Include="Source\Car.h" />
     <ClInclude Include="Source\Coins.h" />

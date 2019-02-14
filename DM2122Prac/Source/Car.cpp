@@ -4,7 +4,7 @@ Car::Car()
 {
 	//initialize values as 0
 	speed = 0;
-	//maxSpeed = 1;
+	maxSpeed = 0.2f;
 
 	acceleration = 0;
 
@@ -60,9 +60,9 @@ void Car::Update(double dt)
 		{
 			acceleration = 0.5f;
 		}
-		if (speed > 0.2f)
+		if (speed > maxSpeed)
 		{
-			speed = 0.2f;
+			speed = maxSpeed;
 		}
 	}
 	if (isDrivingForward)
@@ -104,9 +104,9 @@ void Car::Update(double dt)
 		{
 			acceleration = -0.5f;
 		}
-		if (speed < -0.2f)
+		if (speed < -maxSpeed) //negative because it is moving in the opposite direction
 		{
-			speed = -0.2f;
+			speed = -maxSpeed;
 		}
 	}
 	if (isDrivingBackward)

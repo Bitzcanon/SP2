@@ -10,6 +10,7 @@
 #include "Light.h"
 
 #include "SpeedBuff.h"
+#include "Barrier.h"
 #include "Car.h"
 
 #include <string>
@@ -110,6 +111,7 @@ public:
 
 	virtual void Update(double dt);
 	virtual void UpdateBuffs(double dt);
+	virtual bool CollisionChecker(float objX, float objZ, float length, float width);
 
 	virtual void Render();
 	virtual void Exit();
@@ -139,6 +141,7 @@ private:
 	bool conditionTester;
 
 	SpeedBuff SBuff;
+	Barrier RoadBlock;
 	Car Vehicle;
 
 	float vehicleSpeed;
