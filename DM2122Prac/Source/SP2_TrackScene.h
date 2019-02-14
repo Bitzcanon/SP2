@@ -9,6 +9,7 @@
 #include "MatrixStack.h"
 #include "Light.h"
 
+#include "RenderStrings.h"
 #include "SpeedBuff.h"
 #include "Car.h"
 
@@ -92,10 +93,11 @@ private:
 
 		GEO_TRACK,
 		GEO_TESTCAR,
-		GEO_KART1,
-		GEO_KART2,
-		GEO_KART3,
-		GEO_KART4,
+		
+		GEO_KART,
+		GEO_WHEELS,
+		GEO_WHEEL,
+		GEO_COLOR,
 
 		GEO_SPEEDBUFF,
 
@@ -139,6 +141,8 @@ private:
 	bool conditionTester;
 
 	SpeedBuff SBuff;
+	RenderStrings texts;
+
 	Car Vehicle;
 
 	float vehicleSpeed;

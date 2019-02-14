@@ -13,6 +13,7 @@ public:
 	float returnxPos(int);
 	float returnyPos(int);
 	float returnzPos(int);
+
 	bool returnCondition();
 	void setCondition(bool);
 	

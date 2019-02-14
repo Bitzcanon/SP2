@@ -126,30 +126,6 @@ void SP2_TrackScene::Init()
 	light[0].exponent = 3.f;
 	light[0].spotDirection.Set(0.f, 1.f, 0.f);
 
-	/*light[1].type = Light::LIGHT_DIRECTIONAL;
-	light[1].position.Set(500, 500, -500);
-	light[1].color.Set(1, 1, 1);
-	light[1].power = 1.f;
-	light[1].kC = 1.f;
-	light[1].kL = 0.01f;
-	light[1].kQ = 0.001f;
-	light[1].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[1].cosInner = cos(Math::DegreeToRadian(30));
-	light[1].exponent = 1.f;
-	light[1].spotDirection.Set(0.f, 1.f, 0.f);
-
-	light[2].type = Light::LIGHT_POINT;
-	light[2].position.Set(63.5f, 103, 55);
-	light[2].color.Set(1, 1, 1);
-	light[2].power = 0.5f;
-	light[2].kC = 1.f;
-	light[2].kL = 0.01f;
-	light[2].kQ = 0.001f;
-	light[2].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[2].cosInner = cos(Math::DegreeToRadian(30));
-	light[2].exponent = 1.f;
-	light[2].spotDirection.Set(0.f, 1.f, 0.f);*/
-
 	// Make sure you pass uniform parameters after glUseProgram()
 	glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
 	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &light[0].color.r);
@@ -191,7 +167,8 @@ void SP2_TrackScene::Init()
 	}
 	//Skyboxes: http://www.custommapmakers.org/skyboxes.php
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
+	meshList[GEO_LEFT]->textureID = LoadTGA("Image//Colors//Blue.tga");
+
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("RIGHT", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
 	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("TOP", Color(1, 1, 1), 1.f, 1.f);
@@ -211,10 +188,15 @@ void SP2_TrackScene::Init()
 
 	meshList[GEO_TESTCAR] = MeshBuilder::GenerateCube("Car", Color(0, 1, 0), 5, 1, 1);
 
-	meshList[GEO_KART1] = MeshBuilder::GenerateOBJ("Car", "OBJ//Kart1.obj");
-	meshList[GEO_KART2] = MeshBuilder::GenerateOBJ("Car", "OBJ//Kart2.obj");
-	meshList[GEO_KART3] = MeshBuilder::GenerateOBJ("Car", "OBJ//Kart3.obj");
+	//Default init for kart
+	meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", texts.returnKartString(0));
+	meshList[GEO_KART]->textureID = LoadTGA(texts.returnColorString(0));
 
+	meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Car", texts.returnWheelsString(0));
+
+	meshList[GEO_WHEEL] = MeshBuilder::GenerateOBJ("Car", texts.returnWheelString(0));
+
+	//Default init for kart
 
 	meshList[GEO_TRACK] = MeshBuilder::GenerateOBJ("modelTrack", "OBJ//Track.obj");
 
@@ -642,7 +624,11 @@ void SP2_TrackScene::Render()
 		modelStack.Translate(Vehicle.newPosition.x, Vehicle.newPosition.y, Vehicle.newPosition.z);
 		modelStack.Rotate(Vehicle.steerAngle, 0, 1, 0);
 
-		RenderMesh(meshList[GEO_KART3], true);
+		RenderMesh(meshList[GEO_KART], true);
+
+		modelStack.PushMatrix();
+			RenderMesh(meshList[GEO_WHEEL], true);
+			modelStack.PopMatrix();
 	}
 	modelStack.PopMatrix();
 

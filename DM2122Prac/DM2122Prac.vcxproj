@@ -160,6 +160,7 @@
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
+    <ClCompile Include="Source\RenderStrings.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SP2_NPCScene.cpp" />
     <ClCompile Include="Source\SP2_TrackScene.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="Source\Material.h" />
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
+    <ClInclude Include="Source\RenderStrings.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\SP2_NPCScene.h" />
