@@ -205,6 +205,8 @@ void SP2_TrackScene::Init()
 	meshList[GEO_SPEEDBUFF] = MeshBuilder::GenerateOBJ("SpeedBuff", "OBJ//SpeedBoost.obj");
 	meshList[GEO_SPEEDBUFF]->textureID = LoadTGA("Image//SpeedBoostTexture.tga");
 
+	meshList[GEO_ROADBLOCK] = MeshBuilder::GenerateOBJ("RoadBlock", "OBJ//RoadBlock.obj");
+
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("Light Sphere", Color(1.f, 1.f, 1.f), 32, 36, 1.f);
@@ -253,9 +255,10 @@ void SP2_TrackScene::Update(double dt)
 		bounceTime -= 1 * dt;
 	}
 
+	/*Speedbuff logic done by Gary*/
 	for (int i = 0; i < SBuff.returnSpeedBuffQuantity(); i++)
 	{
-		if (CollisionChecker(SBuff.returnxPos(i), SBuff.returnzPos(i), 1, 1) == true)
+		if (CollisionChecker(i, SBuff.returnxPos(i), SBuff.returnzPos(i), 1, 1) == true)
 		{
 			SBuff.setTimer(4);
 			SBuff.setCondition(true);
@@ -272,13 +275,28 @@ void SP2_TrackScene::Update(double dt)
 		SBuff.setCondition(false);
 	}
 
-	/*for (int i = 0; i < RoadBlock.returnBarrierQuantity(); i++)
+	/*RoadBlock logic done by Winston*/
+	for (int i = 0; i < RoadBlock.returnBarrierQuantity(); i++)
 	{
-		if (CollisionChecker(RoadBlock.returnxPos(i), RoadBlock.returnzPos(i), 1, 2) == true)
+		if (CollisionChecker(i, RoadBlock.returnxPos(i), RoadBlock.returnzPos(i), 1.6f, 1.f) == true) //1.6 as the length due to the model being slightly shorter than 2 (as seen in Maya)
 		{
-
+			RoadBlock.setTimer(0.2f);
+			Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
+			Vehicle.setIsCollided(true);
 		}
-	}*/
+	}
+	//Timer after colliding with road block, to prevent player from having backward controls
+	if (RoadBlock.returnTimer() > 0)
+	{
+		RoadBlock.setTimer(RoadBlock.returnTimer() - 1 * dt);
+		
+	}
+	else if (RoadBlock.returnTimer() < 0 && Vehicle.returnIsCollided() == true)
+	{
+		Vehicle.setIsCollided(false);
+		Vehicle.setAcceleration(0);
+		Vehicle.setSpeed(0);
+	}
 
 	//Miscellaneous controls
 	if (Application::IsKeyPressed('1'))
@@ -300,6 +318,7 @@ void SP2_TrackScene::Update(double dt)
 
 	UpdateFrameRate(FPS);
 
+	/*Vehicle Movement & Camera movement logic done by Winston*/
 	Vehicle.Update(dt);
 	vehicleSpeed = Vehicle.returnSpeed();
 
@@ -310,48 +329,16 @@ void SP2_TrackScene::Update(double dt)
 	cameraTargetX = Vehicle.newPosition.x * 10 ;
 	cameraTargetY = Vehicle.newPosition.y;
 	cameraTargetZ = Vehicle.newPosition.z * 10;
-
-	//Check for camera bounds on skybox
-	if (camera.position.x < 500.f && camera.position.x > -500.f && camera.position.z < 500.f && camera.position.z > -500.f && camera.position.y < 700 && camera.position.y > 0)
-	{
-		camera.Update(dt);
-	}
-	//Camera looks opposite direction when hitting y bounds, but does not do anything when hitting x and z bounds
-	else if (camera.position.x >= 499.f)
-	{
-		camera.position.x = 498.f;
-	}
-	else if (camera.position.x <= -499.f)
-	{
-		camera.position.x = -498.f;
-	}
-	else if (camera.position.z >= 499.f)
-	{
-		camera.position.z = 498.f;
-	}
-	else if (camera.position.z <= -499.f)
-	{
-		camera.position.z = -498.f;
-	}
-	else if (camera.position.y <= 0.f)
-	{
-		camera.position.y = 1.f;
-		camera.target.y = 1.f;
-	}
-	else if (camera.position.y >= 699.f)
-	{
-		camera.position.y = 698.f;
-		camera.target.y = 0.f;
-	}
 }
 
-bool SP2_TrackScene::CollisionChecker(float objX, float objZ, float length, float width)
+/*Original logic done by Gary, Function and code organization done by Winston*/
+bool SP2_TrackScene::CollisionChecker(int index, float objX, float objZ, float length, float width)
 {
 	float minimumXObj = objX / Vehicle.returnCarScale();
 	float minimumZObj = objZ / Vehicle.returnCarScale();
 
-	float maximumXObj = objX / Vehicle.returnCarScale() + length;
-	float maximumZObj = objZ / Vehicle.returnCarScale() + width;
+	float maximumXObj = objX / Vehicle.returnCarScale() + length * RoadBlock.returnBarrierScale(index);
+	float maximumZObj = objZ / Vehicle.returnCarScale() + width * RoadBlock.returnBarrierScale(index);
 
 	//tmp var for car pos
 	float carXMin = Vehicle.newPosition.x;
@@ -379,6 +366,7 @@ bool SP2_TrackScene::CollisionChecker(float objX, float objZ, float length, floa
 
 static const float SKYBOXSIZE = 1000.f;
 
+/*FPS counter done by Winston*/
 string SP2_TrackScene::UpdateFrameRate(float fps)
 {
 	int IntFPS = static_cast<int>(fps); //Convert FPS to 2 digits for display
@@ -633,7 +621,7 @@ void SP2_TrackScene::Render()
 	//Draw Axes (For debugging purposes)
 	RenderMesh(meshList[GEO_AXES], false);
 
-	//Draw Track
+	//Draw Track (Modelled and rendered by Gary)
 	modelStack.PushMatrix();
 	{
 		float trackScale = Vehicle.returnCarScale() * 2;
@@ -644,7 +632,7 @@ void SP2_TrackScene::Render()
 	}
 	modelStack.PopMatrix();
 
-	//Draw Test Car
+	//Draw Test Car (Modelled by Gary, rendered by Winston)
 	modelStack.PushMatrix();
 	{
 		modelStack.Scale(Vehicle.returnCarScale(), Vehicle.returnCarScale(), Vehicle.returnCarScale());
@@ -660,6 +648,7 @@ void SP2_TrackScene::Render()
 	}
 	modelStack.PopMatrix();
 
+	//Draw Speed buffs in the map (Modelled and rendered by Gary)
 	for (int i = 0; i < SBuff.returnSpeedBuffQuantity(); i++)
 	{
 		modelStack.PushMatrix();
@@ -671,12 +660,24 @@ void SP2_TrackScene::Render()
 		modelStack.PopMatrix();
 	}
 
+	//Draw Road Blocks in the map (Modelled by Zheng Hong, rendered by Winston)
+	for (int i = 0; i < RoadBlock.returnBarrierQuantity(); i++)
+	{
+		modelStack.PushMatrix();
+
+		modelStack.Translate(RoadBlock.returnxPos(i), RoadBlock.returnyPos(i), RoadBlock.returnzPos(i));
+		modelStack.Scale(Vehicle.returnCarScale() * RoadBlock.returnBarrierScale(i), Vehicle.returnCarScale() * RoadBlock.returnBarrierScale(i), Vehicle.returnCarScale() * RoadBlock.returnBarrierScale(i));
+		modelStack.Rotate(RoadBlock.returnBarrierRotation(i), 0, 1, 0);
+		RenderMesh(meshList[GEO_ROADBLOCK], true); //set lighting to true once completed
+		modelStack.PopMatrix();
+	}
+
 	//Draw Skybox
 	modelStack.PushMatrix();
 	{
 		RenderSkybox();
 
-		//Draw UI
+		//Draw UI (Logic and rendering done by Winston)
 		modelStack.PushMatrix();
 		{
 			RenderTextOnScreen(meshList[GEO_TEXT], UpdateFrameRate(FPS), Color(1, 1, 0), 2, 72, 55);
@@ -684,10 +685,6 @@ void SP2_TrackScene::Render()
 			//Player's Position (FOR DEBUG PURPOSES)
 			int vehiclePosX = static_cast<int>(Vehicle.newPosition.x); //Convert x coordinate of the vehicle to 2 digits for display
 			int vehiclePosZ = static_cast<int>(Vehicle.newPosition.z); //Convert z coordinate of the vehicle to 2 digits for display
-
-			//int cameraX = static_cast<int>(camera.position.x); //Convert x coordinate of the camera to 2 digits for display
-			//int cameraY = static_cast<int>(camera.position.y); //Convert y coordinate of the camera to 2 digits for display
-			//int cameraZ = static_cast<int>(camera.position.z); //Convert z coordinate of the camera to 2 digits for display
 
 			int cameraX = static_cast<int>(cameraPosX); //Convert x coordinate of the camera to 2 digits for display
 			int cameraY = static_cast<int>(cameraPosY); //Convert y coordinate of the camera to 2 digits for display

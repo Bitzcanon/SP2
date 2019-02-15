@@ -58,6 +58,7 @@ Barrier::Barrier()
 	}
 
 	barrierQuantity = (TextStorage.size() / 4);
+	timer = 0;
 
 	/* For testing purposes , prints out the values of x y and z
 		for (int i = 0; i < TextStorage.size() / 3; i++)
@@ -76,9 +77,9 @@ int Barrier::returnBarrierRotation(int angleNumber)
 	return rotateBy[angleNumber];
 }
 
-int Barrier::returnBarrierScale(int scaleFactor)
+int Barrier::returnBarrierScale(int scaleNumber)
 {
-	return scaleBy[scaleFactor];
+	return scaleBy[scaleNumber];
 }
 
 int Barrier::returnBarrierQuantity()
@@ -99,4 +100,14 @@ float Barrier::returnyPos(int locationNumber)
 float Barrier::returnzPos(int locationNumber)
 {
 	return zPos[locationNumber];
+}
+
+void Barrier::setTimer(float time)
+{
+	timer = time;
+}
+
+float Barrier::returnTimer()
+{
+	return timer;
 }

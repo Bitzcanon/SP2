@@ -6,6 +6,9 @@
 #include "MyMath.h"
 
 #include "Location.h"
+
+//Logic and Car class done by Winston
+
 class Car
 {
 public:
@@ -19,6 +22,7 @@ public:
 
 	float returnSpeed();
 	void setSpeed(float);
+	void setAcceleration(float);
 
 	float returnMaxSpeed();
 
@@ -26,6 +30,9 @@ public:
 	void setCarScale(float);
 
 	void decelerateCar(double dt);
+
+	void setIsCollided(bool);
+	bool returnIsCollided(void);
 
 	Vector3 newPosition;
 	float steerAngle;
@@ -41,6 +48,8 @@ private:
 
 	bool isDrivingForward;
 	bool isDrivingBackward;
+
+	bool isCollidedWithBarrier;
 
 	Location car;
 };

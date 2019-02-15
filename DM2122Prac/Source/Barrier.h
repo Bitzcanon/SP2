@@ -3,6 +3,8 @@
 
 #include <vector>
 
+//Barrier Class done by Winston, orignial logic done by Gary
+
 class Barrier
 {
 public:
@@ -13,6 +15,9 @@ public:
 	float returnyPos(int);
 	float returnzPos(int);
 
+	float returnTimer();
+	void setTimer(float);
+
 	int returnBarrierRotation(int);
 	int returnBarrierScale(int);
 
@@ -20,6 +25,7 @@ public:
 
 private:
 	int barrierQuantity;
+	float timer;
 
 	std::vector <float> rotateBy;
 	std::vector <float> scaleBy;

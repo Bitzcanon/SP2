@@ -13,6 +13,7 @@ Car::Car()
 	health = 0;
 	isDrivingForward = false;
 	isDrivingBackward = false;
+	isCollidedWithBarrier = false;
 
 	newPosition = (0, 0, 0);
 
@@ -173,6 +174,11 @@ void Car::setSpeed(float speedVal)
 	speed = speedVal;
 }
 
+void Car::setAcceleration(float accelerationVal)
+{
+	acceleration = accelerationVal;
+}
+
 float Car::returnSpeed()
 {
 	return speed;
@@ -191,4 +197,14 @@ float Car::returnCarScale()
 void Car::setCarScale(float scale)
 {
 	carScale = scale;
+}
+
+void Car::setIsCollided(bool input)
+{
+	isCollidedWithBarrier = input;
+}
+
+bool Car::returnIsCollided(void)
+{
+	return isCollidedWithBarrier;
 }

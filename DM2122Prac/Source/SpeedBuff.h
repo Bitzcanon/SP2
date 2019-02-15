@@ -4,6 +4,8 @@
 #include "Buff.h"
 #include <vector>
 
+//Logic and Speedbuff class done by Gary
+
 class SpeedBuff : public Buff
 {
 public:

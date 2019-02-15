@@ -101,6 +101,7 @@ private:
 		GEO_COLOR,
 
 		GEO_SPEEDBUFF,
+		GEO_ROADBLOCK,
 
 		NUM_GEOMETRY,
 	};
@@ -113,7 +114,7 @@ public:
 
 	virtual void Update(double dt);
 	virtual void UpdateBuffs(double dt);
-	virtual bool CollisionChecker(float objX, float objZ, float length, float width);
+	virtual bool CollisionChecker(int i, float objX, float objZ, float length, float width);
 
 	virtual void Render();
 	virtual void Exit();
