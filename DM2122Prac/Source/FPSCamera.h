@@ -4,6 +4,7 @@
 #include "Vector3.h"
 #include "Mtx44.h"
 
+//FPSCamera class and logic done by Winston, with reference to: https://learnopengl.com/Getting-started/Camera
 
 class FPSCamera
 {

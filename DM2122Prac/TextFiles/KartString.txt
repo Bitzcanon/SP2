@@ -1,0 +1,3 @@
+OBJ//Kart1.obj
+OBJ//Kart2.obj
+OBJ//Kart3.obj

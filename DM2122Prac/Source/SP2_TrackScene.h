@@ -9,7 +9,9 @@
 #include "MatrixStack.h"
 #include "Light.h"
 
+#include "RenderStrings.h"
 #include "SpeedBuff.h"
+#include "Barrier.h"
 #include "Car.h"
 
 #include <string>
@@ -92,12 +94,14 @@ private:
 
 		GEO_TRACK,
 		GEO_TESTCAR,
-		GEO_KART1,
-		GEO_KART2,
-		GEO_KART3,
-		GEO_KART4,
+		
+		GEO_KART,
+		GEO_WHEELS,
+		GEO_WHEEL,
+		GEO_COLOR,
 
 		GEO_SPEEDBUFF,
+		GEO_ROADBLOCK,
 
 		NUM_GEOMETRY,
 	};
@@ -110,6 +114,7 @@ public:
 
 	virtual void Update(double dt);
 	virtual void UpdateBuffs(double dt);
+	virtual bool CollisionChecker(int i, float objX, float objZ, float length, float width);
 
 	virtual void Render();
 	virtual void Exit();
@@ -139,7 +144,13 @@ private:
 	bool conditionTester;
 
 	SpeedBuff SBuff;
+	RenderStrings texts;
+	Barrier RoadBlock;
 	Car Vehicle;
+
+	int transitionColor;
+
+	float bounceTime;
 
 	float vehicleSpeed;
 	float cameraPosX;

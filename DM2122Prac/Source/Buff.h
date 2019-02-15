@@ -11,9 +11,7 @@ public:
 
 	float returnEffect();
 	float returnTimer();
-
 	void setTimer(float);
-
 
 	//Store the location of where the buff is located at [boundary] 
 	Location pos;
