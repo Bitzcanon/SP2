@@ -9,9 +9,10 @@
 #include "MatrixStack.h"
 #include "Light.h"
 
+#include "RenderStrings.h"
 #include "SpeedBuff.h"
+#include "Barrier.h"
 #include "Car.h"
-
 
 #include <string>
 using namespace std;
@@ -93,8 +94,14 @@ private:
 
 		GEO_TRACK,
 		GEO_TESTCAR,
+		
+		GEO_KART,
+		GEO_WHEELS,
+		GEO_WHEEL,
+		GEO_COLOR,
 
 		GEO_SPEEDBUFF,
+		GEO_ROADBLOCK,
 
 		NUM_GEOMETRY,
 	};
@@ -107,6 +114,7 @@ public:
 
 	virtual void Update(double dt);
 	virtual void UpdateBuffs(double dt);
+	virtual bool CollisionChecker(int i, float objX, float objZ, float length, float width);
 
 	virtual void Render();
 	virtual void Exit();
@@ -118,6 +126,7 @@ private:
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
 
+	//Camera3 camera; //Switch to Camera3 once implementations are done
 	FPSCamera camera;
 	MS modelStack, viewStack, projectionStack;
 	Light light[3]; //array size is the number of light sources in the scene
@@ -131,8 +140,26 @@ private:
 
 	float FPS;
 
+	string condition;
+	bool conditionTester;
+
 	SpeedBuff SBuff;
-	Car SceneCar;
+	RenderStrings texts;
+	Barrier RoadBlock;
+	Car Vehicle;
+
+	int transitionColor;
+
+	float bounceTime;
+
+	float vehicleSpeed;
+	float cameraPosX;
+	float cameraPosY;
+	float cameraPosZ;
+
+	float cameraTargetX;
+	float cameraTargetY;
+	float cameraTargetZ;
 };
 
 #endif // ! SP2_TrackScene_H

@@ -1,14 +1,19 @@
-#pragma once
+#ifndef CAR_H
+#define CAR_H
 #include "Mtx44.h"
 #include "Application.h"
 #include "Utility.h"
 #include "MyMath.h"
 
 #include "Location.h"
+
+//Logic and Car class done by Winston
+
 class Car
 {
 public:
 	Car();
+	Car(float maxSpeed, float accelerationFactor, float steerFactor);
 	~Car();
 
 	void Update(double dt);
@@ -18,26 +23,39 @@ public:
 
 	float returnSpeed();
 	void setSpeed(float);
+	void setAcceleration(float);
+
+	float returnMaxSpeed();
 
 	float returnCarScale();
 	void setCarScale(float);
 
-	float velocityX;
-	float velocityZ;
+	void decelerateCar(double dt);
 
-	float newXpos;
-	float newYpos;
-	float newZpos;
+	void setIsCollided(bool);
+	bool returnIsCollided(void);
+
+	Vector3 newPosition;
 	float steerAngle;
 
 private:
 	float carScale;
 
+	float maxSpeed;
 	float speed;
 	float acceleration;
+	float accelerationFactor;
+	float steerFactor;
+
 	float health;
 	//float weight;
 
-	Location position;
+	bool isDrivingForward;
+	bool isDrivingBackward;
+
+	bool isCollidedWithBarrier;
+
+	Location car;
 };
 
+#endif

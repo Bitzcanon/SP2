@@ -90,6 +90,7 @@ private:
 		GEO_NPC_MECHANIC,
 		GEO_NPC1,
 		GEO_NPC2,
+		GEO_CHOCO,
 
 		NUM_GEOMETRY,
 	};
@@ -119,17 +120,20 @@ private:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	bool CloseToNPC();
+	bool CloseToSellerNPC();
+	void MoveNPC(double dt);
 	struct NPC //To keep track of NPC positions
 	{
 		float x, z;
-		bool close;
+		bool close, interacting;
+		float direction;
 	};
 	
 	string UpdateFrameRate(float string);
 
 	float FPS;
 	bool interact;
-	NPC NPCs[3];
+	NPC NPCs[2];
 };
 
 #endif // ! SP2_NPCScene_H

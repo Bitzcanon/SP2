@@ -108,7 +108,7 @@ void SP2_NPCScene::Init()
 
 	//Initialise initial Camera position
 	//camera.Init(Vector3(0, 20, 1), Vector3(0, 20, 0), Vector3(0, 1, 0)); //For Camera3
-	camera.Init(Vector3(0, 20, 1));
+	camera.Init(Vector3(0, 30, 1));
 
 	//Light parameters
 	//Lower floor lighting
@@ -223,15 +223,16 @@ void SP2_NPCScene::Init()
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("Light Sphere", Color(1.f, 1.f, 1.f), 32, 36, 1.f);
 
+	meshList[GEO_CHOCO] = MeshBuilder::GenerateOBJ("choco", "OBJ//NPC scene chocolates.obj");
+	meshList[GEO_CHOCO]->textureID = LoadTGA("Image//Texture.tga");
 
 	//Set projection to Perspective and load projection matrix
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
 	projectionStack.LoadMatrix(projection);
 
-	NPCs[0].x = -5.582f; NPCs[0].z = 7.759f; NPCs[0].close = false;
-	NPCs[1].x = 5.5f; NPCs[1].z = 7.7f; NPCs[1].close = false;
-	NPCs[2].x = 5.5f; NPCs[2].z = -7.7f; NPCs[2].close = false;
+	NPCs[0].x = -20.f; NPCs[0].z = 20.f; NPCs[0].close = false; NPCs[0].direction = 0; NPCs[0].interacting = false; //initialises the first NPC's starting position, bools for when player is close
+	NPCs[1].x = 6.f; NPCs[1].z = -50.f; NPCs[1].close = false; NPCs[1].direction = 0; NPCs[1].interacting = false; //and bool when player is interacting with the NPC
 }
 
 void SP2_NPCScene::Update(double dt)
@@ -288,6 +289,90 @@ void SP2_NPCScene::Update(double dt)
 	{
 		camera.position.y = 698.f;
 		camera.target.y = 0.f;
+	}
+
+	/*if (CloseToNPC && Application::IsKeyPressed('E'))
+	{
+		
+	}*/
+
+	MoveNPC(dt);
+}
+
+void SP2_NPCScene::MoveNPC(double dt) //Moves the 2 NPCs that "walks" around
+{
+	if (!NPCs[0].close)
+	{
+		switch ((int)NPCs[0].direction)
+		{
+		case 0:
+			if (NPCs[0].x < 20.f)
+			{
+				NPCs[0].x += (float)dt * 5.f;
+			}
+			else
+			{
+				NPCs[0].direction = 1.f;
+			}
+			break;
+		case 1:
+			if (NPCs[0].z > -20.f)
+			{
+				NPCs[0].z -= (float)dt * 5.f;
+			}
+			else
+			{
+				NPCs[0].direction = 2.f;
+			}
+			break;
+		case 2:
+			if (NPCs[0].x > -20.f)
+			{
+				NPCs[0].x -= (float)dt * 5.f;
+			}
+			else
+			{
+				NPCs[0].direction = 3.f;
+			}
+			break;
+		case 3:
+			if (NPCs[0].z < 20.f)
+			{
+				NPCs[0].z += (float)dt * 5.f;
+			}
+			else
+			{
+				NPCs[0].direction = 0.f;
+			}
+			break;
+		}
+	}
+
+	if (!NPCs[1].close)
+	{
+		switch ((int)NPCs[1].direction)
+		{
+		case 0:
+			if (NPCs[1].x < 10.f && !NPCs[1].close)
+			{
+				NPCs[1].x += (float)dt * 5.f;
+			}
+			else
+			{
+				NPCs[1].direction = 1.f;
+			}
+			break;
+		case 1:
+			if (NPCs[1].x > -10.f && !NPCs[1].close)
+			{
+				NPCs[1].x -= (float)dt * 5.f;
+			}
+			else
+			{
+				NPCs[1].direction = 0.f;
+			}
+			break;
+		}
 	}
 }
 
@@ -490,11 +575,35 @@ void SP2_NPCScene::RenderSkybox()
 	//Bottom of Skybox
 }
 
-bool SP2_NPCScene::CloseToNPC()
+bool SP2_NPCScene::CloseToSellerNPC() //To check if player is close to the NPCs that are moving
 {
-	if (camera.position.x >= -30.f - 20.f && camera.position.x <= -30.f + 20.f)
+	if (camera.position.x >= NPCs[0].x * 5.f - 40.f && camera.position.x <= NPCs[0].x * 5.f + 40.f)
 	{
-		if (camera.position.z >= 40.f - 20.f && camera.position.z <= 40.f + 20.f)
+		if (camera.position.z >= NPCs[0].z * 5.f - 40.f && camera.position.z <= NPCs[0].z * 5.f + 40.f)
+		{
+			NPCs[0].close = true;
+			return true;
+		}
+	}
+	if (camera.position.x >= NPCs[1].x * 5.f - 40.f && camera.position.x <= NPCs[1].x * 5.f + 40.f)
+	{
+		if (camera.position.z >= NPCs[1].z * 5.f - 40.f && camera.position.z <= NPCs[1].z * 5.f + 40.f)
+		{
+			NPCs[1].close = true;
+			return true;
+		}
+	}
+
+	NPCs[0].close = false;
+	NPCs[1].close = false;
+	return false;
+}
+
+bool SP2_NPCScene::CloseToNPC() //To check if player is close to the mechanic NPC
+{
+	if (camera.position.x >= -190.f - 40.f && camera.position.x <= -190.f + 40.f)
+	{
+		if (camera.position.z >= -320.f - 40.f && camera.position.z <= -320.f + 40.f)
 		{
 			return true;
 		}
@@ -559,6 +668,40 @@ void SP2_NPCScene::Render()
 	//Draw Axes (For debugging purposes)
 	RenderMesh(meshList[GEO_AXES], false);
 
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 0.1f, 0.f);
+	modelStack.Scale(5.f, 5.f, 5.f);
+	RenderMesh(meshList[GEO_SURROUNDINGS], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+
+	modelStack.Scale(5.f, 5.f, 5.f);
+	modelStack.Translate(-38.109, -0.259, -62.605);
+	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_NPC_MECHANIC], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Scale(5.f, 5.f, 5.f);
+	modelStack.Translate(NPCs[0].x, 0.f, NPCs[0].z);
+	modelStack.Rotate(NPCs[0].direction * 90.f, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_NPC1], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Scale(5.f, 5.f, 5.f);
+	modelStack.Translate(NPCs[1].x, 0.f, NPCs[1].z);
+	modelStack.Rotate(NPCs[1].direction * 180.f, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_NPC2], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 0.1f, 0.f);
+	modelStack.Scale(5.f, 5.f, 5.f);
+	RenderMesh(meshList[GEO_CHOCO], true);
+	modelStack.PopMatrix();
+
 	//Draw Skybox
 	modelStack.PushMatrix();
 	{
@@ -587,33 +730,13 @@ void SP2_NPCScene::Render()
 	}
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Scale(5, 5, 5);
-	RenderMesh(meshList[GEO_SURROUNDINGS], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Scale(5, 5, 5);
-	modelStack.Translate(-5.582, -0.357, 7.759);
-	RenderMesh(meshList[GEO_NPC_MECHANIC], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(5, 5, 5);
-	modelStack.Translate(5.5, 0, 7.7);
-	RenderMesh(meshList[GEO_NPC1], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Scale(5, 5, 5);
-	modelStack.Translate(5.5, 0, -7.7);
-	RenderMesh(meshList[GEO_NPC2], false);
-	modelStack.PopMatrix();
-
 	if (CloseToNPC())
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press E to build car", Color(1, 1, 0), 1, -1, 10);
+	}
+	if (CloseToSellerNPC())
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press E to interact with NPC", Color(1, 1, 0), 1, -1, 10);
 	}
 }
 
