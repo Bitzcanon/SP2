@@ -9,7 +9,6 @@ RenderStrings::RenderStrings()
 	ifstream Color("TextFiles//ColorString.txt");	// open text file
 	
 	string tmp; //tmp string var
-	const char * temp;
 
 	//store kart strings
 	if (Karts.is_open()) // open text file
