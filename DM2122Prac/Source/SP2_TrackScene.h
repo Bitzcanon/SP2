@@ -114,7 +114,7 @@ public:
 
 	virtual void Update(double dt);
 	virtual void UpdateBuffs(double dt);
-	virtual bool CollisionChecker(int i, float objX, float objZ, float length, float width);
+	virtual bool CollisionChecker(int type, int index, float objX, float objZ, float length, float width);
 
 	virtual void Render();
 	virtual void Exit();

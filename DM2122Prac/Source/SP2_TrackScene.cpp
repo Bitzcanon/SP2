@@ -258,7 +258,7 @@ void SP2_TrackScene::Update(double dt)
 	/*Speedbuff logic done by Gary*/
 	for (int i = 0; i < SBuff.returnSpeedBuffQuantity(); i++)
 	{
-		if (CollisionChecker(i, SBuff.returnxPos(i), SBuff.returnzPos(i), 1, 1) == true)
+		if (CollisionChecker(1 ,i, SBuff.returnxPos(i), SBuff.returnzPos(i), 1, 1) == true)
 		{
 			SBuff.setTimer(4);
 			SBuff.setCondition(true);
@@ -278,7 +278,7 @@ void SP2_TrackScene::Update(double dt)
 	/*RoadBlock logic done by Winston*/
 	for (int i = 0; i < RoadBlock.returnBarrierQuantity(); i++)
 	{
-		if (CollisionChecker(i, RoadBlock.returnxPos(i), RoadBlock.returnzPos(i), 1.6f, 1.f) == true) //1.6 as the length due to the model being slightly shorter than 2 (as seen in Maya)
+		if (CollisionChecker(2 ,i, RoadBlock.returnxPos(i), RoadBlock.returnzPos(i), 1.6f, 1.f) == true) //1.6 as the length due to the model being slightly shorter than 2 (as seen in Maya)
 		{
 			RoadBlock.setTimer(0.2f);
 			Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
@@ -331,17 +331,38 @@ void SP2_TrackScene::Update(double dt)
 	cameraTargetZ = Vehicle.newPosition.z * 10;
 
 	camera.Update(dt);
+
+	/*World border collision detection logic done by Winston*/
+	if (((Vehicle.newPosition.x * 10) >= 495.f) || ((Vehicle.newPosition.x * 10) <= -495.f) || ((Vehicle.newPosition.z * 10) >= 495.f) || ((Vehicle.newPosition.z * 10) <= -495.f))
+	{
+		RoadBlock.setTimer(0.2f);
+		Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
+		Vehicle.setIsCollided(true);
+	}
 }
 
 /*Original logic done by Gary, Function and code organization done by Winston*/
-bool SP2_TrackScene::CollisionChecker(int index, float objX, float objZ, float length, float width)
+bool SP2_TrackScene::CollisionChecker(int type, int index, float objX, float objZ, float length, float width)
 {
 	float minimumXObj = objX / Vehicle.returnCarScale();
 	float minimumZObj = objZ / Vehicle.returnCarScale();
+	float maximumXObj;
+	float maximumZObj;
 
-	float maximumXObj = objX / Vehicle.returnCarScale() + length * RoadBlock.returnBarrierScale(index);
-	float maximumZObj = objZ / Vehicle.returnCarScale() + width * RoadBlock.returnBarrierScale(index);
-
+	switch (type) //1 == Speedboost, 2 == Barrier
+	{
+		case 1:
+		{
+			maximumXObj = objX / Vehicle.returnCarScale() + length;
+			maximumZObj = objZ / Vehicle.returnCarScale() + width;
+		}
+		case 2:
+		{
+			maximumXObj = objX / Vehicle.returnCarScale() + length * RoadBlock.returnBarrierScale(index);
+			maximumZObj = objZ / Vehicle.returnCarScale() + width * RoadBlock.returnBarrierScale(index);
+		}
+	}
+	
 	//tmp var for car pos
 	float carXMin = Vehicle.newPosition.x;
 	float carXMax = Vehicle.newPosition.x + length;

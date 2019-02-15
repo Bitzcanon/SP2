@@ -2,30 +2,47 @@
 
 Car::Car()
 {
-	//initialize values as 0
-	speed = 0;
-	maxSpeed = 0.2f;
+	//Set default position of Car to 0,0,0
+	car.setLocation(0, 0, 0);
+	newPosition = (0, 0, 0);
 
-	acceleration = 0;
+	//initialize values as 0
+	maxSpeed = 0.2f;
+	speed = 0;
+
 	accelerationFactor = 0.005f;
+	acceleration = 0;
+	maxAcceleration = 0.5f;
 
 	steerFactor = 3.f;
-
-	acceleration = 0;
 	steerAngle = 0;
+
 	health = 0;
 	isDrivingForward = false;
 	isDrivingBackward = false;
 	isCollidedWithBarrier = false;
-
-	newPosition = (0, 0, 0);
-
-	carScale = 10;
-
-	//Set default position of Car to 0,0,0
-	car.setLocation(0, 0, 0);
 }
 
+float Car::carScale = 10;
+
+Car::Car(float x, float y, float z, float maxSpeedCar, float accelerationFactorCar, float maxAccelerationCar, float steerFactorCar)
+{
+	car.setLocation(x, y, z);
+	newPosition = (x, y, z);
+
+	maxSpeed = maxSpeedCar;
+	accelerationFactor = accelerationFactorCar;
+	maxAcceleration = maxAccelerationCar;
+	steerFactor = steerFactorCar;
+
+	speed = 0;
+	acceleration = 0;
+	steerAngle = 0;
+	health = 0;
+	isDrivingBackward = false;
+	isDrivingForward = false;
+	isCollidedWithBarrier = false;
+}
 
 Car::~Car()
 {
@@ -60,9 +77,9 @@ void Car::Update(double dt)
 		newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
 		car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
 
-		if (acceleration > 0.5f)
+		if (acceleration > maxAcceleration)
 		{
-			acceleration = 0.5f;
+			acceleration = maxAcceleration;
 		}
 		if (speed > maxSpeed)
 		{
@@ -88,9 +105,9 @@ void Car::Update(double dt)
 		newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
 		car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
 
-		if (acceleration < -0.5f)
+		if (acceleration < -maxAcceleration)
 		{
-			acceleration = -0.5f;
+			acceleration = -maxAcceleration;
 		}
 		if (speed < -maxSpeed) //negative because it is moving in the opposite direction
 		{

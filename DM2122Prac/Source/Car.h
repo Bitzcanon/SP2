@@ -13,7 +13,7 @@ class Car
 {
 public:
 	Car();
-	Car(float maxSpeed, float accelerationFactor, float steerFactor);
+	Car(float x, float y, float z, float maxSpeedCar, float accelerationFactorCar, float maxAccelerationCar, float steerFactorCar);
 	~Car();
 
 	void Update(double dt);
@@ -39,9 +39,10 @@ public:
 	float steerAngle;
 
 private:
-	float carScale;
+	static float carScale;
 
 	float maxSpeed;
+	float maxAcceleration;
 	float speed;
 	float acceleration;
 	float accelerationFactor;
