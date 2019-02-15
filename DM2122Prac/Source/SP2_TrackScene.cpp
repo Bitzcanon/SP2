@@ -243,7 +243,7 @@ void SP2_TrackScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
 
-	propellerRotation += (float)(60 * dt);
+	propellerRotation += (float)(180 * dt);
 	
 	if (Application::IsKeyPressed('U'))
 	{
@@ -294,6 +294,14 @@ void SP2_TrackScene::Update(double dt)
 			Vehicle.setIsCollided(true);
 		}
 	}
+	/*World border collision detection logic done by Winston*/
+	if (((Vehicle.newPosition.x * 10) >= 495.f) || ((Vehicle.newPosition.x * 10) <= -495.f) || ((Vehicle.newPosition.z * 10) >= 495.f) || ((Vehicle.newPosition.z * 10) <= -495.f))
+	{
+		RoadBlock.setTimer(0.2f);
+		Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
+		Vehicle.setIsCollided(true);
+	}
+
 	//Timer after colliding with road block, to prevent player from having backward controls
 	if (RoadBlock.returnTimer() > 0)
 	{
@@ -305,6 +313,15 @@ void SP2_TrackScene::Update(double dt)
 		Vehicle.setIsCollided(false);
 		Vehicle.setAcceleration(0);
 		Vehicle.setSpeed(0);
+	}
+
+	if (CollisionChecker(3, 1, 20, 0, 2, 1) == true)
+	{
+		cout << "You Win!" << endl;
+	}
+	else
+	{
+		cout << "You Suck" << endl;
 	}
 
 	//Miscellaneous controls
@@ -341,13 +358,7 @@ void SP2_TrackScene::Update(double dt)
 
 	camera.Update(dt);
 
-	/*World border collision detection logic done by Winston*/
-	if (((Vehicle.newPosition.x * 10) >= 495.f) || ((Vehicle.newPosition.x * 10) <= -495.f) || ((Vehicle.newPosition.z * 10) >= 495.f) || ((Vehicle.newPosition.z * 10) <= -495.f))
-	{
-		RoadBlock.setTimer(0.2f);
-		Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
-		Vehicle.setIsCollided(true);
-	}
+	
 }
 
 /*Original logic done by Gary, Function and code organization done by Winston*/
@@ -369,6 +380,11 @@ bool SP2_TrackScene::CollisionChecker(int type, int index, float objX, float obj
 		{
 			maximumXObj = objX / Vehicle.returnCarScale() + length * RoadBlock.returnBarrierScale(index);
 			maximumZObj = objZ / Vehicle.returnCarScale() + width * RoadBlock.returnBarrierScale(index);
+		}
+		case 3:
+		{
+			maximumXObj = objX / Vehicle.returnCarScale() + length;
+			maximumZObj = objZ / Vehicle.returnCarScale() + width;
 		}
 	}
 	
