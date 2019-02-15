@@ -93,6 +93,8 @@ private:
 		GEO_BACK,
 
 		GEO_TRACK,
+		GEO_FINISHLINE,
+		GEO_PROPELLER,
 		GEO_TESTCAR,
 		
 		GEO_KART,
@@ -151,6 +153,8 @@ private:
 	int transitionColor;
 
 	float bounceTime;
+
+	float propellerRotation;
 
 	float vehicleSpeed;
 	float cameraPosX;

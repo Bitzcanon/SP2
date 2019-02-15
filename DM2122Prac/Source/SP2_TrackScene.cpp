@@ -202,6 +202,11 @@ void SP2_TrackScene::Init()
 
 	meshList[GEO_TRACK] = MeshBuilder::GenerateOBJ("modelTrack", "OBJ//Track.obj");
 
+	meshList[GEO_FINISHLINE] = MeshBuilder::GenerateOBJ("modelFinishLine", "OBJ//FinishLine.obj");
+	meshList[GEO_FINISHLINE]->textureID = LoadTGA("Image//FinishLine.tga");
+
+	meshList[GEO_PROPELLER] = MeshBuilder::GenerateOBJ("modelPropeller", "OBJ//Propeller.obj");
+
 	meshList[GEO_SPEEDBUFF] = MeshBuilder::GenerateOBJ("SpeedBuff", "OBJ//SpeedBoost.obj");
 	meshList[GEO_SPEEDBUFF]->textureID = LoadTGA("Image//SpeedBoostTexture.tga");
 
@@ -226,6 +231,8 @@ void SP2_TrackScene::Init()
 	cameraTargetX = Vehicle.newPosition.x + 1;
 	cameraTargetY = Vehicle.newPosition.y + 1;
 	cameraTargetZ = Vehicle.newPosition.z + 10;
+
+	propellerRotation = 0;
 }
 
 void SP2_TrackScene::UpdateBuffs(double dt)
@@ -235,6 +242,8 @@ void SP2_TrackScene::UpdateBuffs(double dt)
 void SP2_TrackScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
+
+	propellerRotation += (float)(60 * dt);
 	
 	if (Application::IsKeyPressed('U'))
 	{
@@ -322,9 +331,9 @@ void SP2_TrackScene::Update(double dt)
 	Vehicle.Update(dt);
 	vehicleSpeed = Vehicle.returnSpeed();
 
-	cameraPosX = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * 10;
-	cameraPosY = Vehicle.newPosition.y + 20;
-	cameraPosZ = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * 10;
+	cameraPosX = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * 10;
+	cameraPosY = Vehicle.newPosition.y + 15;
+	cameraPosZ = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * 10;
 
 	cameraTargetX = Vehicle.newPosition.x * 10 ;
 	cameraTargetY = Vehicle.newPosition.y;
@@ -652,6 +661,36 @@ void SP2_TrackScene::Render()
 		modelStack.Translate(0, -0.495f, 0);
 
 		RenderMesh(meshList[GEO_TRACK], true);
+	}
+	modelStack.PopMatrix();
+
+	//Draw Finish Line (Modelled and rendered by Winston)
+	modelStack.PushMatrix();
+	{
+		float finishLineScale = Vehicle.returnCarScale() * 2;
+		modelStack.Scale(finishLineScale, finishLineScale, finishLineScale);
+		modelStack.Translate(0, -0.49f, 0);
+
+		RenderMesh(meshList[GEO_FINISHLINE], true);
+
+		//Draw Propeller (Modelled and rendered by Winston)
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(-0.15f, 3.25f, 0);
+			modelStack.Rotate(propellerRotation, 0, 1, 0);
+			RenderMesh(meshList[GEO_PROPELLER], true);
+		}
+		modelStack.PopMatrix();
+
+		//Draw Propeller (Modelled and rendered by Winston)
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(2.15f, 3.25f, 0);
+			modelStack.Rotate(-propellerRotation, 0, 1, 0);
+			RenderMesh(meshList[GEO_PROPELLER], true);
+		}
+		modelStack.PopMatrix();
+
 	}
 	modelStack.PopMatrix();
 
