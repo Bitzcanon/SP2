@@ -293,7 +293,7 @@ void SP2_NPCScene::Update(double dt)
 
 	/*if (CloseToNPC && Application::IsKeyPressed('E'))
 	{
-
+		
 	}*/
 
 	MoveNPC(dt);
@@ -308,7 +308,7 @@ void SP2_NPCScene::MoveNPC(double dt) //Moves the 2 NPCs that "walks" around
 		case 0:
 			if (NPCs[0].x < 20.f)
 			{
-				NPCs[0].x += dt * 5.f;
+				NPCs[0].x += (float)dt * 5.f;
 			}
 			else
 			{
@@ -318,7 +318,7 @@ void SP2_NPCScene::MoveNPC(double dt) //Moves the 2 NPCs that "walks" around
 		case 1:
 			if (NPCs[0].z > -20.f)
 			{
-				NPCs[0].z -= dt * 5.f;
+				NPCs[0].z -= (float)dt * 5.f;
 			}
 			else
 			{
@@ -328,7 +328,7 @@ void SP2_NPCScene::MoveNPC(double dt) //Moves the 2 NPCs that "walks" around
 		case 2:
 			if (NPCs[0].x > -20.f)
 			{
-				NPCs[0].x -= dt * 5.f;
+				NPCs[0].x -= (float)dt * 5.f;
 			}
 			else
 			{
@@ -338,7 +338,7 @@ void SP2_NPCScene::MoveNPC(double dt) //Moves the 2 NPCs that "walks" around
 		case 3:
 			if (NPCs[0].z < 20.f)
 			{
-				NPCs[0].z += dt * 5.f;
+				NPCs[0].z += (float)dt * 5.f;
 			}
 			else
 			{
@@ -355,7 +355,7 @@ void SP2_NPCScene::MoveNPC(double dt) //Moves the 2 NPCs that "walks" around
 		case 0:
 			if (NPCs[1].x < 10.f && !NPCs[1].close)
 			{
-				NPCs[1].x += dt * 5.f;
+				NPCs[1].x += (float)dt * 5.f;
 			}
 			else
 			{
@@ -365,7 +365,7 @@ void SP2_NPCScene::MoveNPC(double dt) //Moves the 2 NPCs that "walks" around
 		case 1:
 			if (NPCs[1].x > -10.f && !NPCs[1].close)
 			{
-				NPCs[1].x -= dt * 5.f;
+				NPCs[1].x -= (float)dt * 5.f;
 			}
 			else
 			{
@@ -601,9 +601,9 @@ bool SP2_NPCScene::CloseToSellerNPC() //To check if player is close to the NPCs 
 
 bool SP2_NPCScene::CloseToNPC() //To check if player is close to the mechanic NPC
 {
-	if (camera.position.x >= -160.f - 40.f && camera.position.x <= -160.f + 40.f)
+	if (camera.position.x >= -190.f - 40.f && camera.position.x <= -190.f + 40.f)
 	{
-		if (camera.position.z >= -460.f - 40.f && camera.position.z <= -460.f + 40.f)
+		if (camera.position.z >= -320.f - 40.f && camera.position.z <= -320.f + 40.f)
 		{
 			return true;
 		}
@@ -677,7 +677,7 @@ void SP2_NPCScene::Render()
 	modelStack.PushMatrix();
 
 	modelStack.Scale(5.f, 5.f, 5.f);
-	modelStack.Translate(-32.664f, -0.382f, -90.575f);
+	modelStack.Translate(-38.109, -0.259, -62.605);
 	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
 	RenderMesh(meshList[GEO_NPC_MECHANIC], false);
 	modelStack.PopMatrix();
