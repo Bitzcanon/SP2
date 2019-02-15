@@ -12,6 +12,8 @@
 
 #include "SP2_TrackScene.h"
 #include "SP2_NPCScene.h"
+#include "SP2_Menu.h"
+#include "SP2_SurvivalScene.h"
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
@@ -60,6 +62,9 @@ void resize_callback(GLFWwindow* window, int w, int h)
 
 void Application::Init()
 {
+	g_dElapsedTime = 0.0;
+	g_dBounceTime = 0.0;
+
 	//Set the error callback
 	glfwSetErrorCallback(error_callback);
 
@@ -115,7 +120,7 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	Scene *scene = new SP2_TrackScene();
+	Scene *scene = new SP2_SurvivalScene();
 	scene->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
