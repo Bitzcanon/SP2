@@ -164,6 +164,7 @@
     <ClCompile Include="Source\RenderStrings.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SP2_NPCScene.cpp" />
+    <ClCompile Include="Source\SP2_SurvivalScene.cpp" />
     <ClCompile Include="Source\SP2_TrackScene.cpp" />
     <ClCompile Include="Source\SpeedBuff.cpp" />
     <ClCompile Include="Source\Traps.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\SP2_NPCScene.h" />
+    <ClInclude Include="Source\SP2_SurvivalScene.h" />
     <ClInclude Include="Source\SP2_TrackScene.h" />
     <ClInclude Include="Source\SpeedBuff.h" />
     <ClInclude Include="Source\Traps.h" />

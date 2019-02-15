@@ -7,6 +7,9 @@ Car::Car()
 	maxSpeed = 0.2f;
 
 	acceleration = 0;
+	accelerationFactor = 0.005f;
+
+	steerFactor = 3.f;
 
 	acceleration = 0;
 	steerAngle = 0;
@@ -49,7 +52,7 @@ void Car::Update(double dt)
 	{
 		isDrivingForward = true;
 		isDrivingBackward = false;
-		acceleration += 0.005;
+		acceleration += accelerationFactor;
 		speed += (float)(acceleration * dt);
 
 		newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
@@ -77,7 +80,7 @@ void Car::Update(double dt)
 	{
 		isDrivingForward = false;
 		isDrivingBackward = true;
-		acceleration -= 0.005f;
+		acceleration -= accelerationFactor;
 		speed += (float)(acceleration * dt);
 
 		newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
@@ -105,22 +108,22 @@ void Car::Update(double dt)
 	{
 		if (isDrivingForward)
 		{
-			steerAngle -= 3.f;
+			steerAngle -= steerFactor;
 		}
 		if (isDrivingBackward)
 		{
-			steerAngle += 3.f;
+			steerAngle += steerFactor;
 		}
 	}
 	if (Application::IsKeyPressed(VK_LEFT))
 	{
 		if (isDrivingForward)
 		{
-			steerAngle += 3.f;
+			steerAngle += steerFactor;
 		}
 		if (isDrivingBackward)
 		{
-			steerAngle -= 3.f;
+			steerAngle -= steerFactor;
 		}
 	}
 }

@@ -13,6 +13,7 @@ class Car
 {
 public:
 	Car();
+	Car(float maxSpeed, float accelerationFactor, float steerFactor);
 	~Car();
 
 	void Update(double dt);
@@ -43,6 +44,9 @@ private:
 	float maxSpeed;
 	float speed;
 	float acceleration;
+	float accelerationFactor;
+	float steerFactor;
+
 	float health;
 	//float weight;
 
