@@ -21,6 +21,8 @@ SP2_TrackScene::~SP2_TrackScene()
 
 void SP2_TrackScene::Init()
 {
+	bounceTime = 0;
+	transitionColor = 0;
 	conditionTester = false;
 	condition = "Something Happened ! OWO";
 	//Set background color to dark blue (Before this are initialized variables, after is the rest)
@@ -156,9 +158,7 @@ void SP2_TrackScene::Init()
 	glUniform1f(m_parameters[U_LIGHT2_COSCUTOFF], light[2].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT2_COSINNER], light[2].cosInner);
 	glUniform1f(m_parameters[U_LIGHT2_EXPONENT], light[2].exponent);
-
 	glUniform1i(m_parameters[U_NUMLIGHTS], 3); //This value is the number of lights in the scene
-
 
 	//Initialise all meshes to NULL
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
@@ -190,7 +190,9 @@ void SP2_TrackScene::Init()
 
 	//Default init for kart
 	meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", texts.returnKartString(0));
-	meshList[GEO_KART]->textureID = LoadTGA(texts.returnColorString(0));
+	meshList[GEO_KART]->textureID = LoadTGA(texts.returnColorString(1).c_str());
+	//
+	cout << texts.returnColorString(1);
 
 	meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Car", texts.returnWheelsString(0));
 
@@ -231,6 +233,25 @@ void SP2_TrackScene::UpdateBuffs(double dt)
 void SP2_TrackScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
+	
+	if (Application::IsKeyPressed('U'))
+	{
+		if (bounceTime <= 0)
+		{
+			transitionColor += 1;
+			if (transitionColor > 4)
+			{
+				transitionColor = 0;
+			}
+			meshList[GEO_KART]->textureID = LoadTGA(texts.returnColorString(transitionColor).c_str());
+			bounceTime = 0.5;
+		}
+	}
+	
+	if (bounceTime > 0)
+	{
+		bounceTime -= 1 * dt;
+	}
 
 	for (int i = 0; i < SBuff.returnSpeedBuffQuantity(); i++)
 	{
@@ -341,17 +362,17 @@ bool SP2_TrackScene::CollisionChecker(float objX, float objZ, float length, floa
 
 	if (carXMax < minimumXObj || carXMin > maximumXObj)
 	{
-		cout << "No Collide" << endl;
+		//cout << "No Collide" << endl;
 		return false;
 	}
 	else if (carZMax < minimumZObj || carZMin > maximumZObj)
 	{
-		cout << "No Collide" << endl;
+		//cout << "No Collide" << endl;
 		return false;
 	}
 	else
 	{
-		cout << "Collide" << endl;
+		//cout << "Collide" << endl;
 		return true;
 	}	
 }

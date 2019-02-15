@@ -9,6 +9,7 @@ RenderStrings::RenderStrings()
 	ifstream Color("TextFiles//ColorString.txt");	// open text file
 	
 	string tmp; //tmp string var
+	const char * temp;
 
 	//store kart strings
 	if (Karts.is_open()) // open text file
@@ -24,7 +25,7 @@ RenderStrings::RenderStrings()
 		Karts.close();
 	}
 	//store wheels strings
-	if (Wheels.is_open()) // open text file
+	if (Wheels.is_open()) 
 	{
 		int i = 0;
 
@@ -37,7 +38,7 @@ RenderStrings::RenderStrings()
 		Wheels.close();
 	}
 	//store wheel strings
-	if (Wheel.is_open()) // open text file
+	if (Wheel.is_open()) 
 	{
 		int i = 0;
 
@@ -50,18 +51,15 @@ RenderStrings::RenderStrings()
 		Wheel.close();
 	}
 
-	const char * temp;
-
-	if (Color.is_open()) // open text file
+	if (Color.is_open()) 
 	{
 		int i = 0;
 
 		while (Color.eof() == false)
 		{
 			Color >> tmp;
-			temp = tmp.c_str();
 			i++;
-			ColorString.push_back(temp);
+			ColorString.push_back(tmp);
 		}
 		Color.close();
 	}
@@ -87,7 +85,7 @@ string RenderStrings::returnWheelString(int x)
 	return WheelsString[x];
 }
 
-const char * RenderStrings::returnColorString(int x)
+string  RenderStrings::returnColorString(int x)
 {
 	return ColorString[x];
 }

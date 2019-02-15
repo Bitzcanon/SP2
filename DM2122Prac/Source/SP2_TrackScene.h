@@ -144,9 +144,12 @@ private:
 
 	SpeedBuff SBuff;
 	RenderStrings texts;
-
 	Barrier RoadBlock;
 	Car Vehicle;
+
+	int transitionColor;
+
+	float bounceTime;
 
 	float vehicleSpeed;
 	float cameraPosX;

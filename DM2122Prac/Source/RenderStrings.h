@@ -14,10 +14,11 @@ public:
 	string returnKartString(int);
 	string returnWheelsString(int);
 	string returnWheelString(int);
-	const char* returnColorString(int);
+	string returnColorString(int);
 
 private:
-	vector <const char*> ColorString;
+	vector <string> ColorString;
+
 	vector <string> KartString;
 	vector <string> WheelsString;
 	vector <string> WheelString;
