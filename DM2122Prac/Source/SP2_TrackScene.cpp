@@ -329,6 +329,8 @@ void SP2_TrackScene::Update(double dt)
 	cameraTargetX = Vehicle.newPosition.x * 10 ;
 	cameraTargetY = Vehicle.newPosition.y;
 	cameraTargetZ = Vehicle.newPosition.z * 10;
+
+	camera.Update(dt);
 }
 
 /*Original logic done by Gary, Function and code organization done by Winston*/
