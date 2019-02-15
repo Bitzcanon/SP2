@@ -1,7 +1,59 @@
-﻿D:\visual studio 2017\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (DM2122Prac.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (DM2122Prac.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Application.cpp
+  Barrier.cpp
+d:\documents\github\sp2\dm2122prac\source\barrier.cpp(31): warning C4018: '<': signed/unsigned mismatch
+d:\documents\github\sp2\dm2122prac\source\barrier.cpp(77): warning C4244: 'return': conversion from '_Ty' to 'int', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+d:\documents\github\sp2\dm2122prac\source\barrier.cpp(82): warning C4244: 'return': conversion from '_Ty' to 'int', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+  Buff.cpp
+  Car.cpp
+d:\documents\github\sp2\dm2122prac\source\car.cpp(18): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\documents\github\sp2\dm2122prac\source\car.cpp(52): warning C4305: '+=': truncation from 'double' to 'float'
+  Coins.cpp
+  FPSCamera.cpp
+d:\documents\github\sp2\dm2122prac\source\fpscamera.cpp(83): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\documents\github\sp2\dm2122prac\source\fpscamera.cpp(87): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\documents\github\sp2\dm2122prac\source\fpscamera.cpp(91): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\documents\github\sp2\dm2122prac\source\fpscamera.cpp(95): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Location.cpp
+  Music.cpp
+  Camera.cpp
+  Camera3.cpp
+  LoadOBJ.cpp
+  LoadTGA.cpp
+  main.cpp
+  Mesh.cpp
+  MeshBuilder.cpp
+  RenderStrings.cpp
+  shader.cpp
+  SP2_NPCScene.cpp
+d:\documents\github\sp2\dm2122prac\source\sp2_npcscene.cpp(680): warning C4305: 'argument': truncation from 'double' to 'float'
   SP2_TrackScene.cpp
-c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(253): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(267): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(268): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(669): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  DM2122Prac.vcxproj -> C:\Users\Gary Quah\Documents\GitHub\SP2\Debug\Studio Project 2.exe
+d:\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(255): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+d:\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(270): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(271): warning C4305: 'argument': truncation from 'double' to 'float'
+d:\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(291): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(660): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(672): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  SpeedBuff.cpp
+d:\documents\github\sp2\dm2122prac\source\speedbuff.cpp(35): warning C4018: '<': signed/unsigned mismatch
+d:\documents\github\sp2\dm2122prac\source\speedbuff.cpp(84): warning C4244: 'return': conversion from '_Ty' to 'int', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+  Generating Code...
+  Compiling...
+  Traps.cpp
+  Utility.cpp
+  Generating Code...
+  LINK : D:\Documents\GitHub\SP2\Debug\Studio Project 2.exe not found or not built by the last incremental link; performing full link
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  DM2122Prac.vcxproj -> D:\Documents\GitHub\SP2\Debug\Studio Project 2.exe
