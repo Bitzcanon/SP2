@@ -78,12 +78,6 @@
     <ClCompile Include="Source\Traps.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SP2_Menu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SP2_SurvivalScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -155,27 +149,12 @@
     <ClInclude Include="Source\Traps.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SP2_Menu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SP2_SurvivalScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\Texture.vertexshader">
       <Filter>Shader</Filter>
     </None>
     <None Include="Shader\Text.fragmentshader">
-      <Filter>Shader</Filter>
-    </None>
-    <None Include="..\..\..\..\Downloads\2018S2 Week 6 framework Soln\2018S2 Week 6 framework Soln\MyGraphics\Shader\SimpleFragmentShader.fragmentshader">
-      <Filter>Shader</Filter>
-    </None>
-    <None Include="..\..\..\..\Downloads\2018S2 Week 6 framework Soln\2018S2 Week 6 framework Soln\MyGraphics\Shader\SimpleVertexShader.vertexshader">
-      <Filter>Shader</Filter>
-    </None>
-    <None Include="..\..\..\..\Downloads\2018S2 Week 6 framework Soln\2018S2 Week 6 framework Soln\MyGraphics\Shader\TransformVertexShader.vertexshader">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

@@ -20,9 +20,6 @@ private:
 
 	//Declare a window object
 	StopWatch m_timer;
-	double g_dElapsedTime;
-	double g_dDeltaTime;
-	double  g_dBounceTime; 
 };
 
 #endif

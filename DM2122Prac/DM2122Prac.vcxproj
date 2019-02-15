@@ -158,9 +158,7 @@
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\shader.cpp" />
-    <ClCompile Include="Source\SP2_Menu.cpp" />
     <ClCompile Include="Source\SP2_NPCScene.cpp" />
-    <ClCompile Include="Source\SP2_SurvivalScene.cpp" />
     <ClCompile Include="Source\SP2_TrackScene.cpp" />
     <ClCompile Include="Source\SpeedBuff.cpp" />
     <ClCompile Include="Source\Traps.cpp" />
@@ -184,9 +182,7 @@
     <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\shader.hpp" />
-    <ClInclude Include="Source\SP2_Menu.h" />
     <ClInclude Include="Source\SP2_NPCScene.h" />
-    <ClInclude Include="Source\SP2_SurvivalScene.h" />
     <ClInclude Include="Source\SP2_TrackScene.h" />
     <ClInclude Include="Source\SpeedBuff.h" />
     <ClInclude Include="Source\Traps.h" />
@@ -194,9 +190,6 @@
     <ClInclude Include="Source\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\Downloads\2018S2 Week 6 framework Soln\2018S2 Week 6 framework Soln\MyGraphics\Shader\SimpleFragmentShader.fragmentshader" />
-    <None Include="..\..\..\..\Downloads\2018S2 Week 6 framework Soln\2018S2 Week 6 framework Soln\MyGraphics\Shader\SimpleVertexShader.vertexshader" />
-    <None Include="..\..\..\..\Downloads\2018S2 Week 6 framework Soln\2018S2 Week 6 framework Soln\MyGraphics\Shader\TransformVertexShader.vertexshader" />
     <None Include="Shader\Text.fragmentshader" />
     <None Include="Shader\Texture.vertexshader" />
   </ItemGroup>
