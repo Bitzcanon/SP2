@@ -4,7 +4,7 @@ Car::Car()
 {
 	//Set default position of Car to 0,0,0
 	car.setLocation(0, 0, 0);
-	newPosition = (0.f, 0.f, 0.f);
+	newPosition = (0, 0, 0);
 
 	//initialize values as 0
 	maxSpeed = 0.2f;
@@ -24,8 +24,6 @@ Car::Car()
 }
 
 float Car::carScale = 10;
-
-bool Car::controlsReversed = false;
 
 Car::Car(float x, float y, float z, float maxSpeedCar, float accelerationFactorCar, float maxAccelerationCar, float steerFactorCar)
 {
@@ -67,166 +65,82 @@ float Car::getZpos(void)
 
 void Car::Update(double dt)
 {
-	if (controlsReversed == false)
+	if (Application::IsKeyPressed(VK_UP) && isDrivingBackward == false)
 	{
-		if (Application::IsKeyPressed(VK_UP) && isDrivingBackward == false)
-		{
-			isDrivingForward = true;
-			isDrivingBackward = false;
-			acceleration += accelerationFactor;
-			speed += (float)(acceleration * dt);
+		isDrivingForward = true;
+		isDrivingBackward = false;
+		acceleration += accelerationFactor;
+		speed += (float)(acceleration * dt);
 
-			newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
-			newPosition.y = car.returnYPos();
-			newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
-			car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
+		newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
+		newPosition.y = car.returnYPos();
+		newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
+		car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
 
-			if (acceleration > maxAcceleration)
-			{
-				acceleration = maxAcceleration;
-			}
-			if (speed > maxSpeed)
-			{
-				speed = maxSpeed;
-			}
-		}
-		if (isDrivingForward)
+		if (acceleration > maxAcceleration)
 		{
-			if (!Application::IsKeyPressed(VK_UP))
-			{
-				decelerateCar(dt);
-			}
+			acceleration = maxAcceleration;
 		}
-		if (Application::IsKeyPressed(VK_DOWN) && isDrivingForward == false)
+		if (speed > maxSpeed)
 		{
-			isDrivingForward = false;
-			isDrivingBackward = true;
-			acceleration -= accelerationFactor;
-			speed += (float)(acceleration * dt);
-
-			newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
-			newPosition.y = newPosition.y;
-			newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
-			car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
-
-			if (acceleration < -maxAcceleration)
-			{
-				acceleration = -maxAcceleration;
-			}
-			if (speed < -maxSpeed) //negative because it is moving in the opposite direction
-			{
-				speed = -maxSpeed;
-			}
-		}
-		if (isDrivingBackward)
-		{
-			if (!Application::IsKeyPressed(VK_DOWN))
-			{
-				decelerateCar(dt);
-			}
-		}
-		if (Application::IsKeyPressed(VK_RIGHT))
-		{
-			if (isDrivingForward)
-			{
-				steerAngle -= steerFactor;
-			}
-			if (isDrivingBackward)
-			{
-				steerAngle += steerFactor;
-			}
-		}
-		if (Application::IsKeyPressed(VK_LEFT))
-		{
-			if (isDrivingForward)
-			{
-				steerAngle += steerFactor;
-			}
-			if (isDrivingBackward)
-			{
-				steerAngle -= steerFactor;
-			}
+			speed = maxSpeed;
 		}
 	}
-	else if (controlsReversed == true)
+	if (isDrivingForward)
 	{
-		if (Application::IsKeyPressed(VK_DOWN) && isDrivingBackward == false)
+		if (!Application::IsKeyPressed(VK_UP))
 		{
-			isDrivingForward = true;
-			isDrivingBackward = false;
-			acceleration += accelerationFactor;
-			speed += (float)(acceleration * dt);
-
-			newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
-			newPosition.y = car.returnYPos();
-			newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
-			car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
-
-			if (acceleration > maxAcceleration)
-			{
-				acceleration = maxAcceleration;
-			}
-			if (speed > maxSpeed)
-			{
-				speed = maxSpeed;
-			}
+			decelerateCar(dt);
 		}
+	}
+	if (Application::IsKeyPressed(VK_DOWN) && isDrivingForward == false)
+	{
+		isDrivingForward = false;
+		isDrivingBackward = true;
+		acceleration -= accelerationFactor;
+		speed += (float)(acceleration * dt);
+
+		newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
+		newPosition.y = newPosition.y;
+		newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
+		car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
+
+		if (acceleration < -maxAcceleration)
+		{
+			acceleration = -maxAcceleration;
+		}
+		if (speed < -maxSpeed) //negative because it is moving in the opposite direction
+		{
+			speed = -maxSpeed;
+		}
+	}
+	if (isDrivingBackward)
+	{
+		if (!Application::IsKeyPressed(VK_DOWN))
+		{
+			decelerateCar(dt);
+		}
+	}
+	if (Application::IsKeyPressed(VK_RIGHT))
+	{
 		if (isDrivingForward)
 		{
-			if (!Application::IsKeyPressed(VK_DOWN))
-			{
-				decelerateCar(dt);
-			}
-		}
-		if (Application::IsKeyPressed(VK_UP) && isDrivingForward == false)
-		{
-			isDrivingForward = false;
-			isDrivingBackward = true;
-			acceleration -= accelerationFactor;
-			speed += (float)(acceleration * dt);
-
-			newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
-			newPosition.y = newPosition.y;
-			newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
-			car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
-
-			if (acceleration < -maxAcceleration)
-			{
-				acceleration = -maxAcceleration;
-			}
-			if (speed < -maxSpeed) //negative because it is moving in the opposite direction
-			{
-				speed = -maxSpeed;
-			}
+			steerAngle -= steerFactor;
 		}
 		if (isDrivingBackward)
 		{
-			if (!Application::IsKeyPressed(VK_UP))
-			{
-				decelerateCar(dt);
-			}
+			steerAngle += steerFactor;
 		}
-		if (Application::IsKeyPressed(VK_LEFT))
+	}
+	if (Application::IsKeyPressed(VK_LEFT))
+	{
+		if (isDrivingForward)
 		{
-			if (isDrivingForward)
-			{
-				steerAngle -= steerFactor;
-			}
-			if (isDrivingBackward)
-			{
-				steerAngle += steerFactor;
-			}
+			steerAngle += steerFactor;
 		}
-		if (Application::IsKeyPressed(VK_RIGHT))
+		if (isDrivingBackward)
 		{
-			if (isDrivingForward)
-			{
-				steerAngle += steerFactor;
-			}
-			if (isDrivingBackward)
-			{
-				steerAngle -= steerFactor;
-			}
+			steerAngle -= steerFactor;
 		}
 	}
 }

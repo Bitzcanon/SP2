@@ -6,9 +6,6 @@
 class Camera3 : public Camera
 {
 public:
-	//Vector3 position;
-	//Vector3 target;
-	//Vector3 up;
 
 	Vector3 defaultPosition;
 	Vector3 defaultTarget;

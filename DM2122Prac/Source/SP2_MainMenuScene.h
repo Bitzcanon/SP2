@@ -1,14 +1,15 @@
-#ifndef SP2_MAINMENUSCENE_H
-#define	SP2_MAINMENUSCENE_H
+#ifndef SP2_MainMenuScene_H
+#define	SP2_MainMenuScene_H
 
 #include "Scene.h"
-#include "Camera3.h"
+#include "MenuCamera.h"
 #include "FPSCamera.h"
 #include "Mesh.h"
 #include "MeshBuilder.h"
 #include "MatrixStack.h"
 #include "Light.h"
 #include <string>
+
 using namespace std;
 
 class SP2_MainMenuScene : public Scene
@@ -118,7 +119,7 @@ private:
 	unsigned m_parameters[U_TOTAL];
 
 	GAMESTATE state;
-	Camera3 camera;
+	MenuCamera camera;
 	MS modelStack, viewStack, projectionStack;
 	Light light[3]; //array size is the number of light sources in the scene
 
@@ -134,4 +135,4 @@ private:
 	int arrowY;
 };
 
-#endif // ! SP2_MAINMENUSCENE_H
+#endif // ! SP2_MainMenuScene_H

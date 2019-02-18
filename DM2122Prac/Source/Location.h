@@ -1,5 +1,5 @@
-#ifndef LOCATION_H
-#define LOCATION_H
+#ifndef Location_H
+#define Location_H
 
 #include "Vector3.h"
 
@@ -20,4 +20,4 @@ private:
 
 };
 
-#endif // ! LOCATION_H
+#endif

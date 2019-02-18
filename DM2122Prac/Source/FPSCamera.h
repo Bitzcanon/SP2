@@ -1,5 +1,5 @@
-#ifndef FPSCAMERA_H
-#define FPSCAMERA_H
+#ifndef FPSCamera_H
+#define FPSCamera_H
 
 #include "Vector3.h"
 #include "Mtx44.h"
@@ -34,4 +34,4 @@ private:
 	void UpdateMouse();
 };
 
-#endif // ! FPSCAMERA_H
+#endif

@@ -1,5 +1,5 @@
-#ifndef SP2_NPCSCENE_H
-#define	SP2_NPCSCENE_H
+#ifndef SP2_NPCScene_H
+#define	SP2_NPCScene_H
 
 #include "Scene.h"
 #include "Camera3.h"
@@ -9,8 +9,6 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "RenderStrings.h"
-
-#include "Player.h"
 
 #include <string>
 using namespace std;
@@ -94,11 +92,12 @@ private:
 		GEO_NPC1,
 		GEO_NPC2,
 		GEO_CHOCO,
-		GEO_GARAGEDOOR,
 
 		GEO_KART,
 		GEO_WHEELS,
 		GEO_COLOR,
+
+		GEO_MENU,
 
 		NUM_GEOMETRY,
 	};
@@ -127,10 +126,8 @@ private:
 	void RenderSkybox();
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
-	void UpdateDoor(double dt);
 	bool CloseToNPC();
 	bool CloseToSellerNPC();
-	bool CloseToDoor();
 	void MoveNPC(double dt);
 	struct NPC //To keep track of NPC positions
 	{
@@ -149,9 +146,9 @@ private:
 	int transitionWheels;
 	float bounceTime;
 	bool interact;
-	float GarageDoorY, GarageDoorRotate;
-	bool GarageOpen;
 	NPC NPCs[2];
+
+	bool doMenu;
 };
 
 #endif // ! SP2_NPCScene_H
