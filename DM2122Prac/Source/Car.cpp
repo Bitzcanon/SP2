@@ -21,6 +21,8 @@ Car::Car()
 	isDrivingForward = false;
 	isDrivingBackward = false;
 	isCollidedWithBarrier = false;
+
+	playerInstance = Player::getInstance();
 }
 
 float Car::carScale = 10;
@@ -42,6 +44,8 @@ Car::Car(float x, float y, float z, float maxSpeedCar, float accelerationFactorC
 	isDrivingBackward = false;
 	isDrivingForward = false;
 	isCollidedWithBarrier = false;
+
+	playerInstance = Player::getInstance();
 }
 
 Car::~Car()
@@ -68,7 +72,6 @@ void Car::Update(double dt)
 	if (Application::IsKeyPressed(VK_UP) && isDrivingBackward == false)
 	{
 		
-
 		isDrivingForward = true;
 		isDrivingBackward = false;
 		acceleration += accelerationFactor;

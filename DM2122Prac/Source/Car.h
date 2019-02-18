@@ -6,6 +6,7 @@
 #include "MyMath.h"
 
 #include "Location.h"
+#include "Player.h"
 
 //Logic and Car class done by Winston
 
@@ -57,6 +58,7 @@ private:
 	bool isCollidedWithBarrier;
 
 	Location car;
+	Player *playerInstance;
 };
 
 #endif
