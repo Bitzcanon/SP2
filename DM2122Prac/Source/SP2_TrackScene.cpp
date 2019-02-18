@@ -436,16 +436,19 @@ bool SP2_TrackScene::CollisionChecker(int type, int index, float objX, float obj
 		{
 			maximumXObj = objX / Vehicle.returnCarScale() + length;
 			maximumZObj = objZ / Vehicle.returnCarScale() + width;
+			break;
 		}
 		case 2:
 		{
 			maximumXObj = objX / Vehicle.returnCarScale() + length * RoadBlock.returnBarrierScale(index);
 			maximumZObj = objZ / Vehicle.returnCarScale() + width * RoadBlock.returnBarrierScale(index);
+			break;
 		}
 		case 3:
 		{
 			maximumXObj = objX / Vehicle.returnCarScale() + length;
 			maximumZObj = objZ / Vehicle.returnCarScale() + width;
+			break;
 		}
 	}
 	

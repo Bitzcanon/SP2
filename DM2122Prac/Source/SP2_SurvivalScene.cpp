@@ -584,7 +584,7 @@ void SP2_SurvivalScene::Render()
 	}
 	modelStack.PopMatrix();
 
-	for (int i = 0; i < SBuff.returnSpeedBuffQuantity(); i++)
+	/*for (int i = 0; i < SBuff.returnSpeedBuffQuantity(); i++)
 	{
 		modelStack.PushMatrix();
 		modelStack.Scale(SceneCar.returnCarScale(), SceneCar.returnCarScale(), SceneCar.returnCarScale());
@@ -593,7 +593,7 @@ void SP2_SurvivalScene::Render()
 		modelStack.Rotate(SBuff.returnSpeedBuffRotation(i), 0, 1, 0);
 		RenderMesh(meshList[GEO_SPEEDBUFF], false);
 		modelStack.PopMatrix();
-	}
+	}*/
 
 	//Draw Skybox
 	modelStack.PushMatrix();

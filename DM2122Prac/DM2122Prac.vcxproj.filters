@@ -84,9 +84,10 @@
     <ClCompile Include="Source\Barrier.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SP2_MainMenuScene.cpp">
- </ClCompile>
     <ClCompile Include="Source\SP2_SurvivalScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SP2_MainMenuScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -166,9 +167,10 @@
     <ClInclude Include="Source\Barrier.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SP2_MainMenuScene.h">
-    </ClInclude>
     <ClInclude Include="Source\SP2_SurvivalScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SP2_MainMenuScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
