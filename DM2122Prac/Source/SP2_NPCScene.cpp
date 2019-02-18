@@ -222,11 +222,8 @@ void SP2_NPCScene::Init()
 	meshList[GEO_NPC_MECHANIC] = MeshBuilder::GenerateOBJ("mechanic", "OBJ//Placeholder sitting NPC.obj");
 	meshList[GEO_NPC_MECHANIC]->textureID = LoadTGA("Image//NPC texture.tga");
 
-	meshList[GEO_NPC1] = MeshBuilder::GenerateOBJ("randomNPC", "OBJ//Placeholder NPC.obj");
-	meshList[GEO_NPC1]->textureID = LoadTGA("Image//NPC texture.tga");
-
-	meshList[GEO_NPC2] = MeshBuilder::GenerateOBJ("randomNPC", "OBJ//Placeholder NPC.obj");
-	meshList[GEO_NPC2]->textureID = LoadTGA("Image//NPC texture.tga");
+	meshList[GEO_NPC] = MeshBuilder::GenerateOBJ("randomNPC", "OBJ//Placeholder NPC.obj");
+	meshList[GEO_NPC]->textureID = LoadTGA("Image//NPC texture.tga");
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("Light Sphere", Color(1.f, 1.f, 1.f), 32, 36, 1.f);
 
@@ -242,6 +239,9 @@ void SP2_NPCScene::Init()
 	meshList[GEO_GARAGEDOOR] = MeshBuilder::GenerateOBJ("door", "OBJ//GarageDoor.obj");
 	meshList[GEO_GARAGEDOOR]->textureID = LoadTGA("Image//GarageDoorTexture.tga");
 
+	meshList[GEO_COIN] = MeshBuilder::GenerateOBJ("coin", "OBJ//Coin.obj");
+	meshList[GEO_COIN]->textureID = LoadTGA("Image//PlaceholderCoinTexture.tga");
+
 	//Set projection to Perspective and load projection matrix
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
@@ -250,6 +250,7 @@ void SP2_NPCScene::Init()
 	NPCs[0].x = -20.f; NPCs[0].z = 20.f; NPCs[0].close = false; NPCs[0].direction = 0; NPCs[0].interacting = false; //initialises the first NPC's starting position, bools for when player is close
 	NPCs[1].x = 6.f; NPCs[1].z = -50.f; NPCs[1].close = false; NPCs[1].direction = 0; NPCs[1].interacting = false; //and bool when player is interacting with the NPC
 	GarageDoorY = 6.685f; GarageDoorRotate = 0.f; GarageOpen = false;
+	coins[0].SetCoinCoords(10.f, 50.f); coins[1].SetCoinCoords(100.f, 90.f);
 }
 
 void SP2_NPCScene::Update(double dt)
@@ -370,6 +371,8 @@ void SP2_NPCScene::Update(double dt)
 
 	MoveNPC(dt);
 	UpdateDoor(dt);
+	coins[0].CoinCollision(camera.position.x, camera.position.z);
+	coins[1].CoinCollision(camera.position.x, camera.position.z);
 }
 
 void SP2_NPCScene::UpdateDoor(double dt)
@@ -804,14 +807,14 @@ void SP2_NPCScene::Render()
 	modelStack.Scale(5.f, 5.f, 5.f);
 	modelStack.Translate(NPCs[0].x, 0.f, NPCs[0].z);
 	modelStack.Rotate(NPCs[0].direction * 90.f, 0.f, 1.f, 0.f);
-	RenderMesh(meshList[GEO_NPC1], false);
+	RenderMesh(meshList[GEO_NPC], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Scale(5.f, 5.f, 5.f);
 	modelStack.Translate(NPCs[1].x, 0.f, NPCs[1].z);
 	modelStack.Rotate(NPCs[1].direction * 180.f, 0.f, 1.f, 0.f);
-	RenderMesh(meshList[GEO_NPC2], false);
+	RenderMesh(meshList[GEO_NPC], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
@@ -820,7 +823,21 @@ void SP2_NPCScene::Render()
 	RenderMesh(meshList[GEO_CHOCO], true);
 	modelStack.PopMatrix();
 
-	
+	if (!coins[0].CheckTaken())
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(coins[0].getX(), 0.f, coins[0].getZ());
+		RenderMesh(meshList[GEO_COIN], true);
+		modelStack.PopMatrix();
+	}
+
+	if (!coins[1].CheckTaken())
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(coins[1].getX(), 0.f, coins[1].getZ());
+		RenderMesh(meshList[GEO_COIN], true);
+		modelStack.PopMatrix();
+	}
 
 	modelStack.PushMatrix();
 	modelStack.Scale(5.f, 5.f, 5.f);
@@ -863,11 +880,11 @@ void SP2_NPCScene::Render()
 	modelStack.Scale(50, 50, 50);
 	RenderMesh(meshList[GEO_KART], true);
 
-		modelStack.PushMatrix();
-		RenderMesh(meshList[GEO_WHEELS], true);
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_WHEELS], true);
 
-		modelStack.PopMatrix();
-		modelStack.PopMatrix();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
 
 	if (CloseToNPC())
 	{

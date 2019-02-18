@@ -11,6 +11,7 @@
 #include "RenderStrings.h"
 
 #include "Player.h"
+#include "Coins.h"
 
 #include <string>
 using namespace std;
@@ -62,7 +63,7 @@ private:
 		U_LIGHT2_SPOTDIRECTION,
 		U_LIGHT2_COSCUTOFF,
 		U_LIGHT2_COSINNER,
-		U_LIGHT2_EXPONENT,
+	 	U_LIGHT2_EXPONENT,
 
 		U_COLOR_TEXTURE_ENABLED,
 		U_COLOR_TEXTURE,
@@ -91,11 +92,10 @@ private:
 		GEO_BACK,
 		GEO_SURROUNDINGS,
 		GEO_NPC_MECHANIC,
-		GEO_NPC1,
-		GEO_NPC2,
+		GEO_NPC,
 		GEO_CHOCO,
 		GEO_GARAGEDOOR,
-
+		GEO_COIN,
 		GEO_KART,
 		GEO_WHEELS,
 		GEO_COLOR,
@@ -152,6 +152,7 @@ private:
 	float GarageDoorY, GarageDoorRotate;
 	bool GarageOpen;
 	NPC NPCs[2];
+	Coins coins[2];
 };
 
 #endif // ! SP2_NPCScene_H
