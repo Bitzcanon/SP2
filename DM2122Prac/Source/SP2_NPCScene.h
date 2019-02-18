@@ -1,5 +1,5 @@
-#ifndef SP2_NPCScene_H
-#define	SP2_NPCScene_H
+#ifndef SP2_NPCSCENE_H
+#define	SP2_NPCSCENE_H
 
 #include "Scene.h"
 #include "Camera3.h"
@@ -9,6 +9,8 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "RenderStrings.h"
+
+#include "Player.h"
 
 #include <string>
 using namespace std;

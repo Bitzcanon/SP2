@@ -4,7 +4,7 @@ Car::Car()
 {
 	//Set default position of Car to 0,0,0
 	car.setLocation(0, 0, 0);
-	newPosition = (0, 0, 0);
+	newPosition = (0.f, 0.f, 0.f);
 
 	//initialize values as 0
 	maxSpeed = 0.2f;
@@ -24,6 +24,8 @@ Car::Car()
 }
 
 float Car::carScale = 10;
+
+bool Car::controlsReversed = false;
 
 Car::Car(float x, float y, float z, float maxSpeedCar, float accelerationFactorCar, float maxAccelerationCar, float steerFactorCar)
 {
@@ -65,82 +67,166 @@ float Car::getZpos(void)
 
 void Car::Update(double dt)
 {
-	if (Application::IsKeyPressed(VK_UP) && isDrivingBackward == false)
+	if (controlsReversed == false)
 	{
-		isDrivingForward = true;
-		isDrivingBackward = false;
-		acceleration += accelerationFactor;
-		speed += (float)(acceleration * dt);
+		if (Application::IsKeyPressed(VK_UP) && isDrivingBackward == false)
+		{
+			isDrivingForward = true;
+			isDrivingBackward = false;
+			acceleration += accelerationFactor;
+			speed += (float)(acceleration * dt);
 
-		newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
-		newPosition.y = car.returnYPos();
-		newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
-		car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
+			newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
+			newPosition.y = car.returnYPos();
+			newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
+			car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
 
-		if (acceleration > maxAcceleration)
-		{
-			acceleration = maxAcceleration;
+			if (acceleration > maxAcceleration)
+			{
+				acceleration = maxAcceleration;
+			}
+			if (speed > maxSpeed)
+			{
+				speed = maxSpeed;
+			}
 		}
-		if (speed > maxSpeed)
-		{
-			speed = maxSpeed;
-		}
-	}
-	if (isDrivingForward)
-	{
-		if (!Application::IsKeyPressed(VK_UP))
-		{
-			decelerateCar(dt);
-		}
-	}
-	if (Application::IsKeyPressed(VK_DOWN) && isDrivingForward == false)
-	{
-		isDrivingForward = false;
-		isDrivingBackward = true;
-		acceleration -= accelerationFactor;
-		speed += (float)(acceleration * dt);
-
-		newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
-		newPosition.y = newPosition.y;
-		newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
-		car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
-
-		if (acceleration < -maxAcceleration)
-		{
-			acceleration = -maxAcceleration;
-		}
-		if (speed < -maxSpeed) //negative because it is moving in the opposite direction
-		{
-			speed = -maxSpeed;
-		}
-	}
-	if (isDrivingBackward)
-	{
-		if (!Application::IsKeyPressed(VK_DOWN))
-		{
-			decelerateCar(dt);
-		}
-	}
-	if (Application::IsKeyPressed(VK_RIGHT))
-	{
 		if (isDrivingForward)
 		{
-			steerAngle -= steerFactor;
+			if (!Application::IsKeyPressed(VK_UP))
+			{
+				decelerateCar(dt);
+			}
+		}
+		if (Application::IsKeyPressed(VK_DOWN) && isDrivingForward == false)
+		{
+			isDrivingForward = false;
+			isDrivingBackward = true;
+			acceleration -= accelerationFactor;
+			speed += (float)(acceleration * dt);
+
+			newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
+			newPosition.y = newPosition.y;
+			newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
+			car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
+
+			if (acceleration < -maxAcceleration)
+			{
+				acceleration = -maxAcceleration;
+			}
+			if (speed < -maxSpeed) //negative because it is moving in the opposite direction
+			{
+				speed = -maxSpeed;
+			}
 		}
 		if (isDrivingBackward)
 		{
-			steerAngle += steerFactor;
+			if (!Application::IsKeyPressed(VK_DOWN))
+			{
+				decelerateCar(dt);
+			}
+		}
+		if (Application::IsKeyPressed(VK_RIGHT))
+		{
+			if (isDrivingForward)
+			{
+				steerAngle -= steerFactor;
+			}
+			if (isDrivingBackward)
+			{
+				steerAngle += steerFactor;
+			}
+		}
+		if (Application::IsKeyPressed(VK_LEFT))
+		{
+			if (isDrivingForward)
+			{
+				steerAngle += steerFactor;
+			}
+			if (isDrivingBackward)
+			{
+				steerAngle -= steerFactor;
+			}
 		}
 	}
-	if (Application::IsKeyPressed(VK_LEFT))
+	else if (controlsReversed == true)
 	{
+		if (Application::IsKeyPressed(VK_DOWN) && isDrivingBackward == false)
+		{
+			isDrivingForward = true;
+			isDrivingBackward = false;
+			acceleration += accelerationFactor;
+			speed += (float)(acceleration * dt);
+
+			newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
+			newPosition.y = car.returnYPos();
+			newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
+			car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
+
+			if (acceleration > maxAcceleration)
+			{
+				acceleration = maxAcceleration;
+			}
+			if (speed > maxSpeed)
+			{
+				speed = maxSpeed;
+			}
+		}
 		if (isDrivingForward)
 		{
-			steerAngle += steerFactor;
+			if (!Application::IsKeyPressed(VK_DOWN))
+			{
+				decelerateCar(dt);
+			}
+		}
+		if (Application::IsKeyPressed(VK_UP) && isDrivingForward == false)
+		{
+			isDrivingForward = false;
+			isDrivingBackward = true;
+			acceleration -= accelerationFactor;
+			speed += (float)(acceleration * dt);
+
+			newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
+			newPosition.y = newPosition.y;
+			newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
+			car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
+
+			if (acceleration < -maxAcceleration)
+			{
+				acceleration = -maxAcceleration;
+			}
+			if (speed < -maxSpeed) //negative because it is moving in the opposite direction
+			{
+				speed = -maxSpeed;
+			}
 		}
 		if (isDrivingBackward)
 		{
-			steerAngle -= steerFactor;
+			if (!Application::IsKeyPressed(VK_UP))
+			{
+				decelerateCar(dt);
+			}
+		}
+		if (Application::IsKeyPressed(VK_LEFT))
+		{
+			if (isDrivingForward)
+			{
+				steerAngle -= steerFactor;
+			}
+			if (isDrivingBackward)
+			{
+				steerAngle += steerFactor;
+			}
+		}
+		if (Application::IsKeyPressed(VK_RIGHT))
+		{
+			if (isDrivingForward)
+			{
+				steerAngle += steerFactor;
+			}
+			if (isDrivingBackward)
+			{
+				steerAngle -= steerFactor;
+			}
 		}
 	}
 }

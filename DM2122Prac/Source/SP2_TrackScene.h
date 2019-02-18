@@ -1,5 +1,5 @@
-#ifndef SP2_TrackScene_H
-#define	SP2_TrackScene_H
+#ifndef SP2_TRACKSCENE_H
+#define	SP2_TRACKSCENE_H
 
 #include "Scene.h"
 #include "Camera3.h"
@@ -13,6 +13,7 @@
 #include "SpeedBuff.h"
 #include "Barrier.h"
 #include "Car.h"
+#include "Player.h"
 
 #include <string>
 using namespace std;
@@ -172,4 +173,4 @@ private:
 	vector <float> SBuffList;
 };
 
-#endif // ! SP2_TrackScene_H
+#endif // ! SP2_TRACKSCENE_H

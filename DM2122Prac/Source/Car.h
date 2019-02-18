@@ -55,6 +55,8 @@ private:
 	bool isDrivingBackward;
 
 	bool isCollidedWithBarrier;
+	
+	static bool controlsReversed;
 
 	Location car;
 };

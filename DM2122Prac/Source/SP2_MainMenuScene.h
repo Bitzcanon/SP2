@@ -1,5 +1,5 @@
-#ifndef SP2_MainMenuScene_H
-#define	SP2_MainMenuScene_H
+#ifndef SP2_MAINMENUSCENE_H
+#define	SP2_MAINMENUSCENE_H
 
 #include "Scene.h"
 #include "Camera3.h"
@@ -134,4 +134,4 @@ private:
 	int arrowY;
 };
 
-#endif // ! SP2_MainMenuScene_H
+#endif // ! SP2_MAINMENUSCENE_H
