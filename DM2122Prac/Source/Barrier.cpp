@@ -28,7 +28,7 @@ Barrier::Barrier()
 	}
 
 	int counter = 1;
-	for (int i = 0; i < TextStorage.size(); i++) // loop through the 9 different TextStorages.
+	for (size_t i = 0; i < TextStorage.size(); i++) // loop through the 9 different TextStorages.
 	{
 		if (counter == 5)
 		{

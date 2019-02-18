@@ -10,6 +10,9 @@
 #include "Light.h"
 #include "RenderStrings.h"
 
+#include "Player.h"
+#include "Coins.h"
+
 #include <string>
 using namespace std;
 
@@ -60,7 +63,7 @@ private:
 		U_LIGHT2_SPOTDIRECTION,
 		U_LIGHT2_COSCUTOFF,
 		U_LIGHT2_COSINNER,
-		U_LIGHT2_EXPONENT,
+	 	U_LIGHT2_EXPONENT,
 
 		U_COLOR_TEXTURE_ENABLED,
 		U_COLOR_TEXTURE,
@@ -89,9 +92,10 @@ private:
 		GEO_BACK,
 		GEO_SURROUNDINGS,
 		GEO_NPC_MECHANIC,
-		GEO_NPC1,
-		GEO_NPC2,
+		GEO_NPC,
 		GEO_CHOCO,
+		GEO_GARAGEDOOR,
+		GEO_COIN,
 
 		GEO_KART,
 		GEO_WHEELS,
@@ -128,7 +132,9 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	bool CloseToNPC();
 	bool CloseToSellerNPC();
+	bool CloseToDoor();
 	void MoveNPC(double dt);
+	void UpdateDoor(double dt);
 	struct NPC //To keep track of NPC positions
 	{
 		float x, z;
@@ -147,6 +153,9 @@ private:
 	float bounceTime;
 	bool interact;
 	NPC NPCs[2];
+	float GarageDoorY, GarageDoorRotate;
+	bool GarageOpen;
+	Coins coins[2];
 
 	bool doMenu;
 };
