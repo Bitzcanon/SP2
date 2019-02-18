@@ -259,7 +259,7 @@ void SP2_NPCScene::Update(double dt)
 
 	if (rotateAngle < 360)
 	{
-		rotateAngle += 80 * dt;
+		rotateAngle += (float)(80 * dt);
 	}
 	else
 	{
@@ -283,7 +283,7 @@ void SP2_NPCScene::Update(double dt)
 			delete meshList[15];
 			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
 			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
-			bounceTime = 0.2;
+			bounceTime = 0.2f;
 		}
 	}
 
@@ -299,7 +299,7 @@ void SP2_NPCScene::Update(double dt)
 			delete meshList[15];
 			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
 			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
-			bounceTime = 0.2;
+			bounceTime = 0.2f;
 		}
 	}
 
@@ -315,13 +315,13 @@ void SP2_NPCScene::Update(double dt)
 		//	delete meshList[16];
 			meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels", text.returnWheelsString(transitionWheels));
 			meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
-			bounceTime = 0.2;
+			bounceTime = 0.2f;
 		}
 	}
 
 	if (bounceTime > 0)
 	{
-		bounceTime -= 1 * dt;
+		bounceTime -= (float)(1 * dt);
 	}
 
 	//Miscellaneous controls
@@ -758,7 +758,7 @@ void SP2_NPCScene::Render()
 	modelStack.PushMatrix();
 
 	modelStack.Scale(5.f, 5.f, 5.f);
-	modelStack.Translate(-38.109, -0.259, -62.605);
+	modelStack.Translate(-38.109f, -0.259f, -62.605f);
 	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
 	RenderMesh(meshList[GEO_NPC_MECHANIC], false);
 	modelStack.PopMatrix();

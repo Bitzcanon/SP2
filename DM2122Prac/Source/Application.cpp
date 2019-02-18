@@ -15,7 +15,7 @@
 
 //Framework prepared by Winston
 
-int::Application::SceneSetter = 2 ;
+int::Application::SceneSetter = 0 ;
 
 Application::Application()
 {

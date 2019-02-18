@@ -13,6 +13,7 @@
 #include "SpeedBuff.h"
 #include "Barrier.h"
 #include "Car.h"
+#include "Player.h"
 
 #include <string>
 using namespace std;

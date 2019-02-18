@@ -241,13 +241,13 @@ void SP2_SurvivalScene::Update(double dt)
 	g_dElapsedTime += dt;
 	g_dDeltaTime = dt;
 
-	timer += 1 * dt;
+	timer += (float)(1 * dt);
 
-	if (timer > 60)
+	if (timer > 60.f)
 	{
 		minutes += 1;
 	}
-	seconds = timer;
+	seconds = (int)(timer);
 
 	//Miscellaneous controls
 	if (Application::IsKeyPressed('1'))
@@ -564,7 +564,7 @@ void SP2_SurvivalScene::Render()
 	//Draw Track
 	modelStack.PushMatrix();
 	{
-		float trackScale = SceneCar.returnCarScale() * 3.5;
+		float trackScale = SceneCar.returnCarScale() * 3.5f;
 		modelStack.Scale(trackScale, trackScale, trackScale);
 		modelStack.Translate(0, -0.495f, 0);
 

@@ -4,7 +4,7 @@ Car::Car()
 {
 	//Set default position of Car to 0,0,0
 	car.setLocation(0, 0, 0);
-	newPosition = (0, 0, 0);
+	newPosition = (0.f, 0.f, 0.f);
 
 	//initialize values as 0
 	maxSpeed = 0.2f;
@@ -67,6 +67,8 @@ void Car::Update(double dt)
 {
 	if (Application::IsKeyPressed(VK_UP) && isDrivingBackward == false)
 	{
+		
+
 		isDrivingForward = true;
 		isDrivingBackward = false;
 		acceleration += accelerationFactor;
