@@ -8,6 +8,9 @@ class Player
 public:
 	static Player* getInstance();
 
+	int getCoinCount(void);
+	void setCoinCount(int);
+
 	bool getHealthUpgradeStatus(void);
 	bool getMaxSpeedUpgradeStatus(void);
 	bool getAccelerationUpgradeStatus(void);

@@ -45,13 +45,13 @@ void SP2_TrackScene::initBuff()
 		Buffs[i] = NULL;
 	}
 
-	for (int i = 0; i < (SBuffList.size() / 4); i++)
+	for (size_t i = 0; i < (SBuffList.size() / 4); i++)
 	{
 		Buffs[i] = new SpeedBuff;
 	}
 
 	int counter = 1;
-	for (int i = 0; i < SBuffList.size(); i++) // loop through the total cords in the text file
+	for (size_t i = 0; i < SBuffList.size(); i++) // loop through the total cords in the text file
 	{
 		int loc = i / 4; 
 		// i = 0 , loc = 0 . i = 1 , loc = 0 , i = 2 , loc = 0 , i = 3 , loc = 0 
@@ -179,8 +179,8 @@ void SP2_TrackScene::Init()
 	glUseProgram(m_programID);
 
 	//Initialise initial Camera position
-	//camera.Init(Vector3(0, 20, 1), Vector3(0, 20, 0), Vector3(0, 1, 0)); //For Camera3
-	camera.Init(Vector3(0, 20, 0)); //For FPS Camera (Only for NPCScene, testing in TrackScene
+	camera.Init(Vector3(0, 20, 1), Vector3(0, 20, 0), Vector3(0, 1, 0)); //For Camera3
+	//camera.Init(Vector3(0, 20, 0)); //For FPS Camera (Only for NPCScene, testing in TrackScene
 
 	//Light parameters
 	//Lower floor lighting
@@ -287,16 +287,17 @@ void SP2_TrackScene::Init()
 	projectionStack.LoadMatrix(projection);
 
 	//Initialise variables
-	vehicleSpeed = 0;
-	cameraPosX = Vehicle.newPosition.x;
-	cameraPosY = Vehicle.newPosition.y;
-	cameraPosZ = Vehicle.newPosition.z;
 
-	cameraTargetX = Vehicle.newPosition.x + 1;
-	cameraTargetY = Vehicle.newPosition.y + 1;
-	cameraTargetZ = Vehicle.newPosition.z + 10;
+	playerInstance = Player::getInstance();
+
+	vehicleSpeed = 0;
+
+	cameraPos = (Vehicle.newPosition.x, Vehicle.newPosition.y, Vehicle.newPosition.z);
+	cameraTarget = (Vehicle.newPosition.x + 1, Vehicle.newPosition.y + 1, Vehicle.newPosition.z + 10);
 
 	propellerRotation = 0;
+
+	isWon = false;
 }
 
 void SP2_TrackScene::Update(double dt)
@@ -321,11 +322,11 @@ void SP2_TrackScene::Update(double dt)
 	
 	if (bounceTime > 0)
 	{
-		bounceTime -= 1 * dt;
+		bounceTime -= (float)(1 * dt);
 	}
 
 	//*Speedbuff logic done by Gary*/
-	for (int i = 0; i < SBuffList.size() / 4; i++)
+	for (size_t i = 0; i < SBuffList.size() / 4; i++)
 	{
 		if (CollisionChecker(1 , i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
 		{
@@ -336,8 +337,8 @@ void SP2_TrackScene::Update(double dt)
 	//Timer after stepping on SpeedBuff
 	if (Buff::timer > 0)
 	{
-		Buff::timer = Buff::timer - 1 * dt;
-		Vehicle.setSpeed(0.2);
+		Buff::timer = Buff::timer - (float)(1 * dt);
+		Vehicle.setSpeed(0.2f);
 	}
 	else if (Buff::timer < 0 && Buff::activateYet == false)
 	{
@@ -365,7 +366,7 @@ void SP2_TrackScene::Update(double dt)
 	//Timer after colliding with road block, to prevent player from having backward controls
 	if (RoadBlock.returnTimer() > 0)
 	{
-		RoadBlock.setTimer(RoadBlock.returnTimer() - 1 * dt);
+		RoadBlock.setTimer(RoadBlock.returnTimer() - (float)(1 * dt));
 		
 	}
 	else if (RoadBlock.returnTimer() < 0 && Vehicle.returnIsCollided() == true)
@@ -375,9 +376,12 @@ void SP2_TrackScene::Update(double dt)
 		Vehicle.setSpeed(0);
 	}
 
+	//Win condition done by Winston
 	if (CollisionChecker(3, 1, 20, 0, 2, 1) == true)
 	{
+		playerInstance->setCoinCount(playerInstance->getCoinCount() + 1);
 		cout << "You Win!" << endl;
+		isWon = true;
 	}
 	else
 	{
@@ -405,21 +409,19 @@ void SP2_TrackScene::Update(double dt)
 	UpdateFrameRate(FPS);
 	
 	/*Vehicle Movement & Camera movement logic done by Winston*/
-	{
-		
-		Vehicle.Update(dt);
-		vehicleSpeed = Vehicle.returnSpeed();
+	Vehicle.Update(dt);
+	vehicleSpeed = Vehicle.returnSpeed();
 
-		cameraPosX = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * 10;
-		cameraPosY = Vehicle.newPosition.y + 15;
-		cameraPosZ = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * 10;
-		cameraTargetX = Vehicle.newPosition.x * 10;
-		cameraTargetY = Vehicle.newPosition.y;
-		cameraTargetZ = Vehicle.newPosition.z * 10;
+	cameraPos.x = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * Vehicle.returnCarScale();
+	cameraPos.y = Vehicle.newPosition.y + 15;
+	cameraPos.z = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * Vehicle.returnCarScale();
 
-		camera.Update(dt);
-	}
+	cameraTarget.x = Vehicle.newPosition.x * Vehicle.returnCarScale();
+	cameraTarget.y = Vehicle.newPosition.y;
+	cameraTarget.z = Vehicle.newPosition.z * Vehicle.returnCarScale();
+
 	camera.Update(dt);
+
 }
 
 /*Original logic done by Gary, Function and code organization done by Winston*/
@@ -683,8 +685,9 @@ void SP2_TrackScene::Render()
 
 	//Define the view/ camera lookat and load the view matrix
 	viewStack.LoadIdentity();
-	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z, camera.target.x, camera.target.y, camera.target.z, camera.up.x, camera.up.y, camera.up.z);
+	//viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z, camera.target.x, camera.target.y, camera.target.z, camera.up.x, camera.up.y, camera.up.z);
 	//viewStack.LookAt(cameraPosX, cameraPosY, cameraPosZ, cameraTargetX, cameraTargetY, cameraTargetZ, 0, 1, 0); //Switch to this once all implementations are done
+	viewStack.LookAt(cameraPos.x, cameraPos.y, cameraPos.z, cameraTarget.x, cameraTarget.y, cameraTarget.z, 0, 1, 0); //Switch to this once all implementations are done
 
 	modelStack.LoadIdentity();
 	if (light[0].type == Light::LIGHT_DIRECTIONAL)
@@ -791,13 +794,13 @@ void SP2_TrackScene::Render()
 	modelStack.PopMatrix();
 
 	//Draw Speed buffs in the map (Modelled and rendered by Gary)
-	for (int i = 0; i < SBuffList.size() / 4; i++)
+	for (size_t i = 0; i < SBuffList.size() / 4; i++)
 	{
 		modelStack.PushMatrix();
 		
 		modelStack.Translate(Buffs[i]->returnxPos(), Buffs[i]->returnyPos(), Buffs[i]->returnzPos());
 		modelStack.Scale(Vehicle.returnCarScale(), Vehicle.returnCarScale(), Vehicle.returnCarScale());
-		modelStack.Rotate(Buffs[i]->returnBuffRotation(), 0, 1, 0);
+		modelStack.Rotate((float)(Buffs[i]->returnBuffRotation()), 0, 1, 0);
 		RenderMesh(meshList[GEO_SPEEDBUFF], false);
 		modelStack.PopMatrix();
 	}
@@ -809,7 +812,7 @@ void SP2_TrackScene::Render()
 
 		modelStack.Translate(RoadBlock.returnxPos(i), RoadBlock.returnyPos(i), RoadBlock.returnzPos(i));
 		modelStack.Scale(Vehicle.returnCarScale() * RoadBlock.returnBarrierScale(i), Vehicle.returnCarScale() * RoadBlock.returnBarrierScale(i), Vehicle.returnCarScale() * RoadBlock.returnBarrierScale(i));
-		modelStack.Rotate(RoadBlock.returnBarrierRotation(i), 0, 1, 0);
+		modelStack.Rotate((float)(RoadBlock.returnBarrierRotation(i)), 0, 1, 0);
 		RenderMesh(meshList[GEO_ROADBLOCK], true); //set lighting to true once completed
 		modelStack.PopMatrix();
 	}
@@ -828,9 +831,9 @@ void SP2_TrackScene::Render()
 			int vehiclePosX = static_cast<int>(Vehicle.newPosition.x); //Convert x coordinate of the vehicle to 2 digits for display
 			int vehiclePosZ = static_cast<int>(Vehicle.newPosition.z); //Convert z coordinate of the vehicle to 2 digits for display
 
-			int cameraX = static_cast<int>(cameraPosX); //Convert x coordinate of the camera to 2 digits for display
-			int cameraY = static_cast<int>(cameraPosY); //Convert y coordinate of the camera to 2 digits for display
-			int cameraZ = static_cast<int>(cameraPosZ); //Convert z coordinate of the camera to 2 digits for display
+			int cameraX = static_cast<int>(cameraPos.x); //Convert x coordinate of the camera to 2 digits for display
+			int cameraY = static_cast<int>(cameraPos.y); //Convert y coordinate of the camera to 2 digits for display
+			int cameraZ = static_cast<int>(cameraPos.z); //Convert z coordinate of the camera to 2 digits for display
 
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehicleSpeed), Color(1, 1, 0), 1, -1, 58);
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehiclePosX), Color(1, 1, 0), 1, -1, 56);
@@ -840,9 +843,11 @@ void SP2_TrackScene::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraY), Color(1, 0, 0), 1, -1, 50);
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraZ), Color(1, 0, 0), 1, -1, 48);
 
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTargetX), Color(1, 0, 0), 1, -1, 46);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTargetY), Color(1, 0, 0), 1, -1, 44);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTargetZ), Color(1, 0, 0), 1, -1, 42);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.x), Color(1, 0, 0), 1, -1, 46);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.y), Color(1, 0, 0), 1, -1, 44);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.z), Color(1, 0, 0), 1, -1, 42);
+
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(playerInstance->getCoinCount()), Color(0, 1, 0), 1, -1, 40);
 		}
 		modelStack.PopMatrix();
 

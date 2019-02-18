@@ -127,8 +127,8 @@ private:
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
 
-	//Camera3 camera; //Switch to Camera3 once implementations are done
-	FPSCamera camera;
+	Camera3 camera; //Switch to Camera3 once implementations are done
+	//FPSCamera camera;
 	MS modelStack, viewStack, projectionStack;
 	Light light[3]; //array size is the number of light sources in the scene
 
@@ -152,6 +152,7 @@ private:
 	RenderStrings texts;
 	Barrier RoadBlock;
 	Car Vehicle;
+	Player *playerInstance;
 
 	int transitionColor;
 
@@ -160,15 +161,12 @@ private:
 	float propellerRotation;
 
 	float vehicleSpeed;
-	float cameraPosX;
-	float cameraPosY;
-	float cameraPosZ;
 
-	float cameraTargetX;
-	float cameraTargetY;
-	float cameraTargetZ;
+	Vector3 cameraPos;
+	Vector3 cameraTarget;
 
 	bool tmpBool;
+	bool isWon;
 	
 	vector <float> SBuffList;
 };
