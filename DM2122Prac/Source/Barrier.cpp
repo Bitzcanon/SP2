@@ -57,7 +57,7 @@ Barrier::Barrier()
 		}
 	}
 
-	barrierQuantity = (TextStorage.size() / 4);
+	barrierQuantity = (TextStorage.size() / 5);
 	timer = 0;
 
 	/* For testing purposes , prints out the values of x y and z

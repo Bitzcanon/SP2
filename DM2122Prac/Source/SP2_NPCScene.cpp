@@ -286,7 +286,7 @@ void SP2_NPCScene::Update(double dt)
 			{
 				transitionColor = 0;
 			}
-			delete meshList[15];
+			//delete meshList[10];
 			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
 			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
 			Player::kart = text.returnKartString(transitionBody);
@@ -304,7 +304,7 @@ void SP2_NPCScene::Update(double dt)
 			{
 				transitionBody = 0;
 			}
-			delete meshList[15];
+			//delete meshList[10];
 			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
 			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
 			Player::kart = text.returnKartString(transitionBody);
@@ -322,7 +322,7 @@ void SP2_NPCScene::Update(double dt)
 			{
 				transitionWheels = 0;
 			}
-		//	delete meshList[16];
+			//delete meshList[16];
 			meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels", text.returnWheelsString(transitionWheels));
 			meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
 			Player::wheels = text.returnWheelsString(transitionWheels);
