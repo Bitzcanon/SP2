@@ -226,7 +226,7 @@ void SP2_MainMenuScene::Update(double dt)
 	{
 		if (bounceTime <= 0)
 		{
-			bounceTime = 0.1;
+			bounceTime = 0.1f;
 			arrowY += 15;
 			if (arrowY > 30)
 			{
@@ -239,7 +239,7 @@ void SP2_MainMenuScene::Update(double dt)
 	{
 		if (bounceTime <= 0)
 		{
-			bounceTime = 0.1;
+			bounceTime = 0.1f;
 			arrowY -= 15;
 			if (arrowY < 0)
 			{
@@ -250,7 +250,7 @@ void SP2_MainMenuScene::Update(double dt)
 
 	if (bounceTime > 0)
 	{
-		bounceTime -= 1 * dt;
+		bounceTime -= (float)(1 * dt);
 	}
 
 	//Miscellaneous controls
@@ -464,7 +464,7 @@ void SP2_MainMenuScene::Render()
 		modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-		modelStack.Translate( -40 , arrowY ,-98);
+		modelStack.Translate( -40.f , (float)(arrowY) ,-98.f);
 		modelStack.Rotate(270, 0, 1, 0);
 		modelStack.Scale(5 , 5 , 5);
 		RenderMesh(meshList[GEO_ARROW], false); //set lighting to true once completed

@@ -1,5 +1,5 @@
-#ifndef SP2_SURVIVALSCENE_H
-#define	SP2_SURVIVALSCENE_H
+#ifndef SP2_SurvivalScene_H
+#define	SP2_SurvivalScene_H
 
 #include "Scene.h"
 #include "Camera3.h"
@@ -11,7 +11,6 @@
 
 #include "SpeedBuff.h"
 #include "Car.h"
-#include "Player.h"
 
 
 #include <string>
@@ -145,4 +144,4 @@ private:
 	double g_dDeltaTime;
 };
 
-#endif // ! SP2_SURVIVALSCENE_H
+#endif;

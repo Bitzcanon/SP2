@@ -40,6 +40,16 @@ Player* Player::getInstance()
 	return instance;
 }
 
+int Player::getCoinCount(void)
+{
+	return coinCount;
+}
+
+void Player::setCoinCount(int input)
+{
+	coinCount = input;
+}
+
 bool Player::getHealthUpgradeStatus(void)
 {
 	return healthUpgrade;

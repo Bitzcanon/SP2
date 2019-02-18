@@ -23,7 +23,7 @@ public:
 	//
 
 	//return rotation
-	int returnBuffRotation();
+	float returnBuffRotation();
 
 	int returnBuffQuantity();
 	float returnEffect();

@@ -21,6 +21,8 @@ SP2_NPCScene::~SP2_NPCScene()
 
 void SP2_NPCScene::Init()
 {
+	doMenu = false;
+	
 	rotateAngle = 0;
 	bounceTime = 0;
 
@@ -236,6 +238,9 @@ void SP2_NPCScene::Init()
 	meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Car", text.returnWheelsString(0));
 	meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
 
+	meshList[GEO_MENU] = MeshBuilder::GenerateQuad("Menu", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_MENU]->textureID = LoadTGA("Image//MainMenu.tga");
+
 	meshList[GEO_GARAGEDOOR] = MeshBuilder::GenerateOBJ("door", "OBJ//GarageDoor.obj");
 	meshList[GEO_GARAGEDOOR]->textureID = LoadTGA("Image//GarageDoorTexture.tga");
 
@@ -259,11 +264,16 @@ void SP2_NPCScene::Update(double dt)
 
 	if (rotateAngle < 360)
 	{
-		rotateAngle += 80.f * (float)dt;
+		rotateAngle += (float)(80 * dt);
 	}
 	else
 	{
 		rotateAngle = 0;
+	}
+
+	if (Application::IsKeyPressed(VK_LEFT))
+	{
+		Application::SceneSetter = 0;
 	}
 
 	if (Application::IsKeyPressed(VK_RIGHT))
@@ -275,13 +285,14 @@ void SP2_NPCScene::Update(double dt)
 			{
 				transitionColor = 0;
 			}
-			delete meshList[16];
+			delete meshList[15];
 			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
 			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
 			bounceTime = 0.2f;
 		}
 	}
-	else if (Application::IsKeyPressed(VK_UP))
+
+	if (Application::IsKeyPressed(VK_UP))
 	{
 		if (bounceTime <= 0)
 		{
@@ -290,13 +301,14 @@ void SP2_NPCScene::Update(double dt)
 			{
 				transitionBody = 0;
 			}
-			delete meshList[16];
+			delete meshList[15];
 			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
 			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
 			bounceTime = 0.2f;
 		}
 	}
-	else if (Application::IsKeyPressed(VK_DOWN))
+
+	if (Application::IsKeyPressed(VK_DOWN))
 	{
 		if (bounceTime <= 0)
 		{
@@ -305,7 +317,7 @@ void SP2_NPCScene::Update(double dt)
 			{
 				transitionWheels = 0;
 			}
-			delete meshList[17];
+		//	delete meshList[16];
 			meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels", text.returnWheelsString(transitionWheels));
 			meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
 			bounceTime = 0.2f;
@@ -314,7 +326,7 @@ void SP2_NPCScene::Update(double dt)
 
 	if (bounceTime > 0)
 	{
-		bounceTime -= 1.f * (float)dt;
+		bounceTime -= (float)(1 * dt);
 	}
 
 	//Miscellaneous controls
@@ -368,6 +380,7 @@ void SP2_NPCScene::Update(double dt)
 		camera.position.y = 698.f;
 		camera.target.y = 0.f;
 	}
+	
 
 	MoveNPC(dt);
 	UpdateDoor(dt);
@@ -797,6 +810,7 @@ void SP2_NPCScene::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
+
 	modelStack.Scale(5.f, 5.f, 5.f);
 	modelStack.Translate(-38.109f, -0.259f, -62.605f);
 	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
@@ -846,6 +860,17 @@ void SP2_NPCScene::Render()
 	RenderMesh(meshList[GEO_GARAGEDOOR], false);
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+		modelStack.Translate(-240, 10, -380);
+		modelStack.Rotate(rotateAngle, 0, 1, 0);
+		modelStack.Scale(50, 50, 50);
+		RenderMesh(meshList[GEO_KART], true);
+
+			modelStack.PushMatrix();
+			RenderMesh(meshList[GEO_WHEELS], true);
+			modelStack.PopMatrix();
+			modelStack.PopMatrix();
+			
 	//Draw Skybox
 	modelStack.PushMatrix();
 	{

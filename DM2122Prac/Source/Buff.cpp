@@ -53,7 +53,7 @@ float Buff::returnTimer()
 	return timer;
 }
 
-int Buff::returnBuffRotation()
+float Buff::returnBuffRotation()
 {
 	return rotateBy;
 }
