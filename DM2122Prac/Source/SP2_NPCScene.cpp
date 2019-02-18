@@ -239,6 +239,9 @@ void SP2_NPCScene::Init()
 	meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Car", text.returnWheelsString(0));
 	meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
 
+	meshList[GEO_GARAGEDOOR] = MeshBuilder::GenerateOBJ("door", "OBJ//GarageDoor.obj");
+	meshList[GEO_GARAGEDOOR]->textureID = LoadTGA("Image//GarageDoorTexture.tga");
+
 	//Set projection to Perspective and load projection matrix
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
@@ -372,6 +375,41 @@ void SP2_NPCScene::Update(double dt)
 	}*/
 
 	MoveNPC(dt);
+	UpdateDoor(dt);
+}
+
+void SP2_NPCScene::UpdateDoor(double dt)
+{
+	if (GarageOpen)
+	{
+		if (GarageDoorY < 12.537f)
+		{
+			GarageDoorY += (float)dt * 2.5f;
+		}
+		if (GarageDoorRotate > -67.338f)
+		{
+			GarageDoorRotate -= (float)dt * 20.f;
+		}
+	}
+	if (!GarageOpen)
+	{
+		if (GarageDoorY > 6.685f)
+		{
+			GarageDoorY -= (float)dt * 2.5f;
+		}
+		if (GarageDoorRotate < 0.f)
+		{
+			GarageDoorRotate += (float)dt * 40.f;
+		}
+	}
+	if (Application::IsKeyPressed('F') && GarageOpen && CloseToDoor())
+	{
+		GarageOpen = false;
+	}
+	else if (Application::IsKeyPressed('F') && !GarageOpen && CloseToDoor())
+	{
+		GarageOpen = true;
+	}
 }
 
 void SP2_NPCScene::MoveNPC(double dt) //Moves the 2 NPCs that "walks" around
@@ -686,6 +724,18 @@ bool SP2_NPCScene::CloseToNPC() //To check if player is close to the mechanic NP
 	return false;
 }
 
+bool SP2_NPCScene::CloseToDoor()
+{
+	if (camera.position.x >= -295.f && camera.position.x <= -167.f)
+	{
+		if (camera.position.z >= -280.f && camera.position.z <= -200.f)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 void SP2_NPCScene::Render()
 {
 	//Clear color & depth buffer every time
@@ -778,6 +828,13 @@ void SP2_NPCScene::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
+	modelStack.Scale(5.f, 5.f, 5.f);
+	modelStack.Translate(-46.369f, GarageDoorY, -56.662f);
+	modelStack.Rotate(GarageDoorRotate, 1.f, 0.f, 0.f);
+	RenderMesh(meshList[GEO_GARAGEDOOR], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
 		modelStack.Translate(-240, 10, -380);
 		modelStack.Rotate(rotateAngle, 0, 1, 0);
 		modelStack.Scale(50, 50, 50);
@@ -827,6 +884,14 @@ void SP2_NPCScene::Render()
 	if (CloseToSellerNPC())
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press E to interact with NPC", Color(1, 1, 0), 1, -1, 10);
+	}
+	if (CloseToDoor() && !GarageOpen)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to open garage door", Color(1, 1, 0), 1, -1, 10);
+	}
+	else if (CloseToDoor() && GarageOpen)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to close garage door", Color(1, 1, 0), 1, -1, 10);
 	}
 }
 

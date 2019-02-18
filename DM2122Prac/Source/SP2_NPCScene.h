@@ -92,6 +92,7 @@ private:
 		GEO_NPC1,
 		GEO_NPC2,
 		GEO_CHOCO,
+		GEO_GARAGEDOOR,
 
 		GEO_KART,
 		GEO_WHEELS,
@@ -124,8 +125,10 @@ private:
 	void RenderSkybox();
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	void UpdateDoor(double dt);
 	bool CloseToNPC();
 	bool CloseToSellerNPC();
+	bool CloseToDoor();
 	void MoveNPC(double dt);
 	struct NPC //To keep track of NPC positions
 	{
@@ -144,6 +147,8 @@ private:
 	int transitionWheels;
 	float bounceTime;
 	bool interact;
+	float GarageDoorY, GarageDoorRotate;
+	bool GarageOpen;
 	NPC NPCs[2];
 };
 
