@@ -7,6 +7,7 @@
 #include "Utility.h"
 #include "LoadTGA.h"
 #include "LoadOBJ.h"
+#include "Player.h"
 
 
 SP2_NPCScene::SP2_NPCScene()
@@ -283,6 +284,8 @@ void SP2_NPCScene::Update(double dt)
 			delete meshList[15];
 			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
 			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
+			Player::kart = text.returnKartString(transitionBody);
+			Player::color = text.returnColorString(transitionColor);
 			bounceTime = 0.2;
 		}
 	}
@@ -299,6 +302,8 @@ void SP2_NPCScene::Update(double dt)
 			delete meshList[15];
 			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
 			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
+			Player::kart = text.returnKartString(transitionBody);
+			Player::color = text.returnColorString(transitionColor);
 			bounceTime = 0.2;
 		}
 	}
@@ -315,6 +320,7 @@ void SP2_NPCScene::Update(double dt)
 		//	delete meshList[16];
 			meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels", text.returnWheelsString(transitionWheels));
 			meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
+			Player::wheels = text.returnWheelsString(transitionWheels);
 			bounceTime = 0.2;
 		}
 	}

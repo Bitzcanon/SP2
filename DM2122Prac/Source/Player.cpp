@@ -1,5 +1,7 @@
 #include "Player.h"
-
+#include <string>
+#include <iostream>
+using namespace std;
 Player::Player()
 {
 	//Change constructor to read from text file from save file so as to make sure progress is saved
@@ -15,6 +17,11 @@ Player::~Player()
 {
 
 }
+
+string Player::kart = "OBJ//Kart1.obj";
+string Player::wheels = "OBJ//Wheels1.obj";
+string Player::color = "Image/Colors/Red.tga";
+//
 
 Player* Player::instance = nullptr;
 

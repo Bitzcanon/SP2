@@ -13,6 +13,7 @@
 #include "SpeedBuff.h"
 #include "Barrier.h"
 #include "Car.h"
+#include "Player.h"
 
 #include <string>
 using namespace std;
@@ -97,6 +98,8 @@ private:
 		GEO_PROPELLER,
 		GEO_TESTCAR,
 		
+		GEO_TREE,
+
 		GEO_KART,
 		GEO_WHEELS,
 		GEO_COLOR,

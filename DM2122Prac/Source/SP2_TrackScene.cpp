@@ -257,14 +257,15 @@ void SP2_TrackScene::Init()
 	meshList[GEO_TESTCAR] = MeshBuilder::GenerateCube("Car", Color(0, 1, 0), 5, 1, 1);
 
 	//Default init for kart
-	meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", texts.returnKartString(0));
-	meshList[GEO_KART]->textureID = LoadTGA(texts.returnColorString(1).c_str());
+	meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", Player::kart);
+	meshList[GEO_KART]->textureID = LoadTGA(Player::color.c_str());
 
-	meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Car", texts.returnWheelsString(0));
+	meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Car", Player::wheels);
 
 	//Default init for kart
 
 	meshList[GEO_TRACK] = MeshBuilder::GenerateOBJ("modelTrack", "OBJ//Track.obj");
+	meshList[GEO_TRACK]->textureID = LoadTGA("Image//Track.tga");
 
 	meshList[GEO_FINISHLINE] = MeshBuilder::GenerateOBJ("modelFinishLine", "OBJ//FinishLine.obj");
 	meshList[GEO_FINISHLINE]->textureID = LoadTGA("Image//FinishLine.tga");
@@ -277,6 +278,9 @@ void SP2_TrackScene::Init()
 	meshList[GEO_ROADBLOCK] = MeshBuilder::GenerateOBJ("RoadBlock", "OBJ//RoadBlock.obj");
 
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
+
+	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//Plant.obj");
+	meshList[GEO_TREE]->textureID = LoadTGA("Image//Plant.tga");
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("Light Sphere", Color(1.f, 1.f, 1.f), 32, 36, 1.f);
 
@@ -380,12 +384,12 @@ void SP2_TrackScene::Update(double dt)
 	if (CollisionChecker(3, 1, 20, 0, 2, 1) == true)
 	{
 		playerInstance->setCoinCount(playerInstance->getCoinCount() + 1);
-		cout << "You Win!" << endl;
+		//cout << "You Win!" << endl;
 		isWon = true;
 	}
 	else
 	{
-		cout << "You Suck" << endl;
+		//cout << "You Suck" << endl;
 	}
 
 	//Miscellaneous controls
