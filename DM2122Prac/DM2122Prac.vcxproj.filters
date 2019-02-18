@@ -85,6 +85,8 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\SP2_MainMenuScene.cpp">
+ </ClCompile>
+    <ClCompile Include="Source\SP2_SurvivalScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -165,6 +167,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\SP2_MainMenuScene.h">
+    </ClInclude>
+    <ClInclude Include="Source\SP2_SurvivalScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

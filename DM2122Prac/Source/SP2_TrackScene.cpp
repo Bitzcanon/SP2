@@ -266,6 +266,11 @@ void SP2_TrackScene::Init()
 
 	meshList[GEO_TRACK] = MeshBuilder::GenerateOBJ("modelTrack", "OBJ//Track.obj");
 
+	meshList[GEO_FINISHLINE] = MeshBuilder::GenerateOBJ("modelFinishLine", "OBJ//FinishLine.obj");
+	meshList[GEO_FINISHLINE]->textureID = LoadTGA("Image//FinishLine.tga");
+
+	meshList[GEO_PROPELLER] = MeshBuilder::GenerateOBJ("modelPropeller", "OBJ//Propeller.obj");
+
 	meshList[GEO_SPEEDBUFF] = MeshBuilder::GenerateOBJ("SpeedBuff", "OBJ//SpeedBoost.obj");
 	meshList[GEO_SPEEDBUFF]->textureID = LoadTGA("Image//SpeedBoostTexture.tga");
 
@@ -290,11 +295,15 @@ void SP2_TrackScene::Init()
 	cameraTargetX = Vehicle.newPosition.x + 1;
 	cameraTargetY = Vehicle.newPosition.y + 1;
 	cameraTargetZ = Vehicle.newPosition.z + 10;
+
+	propellerRotation = 0;
 }
 
 void SP2_TrackScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
+
+	propellerRotation += (float)(180 * dt);
 	
 	if (Application::IsKeyPressed('U'))
 	{
@@ -315,10 +324,10 @@ void SP2_TrackScene::Update(double dt)
 		bounceTime -= 1 * dt;
 	}
 
-	/*Speedbuff logic done by Gary*/
+	//*Speedbuff logic done by Gary*/
 	for (int i = 0; i < SBuffList.size() / 4; i++)
 	{
-		if (CollisionChecker(i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
+		if (CollisionChecker(1 , i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
 		{
 			Buff::timer = 4;
 			//Buff::activateYet = false;
@@ -338,13 +347,21 @@ void SP2_TrackScene::Update(double dt)
 	/*RoadBlock logic done by Winston*/
 	for (int i = 0; i < RoadBlock.returnBarrierQuantity(); i++)
 	{
-		if (CollisionChecker(i, RoadBlock.returnxPos(i), RoadBlock.returnzPos(i), 1.6f, 1.f) == true) //1.6 as the length due to the model being slightly shorter than 2 (as seen in Maya)
+		if (CollisionChecker(2 ,i, RoadBlock.returnxPos(i), RoadBlock.returnzPos(i), 1.6f, 1.f) == true) //1.6 as the length due to the model being slightly shorter than 2 (as seen in Maya)
 		{
 			RoadBlock.setTimer(0.2f);
 			Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
 			Vehicle.setIsCollided(true);
 		}
 	}
+	/*World border collision detection logic done by Winston*/
+	if (((Vehicle.newPosition.x * 10) >= 495.f) || ((Vehicle.newPosition.x * 10) <= -495.f) || ((Vehicle.newPosition.z * 10) >= 495.f) || ((Vehicle.newPosition.z * 10) <= -495.f))
+	{
+		RoadBlock.setTimer(0.2f);
+		Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
+		Vehicle.setIsCollided(true);
+	}
+
 	//Timer after colliding with road block, to prevent player from having backward controls
 	if (RoadBlock.returnTimer() > 0)
 	{
@@ -356,6 +373,15 @@ void SP2_TrackScene::Update(double dt)
 		Vehicle.setIsCollided(false);
 		Vehicle.setAcceleration(0);
 		Vehicle.setSpeed(0);
+	}
+
+	if (CollisionChecker(3, 1, 20, 0, 2, 1) == true)
+	{
+		cout << "You Win!" << endl;
+	}
+	else
+	{
+		cout << "You Suck" << endl;
 	}
 
 	//Miscellaneous controls
@@ -384,27 +410,45 @@ void SP2_TrackScene::Update(double dt)
 		Vehicle.Update(dt);
 		vehicleSpeed = Vehicle.returnSpeed();
 
-		cameraPosX = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * 10;
-		cameraPosY = Vehicle.newPosition.y + 20;
-		cameraPosZ = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * 10;
-
+		cameraPosX = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * 10;
+		cameraPosY = Vehicle.newPosition.y + 15;
+		cameraPosZ = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * 10;
 		cameraTargetX = Vehicle.newPosition.x * 10;
 		cameraTargetY = Vehicle.newPosition.y;
 		cameraTargetZ = Vehicle.newPosition.z * 10;
 
 		camera.Update(dt);
 	}
+	camera.Update(dt);
 }
 
 /*Original logic done by Gary, Function and code organization done by Winston*/
-bool SP2_TrackScene::CollisionChecker(int index, float objX, float objZ, float length, float width)
+bool SP2_TrackScene::CollisionChecker(int type, int index, float objX, float objZ, float length, float width)
 {
 	float minimumXObj = objX / Vehicle.returnCarScale();
 	float minimumZObj = objZ / Vehicle.returnCarScale();
+	float maximumXObj;
+	float maximumZObj;
 
-	float maximumXObj = objX / Vehicle.returnCarScale() + length ;
-	float maximumZObj = objZ / Vehicle.returnCarScale() + width ;
-
+	switch (type) //1 == Speedboost, 2 == Barrier
+	{
+		case 1:
+		{
+			maximumXObj = objX / Vehicle.returnCarScale() + length;
+			maximumZObj = objZ / Vehicle.returnCarScale() + width;
+		}
+		case 2:
+		{
+			maximumXObj = objX / Vehicle.returnCarScale() + length * RoadBlock.returnBarrierScale(index);
+			maximumZObj = objZ / Vehicle.returnCarScale() + width * RoadBlock.returnBarrierScale(index);
+		}
+		case 3:
+		{
+			maximumXObj = objX / Vehicle.returnCarScale() + length;
+			maximumZObj = objZ / Vehicle.returnCarScale() + width;
+		}
+	}
+	
 	//tmp var for car pos
 	float carXMin = Vehicle.newPosition.x;
 	float carXMax = Vehicle.newPosition.x + length;
@@ -694,6 +738,36 @@ void SP2_TrackScene::Render()
 		modelStack.Translate(0, -0.495f, 0);
 
 		RenderMesh(meshList[GEO_TRACK], true);
+	}
+	modelStack.PopMatrix();
+
+	//Draw Finish Line (Modelled and rendered by Winston)
+	modelStack.PushMatrix();
+	{
+		float finishLineScale = Vehicle.returnCarScale() * 2;
+		modelStack.Scale(finishLineScale, finishLineScale, finishLineScale);
+		modelStack.Translate(0, -0.49f, 0);
+
+		RenderMesh(meshList[GEO_FINISHLINE], true);
+
+		//Draw Propeller (Modelled and rendered by Winston)
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(-0.15f, 3.25f, 0);
+			modelStack.Rotate(propellerRotation, 0, 1, 0);
+			RenderMesh(meshList[GEO_PROPELLER], true);
+		}
+		modelStack.PopMatrix();
+
+		//Draw Propeller (Modelled and rendered by Winston)
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(2.15f, 3.25f, 0);
+			modelStack.Rotate(-propellerRotation, 0, 1, 0);
+			RenderMesh(meshList[GEO_PROPELLER], true);
+		}
+		modelStack.PopMatrix();
+
 	}
 	modelStack.PopMatrix();
 

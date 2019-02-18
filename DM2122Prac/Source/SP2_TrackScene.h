@@ -93,6 +93,8 @@ private:
 		GEO_BACK,
 
 		GEO_TRACK,
+		GEO_FINISHLINE,
+		GEO_PROPELLER,
 		GEO_TESTCAR,
 		
 		GEO_KART,
@@ -112,7 +114,7 @@ public:
 	virtual void Init();
 
 	virtual void Update(double dt);
-	virtual bool CollisionChecker(int i, float objX, float objZ, float length, float width);
+	virtual bool CollisionChecker(int type, int index, float objX, float objZ, float length, float width);
 
 	virtual void Render();
 	virtual void Exit();
@@ -153,6 +155,8 @@ private:
 	int transitionColor;
 
 	float bounceTime;
+
+	float propellerRotation;
 
 	float vehicleSpeed;
 	float cameraPosX;
