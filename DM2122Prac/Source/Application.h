@@ -16,7 +16,9 @@ public:
 	static double mouse_x;
 	static double mouse_y;
 
+	static int SceneSetter;
 private:
+	
 
 	//Declare a window object
 	StopWatch m_timer;

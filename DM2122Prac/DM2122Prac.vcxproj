@@ -163,6 +163,7 @@
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\RenderStrings.cpp" />
     <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\SP2_MainMenuScene.cpp" />
     <ClCompile Include="Source\SP2_NPCScene.cpp" />
     <ClCompile Include="Source\SP2_TrackScene.cpp" />
     <ClCompile Include="Source\SpeedBuff.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="Source\RenderStrings.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\shader.hpp" />
+    <ClInclude Include="Source\SP2_MainMenuScene.h" />
     <ClInclude Include="Source\SP2_NPCScene.h" />
     <ClInclude Include="Source\SP2_TrackScene.h" />
     <ClInclude Include="Source\SpeedBuff.h" />

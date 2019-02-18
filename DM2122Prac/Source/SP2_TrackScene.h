@@ -97,7 +97,6 @@ private:
 		
 		GEO_KART,
 		GEO_WHEELS,
-		GEO_WHEEL,
 		GEO_COLOR,
 
 		GEO_SPEEDBUFF,
@@ -113,7 +112,6 @@ public:
 	virtual void Init();
 
 	virtual void Update(double dt);
-	virtual void UpdateBuffs(double dt);
 	virtual bool CollisionChecker(int i, float objX, float objZ, float length, float width);
 
 	virtual void Render();
@@ -136,6 +134,9 @@ private:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	
+	void initBuff();
+	void loadSBuffCoordinates();
+
 	string UpdateFrameRate(float string);
 
 	float FPS;
@@ -143,7 +144,8 @@ private:
 	string condition;
 	bool conditionTester;
 
-	SpeedBuff SBuff;
+	Buff * Buffs[20];
+
 	RenderStrings texts;
 	Barrier RoadBlock;
 	Car Vehicle;
@@ -160,6 +162,10 @@ private:
 	float cameraTargetX;
 	float cameraTargetY;
 	float cameraTargetZ;
+
+	bool tmpBool;
+	
+	vector <float> SBuffList;
 };
 
 #endif // ! SP2_TrackScene_H

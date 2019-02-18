@@ -21,6 +21,13 @@ SP2_NPCScene::~SP2_NPCScene()
 
 void SP2_NPCScene::Init()
 {
+	rotateAngle = 0;
+	bounceTime = 0;
+
+	transitionColor = 0;
+	transitionBody = 0;
+	transitionWheels = 0;
+
 	//Set background color to dark blue (Before this are initialized variables, after is the rest)
 	glClearColor(0.0f, 0.0f, 0.3f, 0.0f);
 
@@ -226,6 +233,12 @@ void SP2_NPCScene::Init()
 	meshList[GEO_CHOCO] = MeshBuilder::GenerateOBJ("choco", "OBJ//NPC scene chocolates.obj");
 	meshList[GEO_CHOCO]->textureID = LoadTGA("Image//Texture.tga");
 
+	meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(0));
+	meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(0).c_str());
+
+	meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Car", text.returnWheelsString(0));
+	meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
+
 	//Set projection to Perspective and load projection matrix
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
@@ -238,6 +251,68 @@ void SP2_NPCScene::Init()
 void SP2_NPCScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
+
+	if (rotateAngle < 360)
+	{
+		rotateAngle += 80 * dt;
+	}
+	else
+	{
+		rotateAngle = 0;
+	}
+
+	if (Application::IsKeyPressed(VK_RIGHT))
+	{
+		if (bounceTime <= 0)
+		{
+			transitionColor += 1;
+			if (transitionColor > 4)
+			{
+				transitionColor = 0;
+			}
+			delete meshList[15];
+			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
+			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
+			bounceTime = 0.2;
+		}
+	}
+
+	if (Application::IsKeyPressed(VK_UP))
+	{
+		if (bounceTime <= 0)
+		{
+			transitionBody += 1;
+			if (transitionBody > 2)
+			{
+				transitionBody = 0;
+			}
+			delete meshList[15];
+			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
+			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
+			bounceTime = 0.2;
+		}
+	}
+
+	if (Application::IsKeyPressed(VK_DOWN))
+	{
+		if (bounceTime <= 0)
+		{
+			transitionWheels += 1;
+			if (transitionWheels > 2)
+			{
+				transitionWheels = 0;
+			}
+			delete meshList[16];
+			meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels", text.returnWheelsString(transitionWheels));
+			meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
+			bounceTime = 0.2;
+		}
+	}
+
+	if (bounceTime > 0)
+	{
+		bounceTime -= 1 * dt;
+	}
 
 	//Miscellaneous controls
 	if (Application::IsKeyPressed('1'))
@@ -702,6 +777,19 @@ void SP2_NPCScene::Render()
 	RenderMesh(meshList[GEO_CHOCO], true);
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+		modelStack.Translate(-240, 10, -380);
+		modelStack.Rotate(rotateAngle, 0, 1, 0);
+		modelStack.Scale(50, 50, 50);
+
+		RenderMesh(meshList[GEO_KART], true);
+
+			modelStack.PushMatrix();
+			RenderMesh(meshList[GEO_WHEELS], true);
+			modelStack.PopMatrix();
+			modelStack.PopMatrix();
+
+
 	//Draw Skybox
 	modelStack.PushMatrix();
 	{
@@ -729,6 +817,8 @@ void SP2_NPCScene::Render()
 		modelStack.PopMatrix();
 	}
 	modelStack.PopMatrix();
+
+
 
 	if (CloseToNPC())
 	{

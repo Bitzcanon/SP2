@@ -19,8 +19,76 @@ SP2_TrackScene::~SP2_TrackScene()
 
 }
 
+void SP2_TrackScene::loadSBuffCoordinates()
+{
+	ifstream myfile("TextFiles//SpeedBuffCoordinates.txt"); // open text file
+
+	if (myfile.is_open()) // open text file
+	{
+		int i = 0;
+		float tmp;
+
+		while (myfile.eof() == false)
+		{
+			myfile >> tmp;
+			i++;
+			SBuffList.push_back(tmp);
+		}
+		myfile.close();
+	}
+}
+
+void SP2_TrackScene::initBuff()
+{
+	for (int i = 0; i < 20; i++)
+	{
+		Buffs[i] = NULL;
+	}
+
+	for (int i = 0; i < (SBuffList.size() / 4); i++)
+	{
+		Buffs[i] = new SpeedBuff;
+	}
+
+	int counter = 1;
+	for (int i = 0; i < SBuffList.size(); i++) // loop through the total cords in the text file
+	{
+		int loc = i / 4; 
+		// i = 0 , loc = 0 . i = 1 , loc = 0 , i = 2 , loc = 0 , i = 3 , loc = 0 
+		// i = 4 , loc = 1 , i = 5 , loc = 1 , i = 6 , loc = 1 , i = 7 , loc = 1
+
+		if (counter == 4)
+		{
+			Buffs[loc]->setRotateBy(SBuffList[i]);
+			counter = 1;
+		}
+		else if (counter == 3) // 
+		{
+			Buffs[loc]->setzPos(SBuffList[i]);
+			counter += 1;
+		}
+		else if (counter == 2) // if k = second number in line
+		{
+			Buffs[loc]->setyPos(SBuffList[i]);
+			counter += 1;
+		}
+		else if (counter == 1) // if k = first number in line
+		{
+			Buffs[loc]->setxPos(SBuffList[i]);
+			counter += 1;
+		}
+	}
+}
+
 void SP2_TrackScene::Init()
 {
+	// loads sbuff coordinates
+	loadSBuffCoordinates();
+
+	initBuff();
+	
+	tmpBool = false;
+
 	bounceTime = 0;
 	transitionColor = 0;
 	conditionTester = false;
@@ -191,12 +259,8 @@ void SP2_TrackScene::Init()
 	//Default init for kart
 	meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", texts.returnKartString(0));
 	meshList[GEO_KART]->textureID = LoadTGA(texts.returnColorString(1).c_str());
-	//
-	cout << texts.returnColorString(1);
 
 	meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Car", texts.returnWheelsString(0));
-
-	meshList[GEO_WHEEL] = MeshBuilder::GenerateOBJ("Car", texts.returnWheelString(0));
 
 	//Default init for kart
 
@@ -228,10 +292,6 @@ void SP2_TrackScene::Init()
 	cameraTargetZ = Vehicle.newPosition.z + 10;
 }
 
-void SP2_TrackScene::UpdateBuffs(double dt)
-{
-}
-
 void SP2_TrackScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
@@ -256,23 +316,23 @@ void SP2_TrackScene::Update(double dt)
 	}
 
 	/*Speedbuff logic done by Gary*/
-	for (int i = 0; i < SBuff.returnSpeedBuffQuantity(); i++)
+	for (int i = 0; i < SBuffList.size() / 4; i++)
 	{
-		if (CollisionChecker(i, SBuff.returnxPos(i), SBuff.returnzPos(i), 1, 1) == true)
+		if (CollisionChecker(i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
 		{
-			SBuff.setTimer(4);
-			SBuff.setCondition(true);
+			Buff::timer = 4;
+			//Buff::activateYet = false;
 		}
 	}
 	//Timer after stepping on SpeedBuff
-	if (SBuff.returnTimer() > 0)
+	if (Buff::timer > 0)
 	{
-		SBuff.setTimer(SBuff.returnTimer() - 1 * dt);
+		Buff::timer = Buff::timer - 1 * dt;
 		Vehicle.setSpeed(0.2);
 	}
-	else if (SBuff.returnTimer() < 0 && SBuff.returnCondition() == true)
+	else if (Buff::timer < 0 && Buff::activateYet == false)
 	{
-		SBuff.setCondition(false);
+		Buff::activateYet = false;
 	}
 
 	/*RoadBlock logic done by Winston*/
@@ -317,20 +377,23 @@ void SP2_TrackScene::Update(double dt)
 	}
 
 	UpdateFrameRate(FPS);
-
+	
 	/*Vehicle Movement & Camera movement logic done by Winston*/
-	Vehicle.Update(dt);
-	vehicleSpeed = Vehicle.returnSpeed();
+	{
+		
+		Vehicle.Update(dt);
+		vehicleSpeed = Vehicle.returnSpeed();
 
-	cameraPosX = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * 10;
-	cameraPosY = Vehicle.newPosition.y + 20;
-	cameraPosZ = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * 10;
+		cameraPosX = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * 10;
+		cameraPosY = Vehicle.newPosition.y + 20;
+		cameraPosZ = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * 10;
 
-	cameraTargetX = Vehicle.newPosition.x * 10 ;
-	cameraTargetY = Vehicle.newPosition.y;
-	cameraTargetZ = Vehicle.newPosition.z * 10;
+		cameraTargetX = Vehicle.newPosition.x * 10;
+		cameraTargetY = Vehicle.newPosition.y;
+		cameraTargetZ = Vehicle.newPosition.z * 10;
 
-	camera.Update(dt);
+		camera.Update(dt);
+	}
 }
 
 /*Original logic done by Gary, Function and code organization done by Winston*/
@@ -339,8 +402,8 @@ bool SP2_TrackScene::CollisionChecker(int index, float objX, float objZ, float l
 	float minimumXObj = objX / Vehicle.returnCarScale();
 	float minimumZObj = objZ / Vehicle.returnCarScale();
 
-	float maximumXObj = objX / Vehicle.returnCarScale() + length * RoadBlock.returnBarrierScale(index);
-	float maximumZObj = objZ / Vehicle.returnCarScale() + width * RoadBlock.returnBarrierScale(index);
+	float maximumXObj = objX / Vehicle.returnCarScale() + length ;
+	float maximumZObj = objZ / Vehicle.returnCarScale() + width ;
 
 	//tmp var for car pos
 	float carXMin = Vehicle.newPosition.x;
@@ -645,19 +708,19 @@ void SP2_TrackScene::Render()
 		RenderMesh(meshList[GEO_KART], true);
 
 		modelStack.PushMatrix();
-			RenderMesh(meshList[GEO_WHEEL], true);
+			RenderMesh(meshList[GEO_WHEELS], true);
 			modelStack.PopMatrix();
 	}
 	modelStack.PopMatrix();
 
 	//Draw Speed buffs in the map (Modelled and rendered by Gary)
-	for (int i = 0; i < SBuff.returnSpeedBuffQuantity(); i++)
+	for (int i = 0; i < SBuffList.size() / 4; i++)
 	{
 		modelStack.PushMatrix();
 		
-		modelStack.Translate(SBuff.returnxPos(i), SBuff.returnyPos(i), SBuff.returnzPos(i));
+		modelStack.Translate(Buffs[i]->returnxPos(), Buffs[i]->returnyPos(), Buffs[i]->returnzPos());
 		modelStack.Scale(Vehicle.returnCarScale(), Vehicle.returnCarScale(), Vehicle.returnCarScale());
-		modelStack.Rotate(SBuff.returnSpeedBuffRotation(i), 0, 1, 0);
+		modelStack.Rotate(Buffs[i]->returnBuffRotation(), 0, 1, 0);
 		RenderMesh(meshList[GEO_SPEEDBUFF], false);
 		modelStack.PopMatrix();
 	}
@@ -709,9 +772,9 @@ void SP2_TrackScene::Render()
 	}
 	modelStack.PopMatrix();
 
-	if (SBuff.returnTimer() > 0)
+	if (Buff::timer > 0)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string(SBuff.returnTimer()), Color(1, 1, 0), 3, 0, 0);
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string(Buff::timer) , Color(1, 1, 0), 3, 0, 0);
 	}
 }
 

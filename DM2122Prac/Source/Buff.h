@@ -1,27 +1,50 @@
 #ifndef BUFF_H
 #define BUFF_H
 
-#include "Location.h"
-
 class Buff
 {
 public:
 	Buff();
+	Buff(float , float , float);
 	~Buff();
+	//return coordinates
+	float returnxPos();
+	float returnyPos();
+	float returnzPos();
 
+	void setxPos(float);
+	void setyPos(float);
+	void setzPos(float);
+	//
+
+	//booleans for whether the buff has been activated
+	bool returnCondition();
+	void setCondition(bool);
+	//
+
+	//return rotation
+	int returnBuffRotation();
+
+	int returnBuffQuantity();
 	float returnEffect();
 	float returnTimer();
 	void setTimer(float);
 
-	//Store the location of where the buff is located at [boundary] 
-	Location pos;
+	void setRotateBy(float);
+
+	//How many buffs are created
+	static int BuffCount;
+	static float timer;
+	static bool activateYet;
 
 protected:
-	float timer; // how long the buff lasts for
-	float effect; // effect that the buf creats
+	int speedBuffQuantity;
 
 
-	
+	float rotateBy;
+	float xPos;
+	float yPos;
+	float zPos;
 
 };
 

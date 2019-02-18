@@ -71,29 +71,7 @@ void Camera3::Update(double dt)
 		view = rotation * view;
 		target = position + view;
 	}
-	if (Application::IsKeyPressed(VK_UP))
-	{
-		Mtx44 rotation;
-		float pitch = (float)((CAMERA_SPEED - 10) * dt);
-		rotation.SetToRotation(pitch, right.x, right.y, right.z);
-
-		view = rotation * view;
-		target = position + view; 
-		up = right.Cross(view).Normalized();
-
-
-	}
-	if (Application::IsKeyPressed(VK_DOWN))
-	{
-		Mtx44 rotation;
-		float pitch = (float)((CAMERA_SPEED - 0) * dt);
-		rotation.SetToRotation(-pitch, right.x, right.y, right.z);
-
-		view = rotation * view;
-		target = position + view;
-		up = right.Cross(view).Normalized();
-
-	}
+	
 	if (Application::IsKeyPressed('R'))
 	{
 		Reset();

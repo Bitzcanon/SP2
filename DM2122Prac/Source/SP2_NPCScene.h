@@ -8,6 +8,7 @@
 #include "MeshBuilder.h"
 #include "MatrixStack.h"
 #include "Light.h"
+#include "RenderStrings.h"
 
 #include <string>
 using namespace std;
@@ -92,6 +93,10 @@ private:
 		GEO_NPC2,
 		GEO_CHOCO,
 
+		GEO_KART,
+		GEO_WHEELS,
+		GEO_COLOR,
+
 		NUM_GEOMETRY,
 	};
 
@@ -129,9 +134,15 @@ private:
 		float direction;
 	};
 	
+	RenderStrings text;
 	string UpdateFrameRate(float string);
 
 	float FPS;
+	float rotateAngle;
+	int transitionColor;
+	int transitionBody;
+	int transitionWheels;
+	float bounceTime;
 	bool interact;
 	NPC NPCs[2];
 };
