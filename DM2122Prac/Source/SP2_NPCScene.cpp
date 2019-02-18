@@ -249,6 +249,7 @@ void SP2_NPCScene::Init()
 
 	NPCs[0].x = -20.f; NPCs[0].z = 20.f; NPCs[0].close = false; NPCs[0].direction = 0; NPCs[0].interacting = false; //initialises the first NPC's starting position, bools for when player is close
 	NPCs[1].x = 6.f; NPCs[1].z = -50.f; NPCs[1].close = false; NPCs[1].direction = 0; NPCs[1].interacting = false; //and bool when player is interacting with the NPC
+	GarageDoorY = 6.685f; GarageDoorRotate = 0.f; GarageOpen = false;
 }
 
 void SP2_NPCScene::Update(double dt)
@@ -257,7 +258,7 @@ void SP2_NPCScene::Update(double dt)
 
 	if (rotateAngle < 360)
 	{
-		rotateAngle += 80 * dt;
+		rotateAngle += 80.f * (float)dt;
 	}
 	else
 	{
@@ -276,7 +277,7 @@ void SP2_NPCScene::Update(double dt)
 			delete meshList[15];
 			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
 			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
-			bounceTime = 0.2;
+			bounceTime = 0.2f;
 		}
 	}
 
@@ -292,7 +293,7 @@ void SP2_NPCScene::Update(double dt)
 			delete meshList[15];
 			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
 			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
-			bounceTime = 0.2;
+			bounceTime = 0.2f;
 		}
 	}
 
@@ -308,13 +309,13 @@ void SP2_NPCScene::Update(double dt)
 			delete meshList[16];
 			meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels", text.returnWheelsString(transitionWheels));
 			meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
-			bounceTime = 0.2;
+			bounceTime = 0.2f;
 		}
 	}
 
 	if (bounceTime > 0)
 	{
-		bounceTime -= 1 * dt;
+		bounceTime -= 1.f * (float)dt;
 	}
 
 	//Miscellaneous controls
@@ -802,7 +803,7 @@ void SP2_NPCScene::Render()
 	modelStack.PushMatrix();
 
 	modelStack.Scale(5.f, 5.f, 5.f);
-	modelStack.Translate(-38.109, -0.259, -62.605);
+	modelStack.Translate(-38.109f, -0.259f, -62.605f);
 	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
 	RenderMesh(meshList[GEO_NPC_MECHANIC], false);
 	modelStack.PopMatrix();
@@ -828,24 +829,22 @@ void SP2_NPCScene::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
+	modelStack.Translate(-240, 10, -380);
+	modelStack.Rotate(rotateAngle, 0, 1, 0);
+	modelStack.Scale(50, 50, 50);
+	RenderMesh(meshList[GEO_KART], true);
+
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_WHEELS], true);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
 	modelStack.Scale(5.f, 5.f, 5.f);
 	modelStack.Translate(-46.369f, GarageDoorY, -56.662f);
 	modelStack.Rotate(GarageDoorRotate, 1.f, 0.f, 0.f);
 	RenderMesh(meshList[GEO_GARAGEDOOR], false);
 	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-		modelStack.Translate(-240, 10, -380);
-		modelStack.Rotate(rotateAngle, 0, 1, 0);
-		modelStack.Scale(50, 50, 50);
-
-		RenderMesh(meshList[GEO_KART], true);
-
-			modelStack.PushMatrix();
-			RenderMesh(meshList[GEO_WHEELS], true);
-			modelStack.PopMatrix();
-			modelStack.PopMatrix();
-
 
 	//Draw Skybox
 	modelStack.PushMatrix();
