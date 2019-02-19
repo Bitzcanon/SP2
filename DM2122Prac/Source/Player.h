@@ -24,9 +24,10 @@ public:
 	void setMaxAccelerationUpgradeStatus(bool);
 	void setSteerUpgradeStatus(bool);
 
-	static std::string kart;
-	static std::string wheels;
-	static std::string color;
+	static bool changeSomething; // boolean for changing of a car part.
+	static std::string kart; // store kart address
+	static std::string wheels; // store wheel address
+	static std::string color; // store color address
 private:
 	Player();
 	~Player();

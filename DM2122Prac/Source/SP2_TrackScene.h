@@ -14,6 +14,7 @@ constexpr auto BARRIERROWCOUNT = 5;
 
 #include "RenderStrings.h"
 #include "SpeedBuff.h"
+#include "SlowBuff.h"
 #include "Barrier.h"
 #include "Car.h"
 #include "Player.h"
@@ -108,6 +109,7 @@ private:
 		GEO_COLOR,
 
 		GEO_SPEEDBUFF,
+		GEO_SLOWBUFF,
 		GEO_ROADBLOCK,
 
 		NUM_GEOMETRY,
@@ -143,7 +145,8 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	
 	void initBuff();
-	void loadSBuffCoordinates();
+	void loadSlowBuffCoordinates();
+	void loadSpeedBuffCoordinates();
 
 	void initBarrier();
 	void loadBarrierCoordinates();
@@ -176,8 +179,9 @@ private:
 	bool tmpBool;
 	bool isWon;
 	
-	vector <float> SBuffList;
-	vector <float> BarrierList;
+	vector <float> SpeedBuffList;
+	vector <float> BarrierList;	
+	vector <float> SlowBuffList;
 };
 
 #endif // ! SP2_TrackScene_H

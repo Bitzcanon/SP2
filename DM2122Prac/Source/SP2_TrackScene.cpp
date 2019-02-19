@@ -8,7 +8,6 @@
 #include "LoadTGA.h"
 #include "LoadOBJ.h"
 
-
 SP2_TrackScene::SP2_TrackScene()
 {
 	
@@ -19,7 +18,7 @@ SP2_TrackScene::~SP2_TrackScene()
 
 }
 
-void SP2_TrackScene::loadSBuffCoordinates()
+void SP2_TrackScene::loadSpeedBuffCoordinates()
 {
 	ifstream myfile("TextFiles//SpeedBuffCoordinates.txt"); // open text file
 
@@ -32,7 +31,26 @@ void SP2_TrackScene::loadSBuffCoordinates()
 		{
 			myfile >> tmp;
 			i++;
-			SBuffList.push_back(tmp);
+			SpeedBuffList.push_back(tmp);
+		}
+		myfile.close();
+	}
+}
+
+void SP2_TrackScene::loadSlowBuffCoordinates()
+{
+	ifstream myfile("TextFiles//SlowBuffCoordinates.txt"); // open text file
+
+	if (myfile.is_open()) // open text file
+	{
+		int i = 0;
+		float tmp;
+
+		while (myfile.eof() == false)
+		{
+			myfile >> tmp;
+			i++;
+			SlowBuffList.push_back(tmp);
 		}
 		myfile.close();
 	}
@@ -64,36 +82,67 @@ void SP2_TrackScene::initBuff()
 		Buffs[i] = NULL;
 	}
 
-	for (size_t i = 0; i < (SBuffList.size() / 4); i++)
+	for (size_t i = 0; i < (SpeedBuffList.size() / 4); i++)
 	{
 		Buffs[i] = new SpeedBuff;
 	}
 
+	for (size_t i = (SpeedBuffList.size() / 4); i < ((SpeedBuffList.size() / 4) + (SlowBuffList.size()/4)); i++)
+	{
+		Buffs[i] = new SlowBuff;
+	}
+
 	int counter = 1;
-	for (size_t i = 0; i < SBuffList.size(); i++) // loop through the total cords in the text file
+	for (size_t i = 0; i < SpeedBuffList.size(); i++) // loop through the total cords in the text file
 	{
 		int loc = i / 4; 
 		// i = 0 , loc = 0 . i = 1 , loc = 0 , i = 2 , loc = 0 , i = 3 , loc = 0 
 		// i = 4 , loc = 1 , i = 5 , loc = 1 , i = 6 , loc = 1 , i = 7 , loc = 1
-
 		if (counter == 4)
 		{
-			Buffs[loc]->setRotateBy(SBuffList[i]);
+			Buffs[loc]->setRotateBy(SpeedBuffList[i]);
 			counter = 1;
 		}
 		else if (counter == 3) // 
 		{
-			Buffs[loc]->setzPos(SBuffList[i]);
+			Buffs[loc]->setzPos(SpeedBuffList[i]);
 			counter += 1;
 		}
 		else if (counter == 2) // if k = second number in line
 		{
-			Buffs[loc]->setyPos(SBuffList[i]);
+			Buffs[loc]->setyPos(SpeedBuffList[i]);
 			counter += 1;
 		}
 		else if (counter == 1) // if k = first number in line
 		{
-			Buffs[loc]->setxPos(SBuffList[i]);
+			Buffs[loc]->setxPos(SpeedBuffList[i]);
+			counter += 1;
+		}
+	}
+	counter = 1;
+	for (size_t i = 0; i < SlowBuffList.size(); i++) // loop through the total cords in the text file
+	{
+		int loc = ((SpeedBuffList.size() /4 ) + i / 4);
+		// i = 0 , loc = 0 . i = 1 , loc = 0 , i = 2 , loc = 0 , i = 3 , loc = 0 
+		// i = 4 , loc = 1 , i = 5 , loc = 1 , i = 6 , loc = 1 , i = 7 , loc = 1
+		if (counter == 4)
+		{
+			Buffs[loc]->setRotateBy(SlowBuffList[i]);
+			counter = 1;
+		}
+		else if (counter == 3) // 
+		{
+			Buffs[loc]->setzPos(SlowBuffList[i]);
+			counter += 1;
+		}
+		else if (counter == 2) // if k = second number in line
+		{
+			Buffs[loc]->setyPos(SlowBuffList[i]);
+			counter += 1;
+		}
+		else if (counter == 1) // if k = first number in line
+		{
+			Buffs[loc]->setxPos(SlowBuffList[i]);
 			counter += 1;
 		}
 	}
@@ -149,12 +198,19 @@ void SP2_TrackScene::initBarrier()
 
 void SP2_TrackScene::Init()
 {
-	// loads sbuff coordinates
-	loadSBuffCoordinates();
-	loadBarrierCoordinates();
-
+	//Loads SpeedBuff coordinates
+	loadSpeedBuffCoordinates();
+	loadSlowBuffCoordinates();
 	initBuff();
+	
+	//Loads Barrier coordinates
+	loadBarrierCoordinates();
 	initBarrier();
+
+	for (size_t i = 0; i < (SpeedBuffList.size() / 4 )+ ( SlowBuffList.size() / 4 ) ; i ++)
+	{
+		cout << Buffs[i]->returnxPos() << " " << Buffs[i]->returnyPos() << " " << Buffs[i]->returnzPos() << endl;
+	}
 	
 	tmpBool = false;
 
@@ -323,36 +379,40 @@ void SP2_TrackScene::Init()
 	meshList[GEO_PROMPT] = MeshBuilder::GenerateText("prompt", 16, 16);
 	meshList[GEO_PROMPT]->textureID = LoadTGA("Image//calibri.tga");
 
+	//remove later
 	meshList[GEO_TESTCAR] = MeshBuilder::GenerateCube("Car", Color(0, 1, 0), 5, 1, 1);
 
 	//Default init for kart
 	meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", Player::kart);
 	meshList[GEO_KART]->textureID = LoadTGA(Player::color.c_str());
-
 	meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Car", Player::wheels);
-
 	//Default init for kart
-
-	meshList[GEO_TRACK] = MeshBuilder::GenerateOBJ("modelTrack", "OBJ//Track.obj");
-	meshList[GEO_TRACK]->textureID = LoadTGA("Image//Track.tga");
 
 	meshList[GEO_FINISHLINE] = MeshBuilder::GenerateOBJ("modelFinishLine", "OBJ//FinishLine.obj");
 	meshList[GEO_FINISHLINE]->textureID = LoadTGA("Image//FinishLine.tga");
 
 	meshList[GEO_PROPELLER] = MeshBuilder::GenerateOBJ("modelPropeller", "OBJ//Propeller.obj");
 
-	meshList[GEO_SPEEDBUFF] = MeshBuilder::GenerateOBJ("SpeedBuff", "OBJ//SpeedBoost.obj");
-	meshList[GEO_SPEEDBUFF]->textureID = LoadTGA("Image//SpeedBoostTexture.tga");
+	/* Gary ENUMS*/
 
+	meshList[GEO_TRACK] = MeshBuilder::GenerateOBJ("modelTrack", "OBJ//Track.obj");
+	meshList[GEO_TRACK]->textureID = LoadTGA("Image//Track.tga");
+
+	meshList[GEO_SPEEDBUFF] = MeshBuilder::GenerateOBJ("SpeedBuff", "OBJ//Boost.obj");
+	meshList[GEO_SPEEDBUFF]->textureID = LoadTGA("Image//SpeedBuffTexture.tga");
+
+	meshList[GEO_SLOWBUFF] = MeshBuilder::GenerateOBJ("SlowBuff", "OBJ//Boost.obj");
+	meshList[GEO_SLOWBUFF]->textureID = LoadTGA("Image//SlowBuffTexture.tga");
+
+	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//Plant.obj");
+	meshList[GEO_TREE]->textureID = LoadTGA("Image//Plant.tga");
+	//
 	meshList[GEO_ROADBLOCK] = MeshBuilder::GenerateOBJ("RoadBlock", "OBJ//RoadBlock.obj");
 
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 
-	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//Plant.obj");
-	meshList[GEO_TREE]->textureID = LoadTGA("Image//Plant.tga");
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("Light Sphere", Color(1.f, 1.f, 1.f), 32, 36, 1.f);
-
 
 	//Set projection to Perspective and load projection matrix
 	Mtx44 projection;
@@ -378,44 +438,64 @@ void SP2_TrackScene::Update(double dt)
 	FPS = 1.f / (float)dt;
 
 	propellerRotation += (float)(180 * dt);
-	
-	if (Application::IsKeyPressed('U'))
-	{
-		if (bounceTime <= 0)
-		{
-			transitionColor += 1;
-			if (transitionColor > 4)
-			{
-				transitionColor = 0;
-			}
-			meshList[GEO_KART]->textureID = LoadTGA(texts.returnColorString(transitionColor).c_str());
-			bounceTime = 0.5;
-		}
-	}
-	
-	if (bounceTime > 0)
+
+	if (bounceTime > 0) //updating bouncetime
 	{
 		bounceTime -= (float)(1 * dt);
 	}
+	//not needed in the game ,remove later.
+	//if (Application::IsKeyPressed('U'))
+	//{
+	//	if (bounceTime <= 0)
+	//	{
+	//		transitionColor += 1;
+	//		if (transitionColor > 4)
+	//		{
+	//			transitionColor = 0;
+	//		}
+	//		meshList[GEO_KART]->textureID = LoadTGA(texts.returnColorString(transitionColor).c_str());
+	//		bounceTime = 0.5;
+	//	}
+	//}
 
 	//*Speedbuff logic done by Gary*/
-	for (size_t i = 0; i < SBuffList.size() / 4; i++)
+	for (size_t i = 0; i < (SpeedBuffList.size() / 4); i++)
 	{
-		if (CollisionChecker(1 , i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
+		if (CollisionChecker(1, i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
 		{
-			Buff::timer = 4;
+			SpeedBuff::timer = 1;
 			//Buff::activateYet = false;
 		}
 	}
-	//Timer after stepping on SpeedBuff
-	if (Buff::timer > 0)
+	//*SlowBuff logic done by Gary*/
+	for (size_t i = (SpeedBuffList.size() / 4); i < (SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4); i++)
 	{
-		Buff::timer = Buff::timer - (float)(1 * dt);
-		Vehicle.setSpeed(0.2f);
+		if (CollisionChecker(1 , i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
+		{
+			SlowBuff::timer = 2;
+			//Buff::activateYet = false;
+		}
 	}
-	else if (Buff::timer < 0 && Buff::activateYet == false)
+	
+	//Timer after stepping on SpeedBuff
+	if (SpeedBuff::timer > 0)
 	{
-		Buff::activateYet = false;
+		SpeedBuff::timer = SpeedBuff::timer - (float)(1 * dt);
+		Vehicle.setSpeed(0.5f);
+	}
+	else if (SpeedBuff::timer < 0 && SpeedBuff::activateYet == false)
+	{
+		SpeedBuff::activateYet = false;
+	}
+	//Timer after stepping on SlowBuff
+	if (SlowBuff::timer > 0)
+	{
+		SlowBuff::timer = SlowBuff::timer - (float)(1 * dt);
+		Vehicle.setSpeed(0.05f);
+	}
+	else if (SlowBuff::timer < 0 && SlowBuff::activateYet == false)
+	{
+		SlowBuff::activateYet = false;
 	}
 
 	/*RoadBlock logic done by Winston*/
@@ -877,7 +957,8 @@ void SP2_TrackScene::Render()
 	modelStack.PopMatrix();
 
 	//Draw Speed buffs in the map (Modelled and rendered by Gary)
-	for (size_t i = 0; i < SBuffList.size() / 4; i++)
+	//start from the start of the buffs
+	for (size_t i = 0; i < SpeedBuffList.size() / 4; i++)
 	{
 		modelStack.PushMatrix();
 		
@@ -887,6 +968,17 @@ void SP2_TrackScene::Render()
 		RenderMesh(meshList[GEO_SPEEDBUFF], false);
 		modelStack.PopMatrix();
 	}
+	//Render slow buff. start from where speedbuff ended off at 
+	for (size_t i = (SpeedBuffList.size() / 4); i < ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4)); i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(Buffs[i]->returnxPos(), Buffs[i]->returnyPos(), Buffs[i]->returnzPos());
+		modelStack.Scale(Vehicle.returnCarScale(), Vehicle.returnCarScale(), Vehicle.returnCarScale());
+		modelStack.Rotate((float)(Buffs[i]->returnBuffRotation()), 0, 1, 0);
+		RenderMesh(meshList[GEO_SLOWBUFF], false);
+		modelStack.PopMatrix();
+	}
+	//
 
 	//Draw Road Blocks in the map (Modelled by Zheng Hong, rendered by Winston)
 	for (size_t i = 0; i < BarrierList.size() / BARRIERROWCOUNT; i++)
@@ -937,9 +1029,13 @@ void SP2_TrackScene::Render()
 	}
 	modelStack.PopMatrix();
 
-	if (Buff::timer > 0)
+	if (SpeedBuff::timer > 0)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string(Buff::timer) , Color(1, 1, 0), 3, 0, 0);
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string(SpeedBuff::timer) , Color(1, 1, 0), 3, 0, 0);
+	}
+	if (SlowBuff::timer > 0)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string(SlowBuff::timer), Color(1, 1, 0), 3, 0, 0);
 	}
 }
 

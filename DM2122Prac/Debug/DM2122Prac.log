@@ -1,10 +1,16 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (DM2122Prac.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   Application.cpp
+  SlowBuff.cpp
   SP2_TrackScene.cpp
-d:\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(123): warning C4244: 'argument': conversion from '_Ty' to 'int', possible loss of data
+d:\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(172): warning C4244: 'argument': conversion from '_Ty' to 'int', possible loss of data
           with
           [
               _Ty=float
           ]
+d:\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(210): warning C4018: '<': signed/unsigned mismatch
   Generating Code...
-  DM2122Prac.vcxproj -> D:\Documents\GitHub\SP2\Debug\Studio Project 2.exe
+  LINK : D:\Documents\GitHub\SP2\Debug\Studio Project 2.exe not found or not built by the last incremental link; performing full link
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+SP2_TrackScene.obj : error LNK2001: unresolved external symbol "public: static float SpeedBuff::timer" (?timer@SpeedBuff@@2MA)
+SP2_TrackScene.obj : error LNK2001: unresolved external symbol "public: static bool SpeedBuff::activateYet" (?activateYet@SpeedBuff@@2_NA)
+D:\Documents\GitHub\SP2\Debug\Studio Project 2.exe : fatal error LNK1120: 2 unresolved externals
