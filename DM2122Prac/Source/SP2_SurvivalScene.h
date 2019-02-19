@@ -131,7 +131,7 @@ private:
 
 	float FPS;
 
-	SpeedBuff SBuff;
+	SpeedBuff SpeedBuff;
 	Car SceneCar;
 
 	int minutes ;

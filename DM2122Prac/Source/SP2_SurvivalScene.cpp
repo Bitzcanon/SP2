@@ -584,13 +584,13 @@ void SP2_SurvivalScene::Render()
 	}
 	modelStack.PopMatrix();
 
-	/*for (int i = 0; i < SBuff.returnSpeedBuffQuantity(); i++)
+	/*for (int i = 0; i < SpeedBuff.returnSpeedBuffQuantity(); i++)
 	{
 		modelStack.PushMatrix();
 		modelStack.Scale(SceneCar.returnCarScale(), SceneCar.returnCarScale(), SceneCar.returnCarScale());
 
-		modelStack.Translate(SBuff.returnxPos(i), SBuff.returnyPos(i), SBuff.returnzPos(i));
-		modelStack.Rotate(SBuff.returnSpeedBuffRotation(i), 0, 1, 0);
+		modelStack.Translate(SpeedBuff.returnxPos(i), SpeedBuff.returnyPos(i), SpeedBuff.returnzPos(i));
+		modelStack.Rotate(SpeedBuff.returnSpeedBuffRotation(i), 0, 1, 0);
 		RenderMesh(meshList[GEO_SPEEDBUFF], false);
 		modelStack.PopMatrix();
 	}*/

@@ -8,20 +8,13 @@ Buff::Buff()
 	zPos = 0;
 }
 
-Buff::Buff(float x , float y , float z) // not used
-{
-	xPos = x, yPos = y, zPos = z;
-}
-
 Buff::~Buff()
 {
 
 }
 
 //init static buffcount = 0;
-float::Buff::timer = 0;
-int::Buff::BuffCount = 0;
-bool::Buff::activateYet = false;
+
 
 void Buff::setxPos(float x)
 {
@@ -43,24 +36,9 @@ void Buff::setRotateBy(float angle)
 	rotateBy = angle;
 }
 
-void Buff::setTimer(float time)
-{
-	timer = time;
-}
-
-float Buff::returnTimer()
-{
-	return timer;
-}
-
 float Buff::returnBuffRotation()
 {
 	return rotateBy;
-}
-
-int Buff::returnBuffQuantity()
-{
-	return BuffCount;
 }
 
 float Buff::returnxPos()

@@ -18,6 +18,7 @@ Player::~Player()
 
 }
 
+bool Player::changeSomething = false;
 string Player::kart = "OBJ//Kart1.obj";
 string Player::wheels = "OBJ//Wheels1.obj";
 string Player::color = "Image/Colors/Red.tga";

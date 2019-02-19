@@ -133,15 +133,19 @@ void Application::Run()
 	scene[1] = new SP2_TrackScene();
 	scene[2] = new SP2_NPCScene();
 	
-	scene[0]->Init();
-	scene[1]->Init();
-	scene[2]->Init();
-
+	for (int i = 0; i < 5; i++)
+	{
+		if (scene[i] != NULL)
+		{
+			scene[i]->Init();
+		}
+	}
+	
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
 		scene[SceneSetter]->Update(m_timer.getElapsedTime());
-		if (SceneSetter == 10)
+		if (SceneSetter == 10) // ENSURE THIS IS BEFORE RENDER SO IT WONT OVERLOAD RENDER
 		{
 			break;
 		}

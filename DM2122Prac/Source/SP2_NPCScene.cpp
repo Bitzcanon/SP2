@@ -272,7 +272,7 @@ void SP2_NPCScene::Update(double dt)
 		rotateAngle = 0;
 	}
 
-	if (Application::IsKeyPressed(VK_LEFT))
+	if (Application::IsKeyPressed('M'))
 	{
 		Application::SceneSetter = 0;
 	}
@@ -289,6 +289,7 @@ void SP2_NPCScene::Update(double dt)
 			//delete meshList[10];
 			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
 			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
+			//EDIT STATIC PLAYER VAR
 			Player::kart = text.returnKartString(transitionBody);
 			Player::color = text.returnColorString(transitionColor);
 			bounceTime = 0.2f;
@@ -307,6 +308,7 @@ void SP2_NPCScene::Update(double dt)
 			//delete meshList[10];
 			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
 			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
+			//EDIT STATIC PLAYER VAR
 			Player::kart = text.returnKartString(transitionBody);
 			Player::color = text.returnColorString(transitionColor);
 			bounceTime = 0.2f;
@@ -325,7 +327,9 @@ void SP2_NPCScene::Update(double dt)
 			//delete meshList[16];
 			meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels", text.returnWheelsString(transitionWheels));
 			meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
+			//EDIT STATIC PLAYER VAR
 			Player::wheels = text.returnWheelsString(transitionWheels);
+			Player::color = "Image//Colors//Gray.tga";
 			bounceTime = 0.2f;
 		}
 	}
