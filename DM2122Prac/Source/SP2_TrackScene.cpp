@@ -504,7 +504,7 @@ void SP2_TrackScene::Update(double dt)
 		}
 	}
 	/*World border collision detection logic done by Winston*/
-	if (((Vehicle.newPosition.x * 10) >= 495.f) || ((Vehicle.newPosition.x * 10) <= -495.f) || ((Vehicle.newPosition.z * 10) >= 495.f) || ((Vehicle.newPosition.z * 10) <= -495.f))
+	if (((Vehicle.newPosition.x * 10) >= 493.5f) || ((Vehicle.newPosition.x * 10) <= -493.5f) || ((Vehicle.newPosition.z * 10) >= 493.5f) || ((Vehicle.newPosition.z * 10) <= -493.5f))
 	{
 		Barrier::BarrierDelay = 0.2f;
 		Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
@@ -568,6 +568,22 @@ void SP2_TrackScene::Update(double dt)
 	cameraTarget.z = Vehicle.newPosition.z * Vehicle.returnCarScale();
 
 	camera.Update(dt);
+	if (cameraPos.x >= 498.f)
+	{
+		cameraPos.x = 497.f;
+	}
+	else if (cameraPos.x <= -498.f)
+	{
+		cameraPos.x = -497.f;
+	}
+	else if (cameraPos.z >= 498.f)
+	{
+		cameraPos.z = 497.f;
+	}
+	else if (cameraPos.z <= -498.f)
+	{
+		cameraPos.z = -497.f;
+	}
 
 }
 
@@ -591,18 +607,6 @@ bool SP2_TrackScene::CollisionChecker(int type, int index, float objX, float obj
 		{
 			maximumXObj = objX / Vehicle.returnCarScale() + length * Barriers[index]->returnBarrierScale();
 			maximumZObj = objZ / Vehicle.returnCarScale() + width * Barriers[index]->returnBarrierScale();
-
-			/*if (Barriers[index]->returnBarrierRotation() == 90)
-			{
-				float tmp = minimumXObj;
-				minimumXObj = minimumZObj;
-				minimumZObj = tmp;
-
-				tmp = maximumXObj;
-				maximumXObj = maximumZObj;
-				maximumZObj = tmp;
-			}
-			break;*/
 		}
 		case 3:
 		{
