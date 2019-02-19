@@ -166,8 +166,6 @@ private:
 	Player *playerInstance;
 	RenderStrings text; // text file that stores the car locations
 
-	int transitionColor;
-
 	float bounceTime;
 
 	float propellerRotation;

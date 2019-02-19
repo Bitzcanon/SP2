@@ -206,17 +206,10 @@ void SP2_TrackScene::Init()
 	//Loads Barrier coordinates
 	loadBarrierCoordinates();
 	initBarrier();
-
-	//remove later
-	/*for (size_t i = 0; i < (SpeedBuffList.size() / 4 )+ ( SlowBuffList.size() / 4 ) ; i ++)
-	{
-		cout << Buffs[i]->returnxPos() << " " << Buffs[i]->returnyPos() << " " << Buffs[i]->returnzPos() << endl;
-	}*/
 	
 	tmpBool = false;
 
 	bounceTime = 0;
-	transitionColor = 0;
 	conditionTester = false;
 
 	//Set background color to dark blue (Before this are initialized variables, after is the rest)
@@ -459,20 +452,6 @@ void SP2_TrackScene::Update(double dt)
 	{
 		bounceTime -= (float)(1 * dt);
 	}
-	//not needed in the game ,remove later.
-	//if (Application::IsKeyPressed('U'))
-	//{
-	//	if (bounceTime <= 0)
-	//	{
-	//		transitionColor += 1;
-	//		if (transitionColor > 4)
-	//		{
-	//			transitionColor = 0;
-	//		}
-	//		meshList[GEO_KART]->textureID = LoadTGA(texts.returnColorString(transitionColor).c_str());
-	//		bounceTime = 0.5;
-	//	}
-	//}
 
 	//*Speedbuff logic done by Gary*/
 	for (size_t i = 0; i < (SpeedBuffList.size() / 4); i++)

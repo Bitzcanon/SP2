@@ -23,7 +23,7 @@ void MenuCamera::Update(double dt)
 	Vector3 view = (target - position).Normalized();
 	Vector3 right = view.Cross(up);
 	//
-	if (Application::IsKeyPressed('A'))
+	/*if (Application::IsKeyPressed('A'))
 	{
 		position = position - right;
 		target = position + view;
@@ -71,7 +71,7 @@ void MenuCamera::Update(double dt)
 
 		view = rotation * view;
 		target = position + view;
-	}
+	}*/
 	//
 	if (Application::IsKeyPressed('R'))
 	{
