@@ -133,7 +133,7 @@ void Application::Run()
 	scene[0] = new SP2_MainMenuScene();
 	scene[1] = new SP2_TrackScene();
 	scene[2] = new SP2_NPCScene();
-	
+
 	for (int i = 0; i < 5; i++)
 	{
 		if (scene[i] != NULL)
@@ -141,7 +141,7 @@ void Application::Run()
 			scene[i]->Init();
 		}
 	}
-	
+
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
@@ -169,10 +169,13 @@ void Application::Run()
 		m_timer.waitUntil(frameTime);// Frame rate limiter. Limits each frame to a specified time in ms. 
 	}
 
-	for (int i = 0; i < 5; i ++)
+	for (int i = 0; i < 5; i++)
 	{
-		scene[i]->Exit();
-		delete scene[i];
+		if (scene[i] != NULL)
+		{
+			scene[i]->Exit();
+			delete scene[i];
+		}
 	}
 }
 
