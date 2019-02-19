@@ -1,6 +1,9 @@
 #ifndef SP2_TrackScene_H
 #define	SP2_TrackScene_H
 
+constexpr auto BARRIERCOUNT = 9;
+constexpr auto BARRIERROWCOUNT = 5;
+
 #include "Scene.h"
 #include "Camera3.h"
 #include "FPSCamera.h"
@@ -145,6 +148,9 @@ private:
 	void loadSlowBuffCoordinates();
 	void loadSpeedBuffCoordinates();
 
+	void initBarrier();
+	void loadBarrierCoordinates();
+
 	string UpdateFrameRate(float string);
 
 	float FPS;
@@ -152,10 +158,10 @@ private:
 	bool conditionTester;
 
 	Buff * Buffs[20];
+	Barrier *Barriers[BARRIERCOUNT];
 
 	//Declaration of class instances
 	RenderStrings texts;
-	Barrier RoadBlock;
 	Car Vehicle;
 	Player *playerInstance;
 	RenderStrings text; // text file that stores the car locations
@@ -175,6 +181,7 @@ private:
 	bool isWon;
 	
 	vector <float> SpeedBuffList;
+	vector <float> BarrierList;	
 	vector <float> SlowBuffList;
 };
 

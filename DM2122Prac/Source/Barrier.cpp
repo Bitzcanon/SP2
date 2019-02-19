@@ -6,65 +6,67 @@
 
 using namespace std;
 
+float Barrier::BarrierDelay = 0;
+
 Barrier::Barrier()
 {
-	//Storing coordinates in text file over into vector found in 
-	ifstream myfile("TextFiles//BarrierCoordinates.txt"); //Open text file
+	////Storing coordinates in text file over into vector found in 
+	//ifstream myfile("TextFiles//BarrierCoordinates.txt"); //Open text file
 
-	vector <float> TextStorage; // tmp vector to store stuff from text file 
+	//vector <float> TextStorage; // tmp vector to store stuff from text file 
 
-	if (myfile.is_open()) // open text file
-	{
-		int i = 0;
-		float tmp;
+	//if (myfile.is_open()) // open text file
+	//{
+	//	int i = 0;
+	//	float tmp;
 
-		while (myfile.eof() == false)
-		{
-			myfile >> tmp;
-			i++;
-			TextStorage.push_back(tmp);
-		}
-		myfile.close();
-	}
+	//	while (myfile.eof() == false)
+	//	{
+	//		myfile >> tmp;
+	//		i++;
+	//		TextStorage.push_back(tmp);
+	//	}
+	//	myfile.close();
+	//}
 
-	int counter = 1;
-	for (size_t i = 0; i < TextStorage.size(); i++) // loop through the 9 different TextStorages.
-	{
-		if (counter == 5)
-		{
-			scaleBy.push_back(TextStorage[i]);
-			counter = 1;
-		}
-		else if (counter == 4) //if k = fourth number in the line
-		{
-			rotateBy.push_back(TextStorage[i]);
-			counter += 1;
-		}
-		else if (counter == 3) // if k = third number in the line
-		{
-			zPos.push_back(TextStorage[i]);
-			counter += 1;
-		}
-		else if (counter == 2) // if k = second number in line
-		{
-			yPos.push_back(TextStorage[i]);
-			counter += 1;
-		}
-		else if (counter == 1) // if k = first number in line
-		{
-			xPos.push_back(TextStorage[i]);
-			counter += 1;
-		}
-	}
+	//int counter = 1;
+	//for (size_t i = 0; i < TextStorage.size(); i++) // loop through the 9 different TextStorages.
+	//{
+	//	if (counter == 5)
+	//	{
+	//		scaleBy.push_back(TextStorage[i]);
+	//		counter = 1;
+	//	}
+	//	else if (counter == 4) //if k = fourth number in the line
+	//	{
+	//		rotateBy.push_back(TextStorage[i]);
+	//		counter += 1;
+	//	}
+	//	else if (counter == 3) // if k = third number in the line
+	//	{
+	//		zPos.push_back(TextStorage[i]);
+	//		counter += 1;
+	//	}
+	//	else if (counter == 2) // if k = second number in line
+	//	{
+	//		yPos.push_back(TextStorage[i]);
+	//		counter += 1;
+	//	}
+	//	else if (counter == 1) // if k = first number in line
+	//	{
+	//		xPos.push_back(TextStorage[i]);
+	//		counter += 1;
+	//	}
+	//}
 
-	barrierQuantity = (TextStorage.size() / 5);
-	timer = 0;
+	//barrierQuantity = (TextStorage.size() / 5);
+	//timer = 0;
 
-	/* For testing purposes , prints out the values of x y and z
-		for (int i = 0; i < TextStorage.size() / 3; i++)
-		{
-			cout << "X value : " << xPos[i] << " Y value : " << yPos[i] << " Z Value : " << zPos[i] << endl;
-		}*/
+	///* For testing purposes , prints out the values of x y and z
+	//	for (int i = 0; i < TextStorage.size() / 3; i++)
+	//	{
+	//		cout << "X value : " << xPos[i] << " Y value : " << yPos[i] << " Z Value : " << zPos[i] << endl;
+	//	}*/
 }
 
 Barrier::~Barrier()
@@ -72,42 +74,67 @@ Barrier::~Barrier()
 
 }
 
-int Barrier::returnBarrierRotation(int angleNumber)
+int Barrier::returnBarrierRotation()
 {
-	return rotateBy[angleNumber];
+	return rotateBy;
 }
 
-int Barrier::returnBarrierScale(int scaleNumber)
+void Barrier::setBarrierRotation(float angle)
 {
-	return scaleBy[scaleNumber];
+	rotateBy = angle;
+}
+
+int Barrier::returnBarrierScale()
+{
+	return scaleBy;
+}
+
+void Barrier::setBarrierScale(int scaleFactor)
+{
+	scaleBy = scaleFactor;
 }
 
 int Barrier::returnBarrierQuantity()
 {
-	return barrierQuantity;
+	return barrierCount;
 }
 
-float Barrier::returnxPos(int locationNumber)
+float Barrier::returnxPos()
 {
-	return xPos[locationNumber];
+	return xPos;
 }
 
-float Barrier::returnyPos(int locationNumber)
+float Barrier::returnyPos()
 {
-	return yPos[locationNumber];
+	return yPos;
 }
 
-float Barrier::returnzPos(int locationNumber)
+float Barrier::returnzPos()
 {
-	return zPos[locationNumber];
+	return zPos;
+}
+
+void Barrier::setxPos(float x)
+{
+	xPos = x;
+}
+
+void Barrier::setyPos(float y)
+{
+	yPos = y;
+}
+
+void Barrier::setzPos(float z)
+{
+	zPos = z;
 }
 
 void Barrier::setTimer(float time)
 {
-	timer = time;
+	BarrierDelay = time;
 }
 
 float Barrier::returnTimer()
 {
-	return timer;
+	return BarrierDelay;
 }
