@@ -16,7 +16,7 @@ public:
 	static double mouse_x;
 	static double mouse_y;
 
-	static bool resetTrack;
+	static bool resetScene;
 	static int SceneSetter;
 private:
 	

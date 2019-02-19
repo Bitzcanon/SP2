@@ -89,6 +89,7 @@ private:
 
 		GEO_MENU,
 		GEO_ARROW,
+		GEO_BACKGROUND,
 
 		NUM_GEOMETRY,
 	};
@@ -132,7 +133,10 @@ private:
 	float bounceTime;
 	float FPS;
 
-	int arrowY;
+	bool isMenu;
+
+	int sceneNumber;
+	double arrowY;
 };
 
 #endif // ! SP2_MainMenuScene_H
