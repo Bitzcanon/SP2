@@ -253,10 +253,10 @@ void SP2_NPCScene::Init()
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
 	projectionStack.LoadMatrix(projection);
 
-	NPCs[0].x = -20.f; NPCs[0].z = 20.f; NPCs[0].close = false; NPCs[0].direction = 0; NPCs[0].interacting = false; //initialises the first NPC's starting position, bools for when player is close
-	NPCs[1].x = 6.f; NPCs[1].z = -50.f; NPCs[1].close = false; NPCs[1].direction = 0; NPCs[1].interacting = false; //and bool when player is interacting with the NPC
+	NPCs[0].setCoordsNPC(-20.f, 20.f);  //sets the coordinates of the npcs
+	NPCs[1].setCoordsNPC(6.f, -50.f);
 	GarageDoorY = 6.685f; GarageDoorRotate = 0.f; GarageOpen = false;
-	coins[0].SetCoinCoords(10.f, 50.f); coins[1].SetCoinCoords(100.f, 90.f);
+	//coins[0].SetCoinCoords(10.f, 50.f); coins[1].SetCoinCoords(100.f, 90.f);
 }
 
 void SP2_NPCScene::Update(double dt)
@@ -391,8 +391,11 @@ void SP2_NPCScene::Update(double dt)
 		camera.target.y = 0.f;
 	}
 	
+	for (int i = 0; i < 2; i++)
+	{
+		NPCs[i].MoveNPC(dt, i);
+	}
 
-	MoveNPC(dt);
 	UpdateDoor(dt);
 	coins[0].CoinCollision(camera.position.x, camera.position.z);
 	coins[1].CoinCollision(camera.position.x, camera.position.z);
@@ -422,90 +425,15 @@ void SP2_NPCScene::UpdateDoor(double dt)
 			GarageDoorRotate += (float)dt * 40.f;
 		}
 	}
-	if (Application::IsKeyPressed('F') && GarageOpen && CloseToDoor())
+	if (Application::IsKeyPressed('F') && GarageOpen && CloseToDoor() && bounceTime <= 0)
 	{
 		GarageOpen = false;
+		bounceTime = 0.4f;
 	}
-	else if (Application::IsKeyPressed('F') && !GarageOpen && CloseToDoor())
+	else if (Application::IsKeyPressed('F') && !GarageOpen && CloseToDoor() && bounceTime <= 0)
 	{
 		GarageOpen = true;
-	}
-}
-
-void SP2_NPCScene::MoveNPC(double dt) //Moves the 2 NPCs that "walks" around
-{
-	if (!NPCs[0].close)
-	{
-		switch ((int)NPCs[0].direction)
-		{
-		case 0:
-			if (NPCs[0].x < 20.f)
-			{
-				NPCs[0].x += (float)dt * 5.f;
-			}
-			else
-			{
-				NPCs[0].direction = 1.f;
-			}
-			break;
-		case 1:
-			if (NPCs[0].z > -20.f)
-			{
-				NPCs[0].z -= (float)dt * 5.f;
-			}
-			else
-			{
-				NPCs[0].direction = 2.f;
-			}
-			break;
-		case 2:
-			if (NPCs[0].x > -20.f)
-			{
-				NPCs[0].x -= (float)dt * 5.f;
-			}
-			else
-			{
-				NPCs[0].direction = 3.f;
-			}
-			break;
-		case 3:
-			if (NPCs[0].z < 20.f)
-			{
-				NPCs[0].z += (float)dt * 5.f;
-			}
-			else
-			{
-				NPCs[0].direction = 0.f;
-			}
-			break;
-		}
-	}
-
-	if (!NPCs[1].close)
-	{
-		switch ((int)NPCs[1].direction)
-		{
-		case 0:
-			if (NPCs[1].x < 10.f && !NPCs[1].close)
-			{
-				NPCs[1].x += (float)dt * 5.f;
-			}
-			else
-			{
-				NPCs[1].direction = 1.f;
-			}
-			break;
-		case 1:
-			if (NPCs[1].x > -10.f && !NPCs[1].close)
-			{
-				NPCs[1].x -= (float)dt * 5.f;
-			}
-			else
-			{
-				NPCs[1].direction = 0.f;
-			}
-			break;
-		}
+		bounceTime = 0.4f;
 	}
 }
 
@@ -708,30 +636,6 @@ void SP2_NPCScene::RenderSkybox()
 	//Bottom of Skybox
 }
 
-bool SP2_NPCScene::CloseToSellerNPC() //To check if player is close to the NPCs that are moving
-{
-	if (camera.position.x >= NPCs[0].x * 5.f - 40.f && camera.position.x <= NPCs[0].x * 5.f + 40.f)
-	{
-		if (camera.position.z >= NPCs[0].z * 5.f - 40.f && camera.position.z <= NPCs[0].z * 5.f + 40.f)
-		{
-			NPCs[0].close = true;
-			return true;
-		}
-	}
-	if (camera.position.x >= NPCs[1].x * 5.f - 40.f && camera.position.x <= NPCs[1].x * 5.f + 40.f)
-	{
-		if (camera.position.z >= NPCs[1].z * 5.f - 40.f && camera.position.z <= NPCs[1].z * 5.f + 40.f)
-		{
-			NPCs[1].close = true;
-			return true;
-		}
-	}
-
-	NPCs[0].close = false;
-	NPCs[1].close = false;
-	return false;
-}
-
 bool SP2_NPCScene::CloseToNPC() //To check if player is close to the mechanic NPC
 {
 	if (camera.position.x >= -190.f - 40.f && camera.position.x <= -190.f + 40.f)
@@ -827,19 +731,23 @@ void SP2_NPCScene::Render()
 	RenderMesh(meshList[GEO_NPC_MECHANIC], false);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Scale(5.f, 5.f, 5.f);
-	modelStack.Translate(NPCs[0].x, 0.f, NPCs[0].z);
-	modelStack.Rotate(NPCs[0].direction * 90.f, 0.f, 1.f, 0.f);
-	RenderMesh(meshList[GEO_NPC], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Scale(5.f, 5.f, 5.f);
-	modelStack.Translate(NPCs[1].x, 0.f, NPCs[1].z);
-	modelStack.Rotate(NPCs[1].direction * 180.f, 0.f, 1.f, 0.f);
-	RenderMesh(meshList[GEO_NPC], false);
-	modelStack.PopMatrix();
+	for (int i = 0; i < 2; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Scale(5.f, 5.f, 5.f);
+		modelStack.Translate(NPCs[i].getx(), 0.f, NPCs[i].getz());
+		switch (i)
+		{
+		case 0:
+			modelStack.Rotate(NPCs[i].getDirection() * 90.f, 0.f, 1.f, 0.f);
+			break;
+		case 1:
+			modelStack.Rotate(NPCs[i].getDirection() * 180.f, 0.f, 1.f, 0.f);
+			break;
+		}
+		RenderMesh(meshList[GEO_NPC], false);
+		modelStack.PopMatrix();
+	}
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0.f, 0.1f, 0.f);
@@ -847,20 +755,16 @@ void SP2_NPCScene::Render()
 	RenderMesh(meshList[GEO_CHOCO], true);
 	modelStack.PopMatrix();
 
-	if (!coins[0].CheckTaken())
+	for (int i = 0; i < 2; i++)
 	{
-		modelStack.PushMatrix();
-		modelStack.Translate(coins[0].getX(), 0.f, coins[0].getZ());
-		RenderMesh(meshList[GEO_COIN], true);
-		modelStack.PopMatrix();
-	}
-
-	if (!coins[1].CheckTaken())
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(coins[1].getX(), 0.f, coins[1].getZ());
-		RenderMesh(meshList[GEO_COIN], true);
-		modelStack.PopMatrix();
+		if (!coins[i].CheckTaken())
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(coins[i].getX(), 0.f, coins[i].getZ());
+			modelStack.Scale(50, 50, 50);
+			RenderMesh(meshList[GEO_COIN], true);
+			modelStack.PopMatrix();
+		}
 	}
 
 	modelStack.PushMatrix();
@@ -925,9 +829,9 @@ void SP2_NPCScene::Render()
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press E to build car", Color(1, 1, 0), 1, -1, 10);
 	}
-	if (CloseToSellerNPC())
+	if (NPCs[0].CloseToNPC(camera.position.x, camera.position.z) || NPCs[1].CloseToNPC(camera.position.x, camera.position.z))
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press E to interact with NPC", Color(1, 1, 0), 1, -1, 10);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Press E to interact with NPC", Color(1, 1, 0), 1, -1, 10);
 	}
 	if (CloseToDoor() && !GarageOpen)
 	{

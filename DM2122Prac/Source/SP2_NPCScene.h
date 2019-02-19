@@ -12,6 +12,7 @@
 
 #include "Player.h"
 #include "Coins.h"
+#include "NPCS.h"
 
 #include <string>
 using namespace std;
@@ -131,17 +132,9 @@ private:
 	void RenderSkybox();
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
-	bool CloseToNPC();
-	bool CloseToSellerNPC();
+	bool CloseToNPC(); //For the mechanic NPC, which is sitting down
 	bool CloseToDoor();
-	void MoveNPC(double dt);
 	void UpdateDoor(double dt);
-	struct NPC //To keep track of NPC positions
-	{
-		float x, z;
-		bool close, interacting;
-		float direction;
-	};
 	
 	RenderStrings text;
 	string UpdateFrameRate(float string);
@@ -153,7 +146,7 @@ private:
 	int transitionWheels;
 	float bounceTime;
 	bool interact;
-	NPC NPCs[2];
+	NPCS NPCs[2];
 	float GarageDoorY, GarageDoorRotate;
 	bool GarageOpen;
 	Coins coins[2];
