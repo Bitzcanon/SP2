@@ -16,6 +16,7 @@
 //Framework prepared by Winston
 
 int::Application::SceneSetter = 0 ;
+bool::Application::resetScene = false;
 
 Application::Application()
 {
@@ -122,7 +123,7 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	Scene *scene[5];
+	Scene *scene[6];
 	//INIT TO NULL
 	for (int i = 0; i < 5; i++)
 	{
@@ -130,9 +131,12 @@ void Application::Run()
 	}
 
 	scene[0] = new SP2_MainMenuScene();
+
 	scene[1] = new SP2_TrackScene();
-	scene[2] = new SP2_NPCScene();
-	
+	/*scene[2] = new SP2_CollectionScene();
+	scene[3] = new SP2_SurvivalScene();*/
+	scene[4] = new SP2_NPCScene();
+
 	for (int i = 0; i < 5; i++)
 	{
 		if (scene[i] != NULL)
@@ -140,27 +144,55 @@ void Application::Run()
 			scene[i]->Init();
 		}
 	}
-	
+
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
+
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
 		scene[SceneSetter]->Update(m_timer.getElapsedTime());
-		if (SceneSetter == 10) // ENSURE THIS IS BEFORE RENDER SO IT WONT OVERLOAD RENDER
+
+		if /*(*/(SceneSetter == 1 /*|| SceneSetter == 2 || SceneSetter == 3 )*/ && resetScene == true) // reset the track everytime u enter from main menu
+		{
+			int i = SceneSetter;
+			scene[i]->Exit();
+			delete scene[i];
+			if (i == 1)
+			{
+				scene[1] = new SP2_TrackScene;
+				scene[1]->Init();
+			}
+			/*else if (i == 2)
+			{
+				scene[2] = new SP2_CoinScene;
+				scene[2]->Init();
+			}
+			else if (i == 3)
+			{
+				scene[3] = new SP2_SurvivalScene;
+				scene[3]->Init();
+			}*/
+			resetScene = false;
+		}
+		else if (SceneSetter == 10) // ENSURE THIS IS BEFORE RENDER SO IT WONT OVERLOAD RENDER
 		{
 			break;
 		}
+
 		scene[SceneSetter]->Render();
 		//Swap buffers
 		glfwSwapBuffers(m_window);
 		//Get and organize events, like keyboard and mouse input, window resizing, etc...
 		glfwPollEvents();
-		m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms. 
+		m_timer.waitUntil(frameTime);// Frame rate limiter. Limits each frame to a specified time in ms. 
 	}
 
-	for (int i = 0; i < 3; i ++)
+	for (int i = 0; i < 5; i++)
 	{
-		scene[i]->Exit();
-		delete scene[i];
+		if (scene[i] != NULL)
+		{
+			scene[i]->Exit();
+			delete scene[i];
+		}
 	}
 }
 

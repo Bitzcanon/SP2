@@ -21,7 +21,8 @@ SP2_MainMenuScene::~SP2_MainMenuScene()
 void SP2_MainMenuScene::Init()
 {
 	bounceTime = 0;
-	arrowY = 30;
+	arrowY = 0.2;
+	isMenu = true;
 	//Set background color to dark blue (Before this are initialized variables, after is the rest)
 	glClearColor(0.0f, 0.0f, 0.3f, 0.0f);
 
@@ -173,6 +174,7 @@ void SP2_MainMenuScene::Init()
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("FRONT", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
+
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
 
@@ -181,6 +183,8 @@ void SP2_MainMenuScene::Init()
 	meshList[GEO_MENU]->textureID = LoadTGA("Image//MainMenu.tga");
 
 	meshList[GEO_ARROW] = MeshBuilder::GenerateOBJ("Arrow", "OBJ//Arrow.obj");
+
+	meshList[GEO_BACKGROUND] = MeshBuilder::GenerateQuad("Background", Color(0, 0, 0), 1.f, 1.f);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
@@ -205,45 +209,120 @@ void SP2_MainMenuScene::Update(double dt)
 		Application::SceneSetter = 1;
 	}
 
+	if (Application::IsKeyPressed('U'))
+	{
+		cout << arrowY << endl;
+	}
+
 	if (Application::IsKeyPressed(VK_RETURN))
 	{
-		if (arrowY == 30)
+		if (bounceTime <= 0)
 		{
-			Application::SceneSetter = 1;
+			bounceTime = 0.2;
+			if (isMenu == true) // if player is at the menu ,
+			{
+				if (arrowY == 0.2)
+				{
+					sceneNumber = 1;
+					meshList[GEO_MENU]->textureID = LoadTGA("Image//ConfirmMenu.tga");
+					arrowY = 0;
+					isMenu = false;
+				}
+				else if (arrowY == 0.1)
+				{
+					sceneNumber = 2;
+					meshList[GEO_MENU]->textureID = LoadTGA("Image//ConfirmMenu.tga");
+					arrowY = 0;
+					isMenu = false;
+				}
+				else if (arrowY == 0)
+				{
+					sceneNumber = 3;
+					meshList[GEO_MENU]->textureID = LoadTGA("Image//ConfirmMenu.tga");
+					arrowY = 0;
+					isMenu = false;
+				}
+				else if (arrowY == -0.1)
+				{
+					Application::SceneSetter = 4;
+				}
+				else if (arrowY == -0.2)
+				{
+					Application::SceneSetter = 10;
+				}
+			}
+			else if (isMenu == false)
+			{
+				if (arrowY == 0.1)
+				{
+					Application::SceneSetter = sceneNumber;
+				}
+				else if (arrowY == 0)
+				{
+					Application::SceneSetter = sceneNumber;
+					Application::resetScene = true;
+				}
+				else if (arrowY == -0.1)
+				{
+					meshList[GEO_MENU]->textureID = LoadTGA("Image//MainMenu.tga");
+					isMenu = true;
+				}
+			}
 		}
-		else if (arrowY == 15)
-		{
-			Application::SceneSetter = 2;
-		}
-		else if (arrowY == 0)
-		{
-			Application::SceneSetter = 10;
-		}
-		
 	}
 
 	if (Application::IsKeyPressed(VK_UP))
 	{
-		if (bounceTime <= 0)
+		if (isMenu == true)
 		{
-			bounceTime = 0.1f;
-			arrowY += 15;
-			if (arrowY > 30)
+			if (bounceTime <= 0)
 			{
-				arrowY = 0;
+				bounceTime = 0.1f;
+				arrowY += 0.1;
+				if (arrowY > 0.3)
+				{
+					arrowY = -0.2;
+				}
+			}
+		}
+		else if (isMenu == false)
+		{
+			if (bounceTime <= 0)
+			{
+				bounceTime = 0.1f;
+				arrowY += 0.1;
+				if (arrowY > 0.1)
+				{
+					arrowY = -0.1;
+				}
 			}
 		}
 	}
 
 	if (Application::IsKeyPressed(VK_DOWN))
 	{
-		if (bounceTime <= 0)
+		if (isMenu == true)
 		{
-			bounceTime = 0.1f;
-			arrowY -= 15;
-			if (arrowY < 0)
+			if (bounceTime <= 0)
 			{
-				arrowY = 30;
+				bounceTime = 0.1f;
+				arrowY -= 0.1;
+				if (arrowY < -0.3)
+				{
+					arrowY = 0.2;
+				}
+			}
+		}
+		else if (isMenu == false)
+		{
+			if (bounceTime <= 0)
+			{
+				bounceTime = 0.1f;
+				arrowY -= 0.1;
+				if (arrowY < -0.1)
+				{
+					arrowY = 0.1;
+				}
 			}
 		}
 	}
@@ -458,17 +537,24 @@ void SP2_MainMenuScene::Render()
 	RenderMesh(meshList[GEO_AXES], false);
 
 	modelStack.PushMatrix();
-		modelStack.Translate(0, 20, -100);
-		modelStack.Scale(120 , 100 , 100);
-		RenderMesh(meshList[GEO_MENU], false);
-		modelStack.PopMatrix();
+	modelStack.Translate(0, 20, -200);
+	modelStack.Scale(500, 500, 500);
+	RenderMesh(meshList[GEO_BACKGROUND], false);
+	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-		modelStack.Translate( -40.f , (float)(arrowY) ,-98.f);
+		modelStack.Translate(0, 20, -120);
+		modelStack.Scale(120 , 100 , 100);
+		RenderMesh(meshList[GEO_MENU], false);
+
+	modelStack.PushMatrix();
+		modelStack.Translate(-0.38 , arrowY ,0.1);
 		modelStack.Rotate(270, 0, 1, 0);
-		modelStack.Scale(5 , 5 , 5);
+		modelStack.Scale(0.05 , 0.05 , 0.05);
 		RenderMesh(meshList[GEO_ARROW], false); //set lighting to true once completed
 		modelStack.PopMatrix();
+		modelStack.PopMatrix();
+
 }
 
 void SP2_MainMenuScene::Exit()

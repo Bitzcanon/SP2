@@ -292,6 +292,7 @@ void SP2_NPCScene::Update(double dt)
 			//EDIT STATIC PLAYER VAR
 			Player::kart = text.returnKartString(transitionBody);
 			Player::color = text.returnColorString(transitionColor);
+			Player::changeSomething = true;
 			bounceTime = 0.2f;
 		}
 	}
@@ -311,6 +312,7 @@ void SP2_NPCScene::Update(double dt)
 			//EDIT STATIC PLAYER VAR
 			Player::kart = text.returnKartString(transitionBody);
 			Player::color = text.returnColorString(transitionColor);
+			Player::changeSomething = true;
 			bounceTime = 0.2f;
 		}
 	}
@@ -330,6 +332,7 @@ void SP2_NPCScene::Update(double dt)
 			//EDIT STATIC PLAYER VAR
 			Player::wheels = text.returnWheelsString(transitionWheels);
 			Player::color = "Image//Colors//Gray.tga";
+			Player::changeSomething = true;
 			bounceTime = 0.2f;
 		}
 	}

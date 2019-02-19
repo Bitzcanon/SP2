@@ -11,27 +11,41 @@ public:
 	Barrier();
 	~Barrier();
 
-	float returnxPos(int);
-	float returnyPos(int);
-	float returnzPos(int);
+	float returnxPos();
+	float returnyPos();
+	float returnzPos();
+
+	void setxPos(float);
+	void setyPos(float);
+	void setzPos(float);
 
 	float returnTimer();
 	void setTimer(float);
 
-	int returnBarrierRotation(int);
-	int returnBarrierScale(int);
+	int returnBarrierRotation();
+	void setBarrierRotation(float);
+
+	int returnBarrierScale();
+	void setBarrierScale(int);
 
 	int returnBarrierQuantity(void);
 
-private:
-	int barrierQuantity;
-	float timer;
+	static float BarrierDelay;
 
-	std::vector <float> rotateBy;
+private:
+	int barrierCount;
+
+	/*std::vector <float> rotateBy;
 	std::vector <float> scaleBy;
 	std::vector <float> xPos;
 	std::vector <float> yPos;
-	std::vector <float> zPos;
+	std::vector <float> zPos;*/
+
+	float rotateBy;
+	float scaleBy;
+	float xPos;
+	float yPos;
+	float zPos;
 };
 
 #endif

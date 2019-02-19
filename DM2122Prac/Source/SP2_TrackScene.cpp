@@ -56,6 +56,25 @@ void SP2_TrackScene::loadSlowBuffCoordinates()
 	}
 }
 
+void SP2_TrackScene::loadBarrierCoordinates()
+{
+	ifstream myfile("TextFiles//BarrierCoordinates.txt"); //File directory
+
+	if (myfile.is_open()) //Open the text file
+	{
+		int i = 0;
+		float tmp;
+
+		while (myfile.eof() == false)
+		{
+			myfile >> tmp;
+			i++;
+			BarrierList.push_back(tmp);
+		}
+		myfile.close();
+	}
+}
+
 void SP2_TrackScene::initBuff()
 {
 	for (int i = 0; i < 20; i++)
@@ -129,24 +148,77 @@ void SP2_TrackScene::initBuff()
 	}
 }
 
+void SP2_TrackScene::initBarrier()
+{
+	for (int i = 0; i < BARRIERCOUNT; i++) //Init array container to NULL
+	{
+		Barriers[i] = NULL;
+	}
+
+	for (size_t i = 0; i < (BarrierList.size() / BARRIERROWCOUNT); i++)
+	{
+		Barriers[i] = new Barrier;
+	}
+
+	int counter = 1;
+	for (size_t i = 0; i < BarrierList.size(); i++) // loop through the total cords in the text file
+	{
+		int loc = i / BARRIERROWCOUNT;
+		// i = 0 , loc = 0 . i = 1 , loc = 0 , i = 2 , loc = 0 , i = 3 , loc = 0 
+		// i = 4 , loc = 0 , i = 5 , loc = 1 , i = 6 , loc = 1 , i = 7 , loc = 1
+
+		if (counter == 5)
+		{
+			Barriers[loc]->setBarrierScale(BarrierList[i]);
+			counter = 1;
+		}
+		else if (counter == 4)
+		{
+			Barriers[loc]->setBarrierRotation(BarrierList[i]);
+			counter += 1;
+		}
+		else if (counter == 3) // 
+		{
+			Barriers[loc]->setzPos(BarrierList[i]);
+			counter += 1;
+		}
+		else if (counter == 2) // if k = second number in line
+		{
+			Barriers[loc]->setyPos(BarrierList[i]);
+			counter += 1;
+		}
+		else if (counter == 1) // if k = first number in line
+		{
+			Barriers[loc]->setxPos(BarrierList[i]);
+			counter += 1;
+		}
+		
+	}
+}
+
 void SP2_TrackScene::Init()
 {
-	// loads SpeedBuff coordinates
+	//Loads SpeedBuff coordinates
 	loadSpeedBuffCoordinates();
 	loadSlowBuffCoordinates();
 	initBuff();
+	
+	//Loads Barrier coordinates
+	loadBarrierCoordinates();
+	initBarrier();
 
-	for (int i = 0; i < (SpeedBuffList.size() / 4 )+ ( SlowBuffList.size() / 4 ) ; i ++)
+	//remove later
+	/*for (size_t i = 0; i < (SpeedBuffList.size() / 4 )+ ( SlowBuffList.size() / 4 ) ; i ++)
 	{
 		cout << Buffs[i]->returnxPos() << " " << Buffs[i]->returnyPos() << " " << Buffs[i]->returnzPos() << endl;
-	}
+	}*/
 	
 	tmpBool = false;
 
 	bounceTime = 0;
 	transitionColor = 0;
 	conditionTester = false;
-	condition = "Something Happened ! OWO";
+
 	//Set background color to dark blue (Before this are initialized variables, after is the rest)
 	glClearColor(0.0f, 0.0f, 0.3f, 0.0f);
 
@@ -238,7 +310,7 @@ void SP2_TrackScene::Init()
 
 	//Light parameters
 	//Lower floor lighting
-	light[0].type = Light::LIGHT_POINT;
+	light[0].type = Light::LIGHT_SPOT;
 	light[0].position.Set(0, 60, 0);
 	light[0].color.Set(1, 1, 1);
 	light[0].power = 4.f;
@@ -366,6 +438,21 @@ void SP2_TrackScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
 
+	if (Application::IsKeyPressed('M'))
+	{
+		Application::SceneSetter = 0;
+	}
+
+	if (Player::changeSomething == true) // reload car model.
+	{
+		cout << Player::color << endl;
+		meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", Player::kart);
+		meshList[GEO_KART]->textureID = LoadTGA(Player::color.c_str());
+		meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels" , Player::wheels);
+		meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
+		Player::changeSomething = false;
+	}
+
 	propellerRotation += (float)(180 * dt);
 
 	if (bounceTime > 0) //updating bouncetime
@@ -428,30 +515,29 @@ void SP2_TrackScene::Update(double dt)
 	}
 
 	/*RoadBlock logic done by Winston*/
-	for (int i = 0; i < RoadBlock.returnBarrierQuantity(); i++)
+	for (size_t i = 0; i < BarrierList.size() / BARRIERROWCOUNT; i++)
 	{
-		if (CollisionChecker(2 ,i, RoadBlock.returnxPos(i), RoadBlock.returnzPos(i), 1.6f, 1.f) == true) //1.6 as the length due to the model being slightly shorter than 2 (as seen in Maya)
+		if (CollisionChecker(2, i, Barriers[i]->returnxPos(), Barriers[i]->returnzPos(), 1.4f, 0.9f) == true) //1.6 as the length due to the model being slightly shorter than 2 (as seen in Maya)
 		{
-			RoadBlock.setTimer(0.2f);
+			Barrier::BarrierDelay = 0.2f;
 			Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
 			Vehicle.setIsCollided(true);
 		}
 	}
 	/*World border collision detection logic done by Winston*/
-	if (((Vehicle.newPosition.x * 10) >= 495.f) || ((Vehicle.newPosition.x * 10) <= -495.f) || ((Vehicle.newPosition.z * 10) >= 495.f) || ((Vehicle.newPosition.z * 10) <= -495.f))
+	if (((Vehicle.newPosition.x * 10) >= 493.5f) || ((Vehicle.newPosition.x * 10) <= -493.5f) || ((Vehicle.newPosition.z * 10) >= 493.5f) || ((Vehicle.newPosition.z * 10) <= -493.5f))
 	{
-		RoadBlock.setTimer(0.2f);
+		Barrier::BarrierDelay = 0.2f;
 		Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
 		Vehicle.setIsCollided(true);
 	}
 
 	//Timer after colliding with road block, to prevent player from having backward controls
-	if (RoadBlock.returnTimer() > 0)
+	if (Barrier::BarrierDelay > 0)
 	{
-		RoadBlock.setTimer(RoadBlock.returnTimer() - (float)(1 * dt));
-		
+		Barrier::BarrierDelay = Barrier::BarrierDelay - (float)(1 * dt);
 	}
-	else if (RoadBlock.returnTimer() < 0 && Vehicle.returnIsCollided() == true)
+	else if (Barrier::BarrierDelay < 0 && Vehicle.returnIsCollided() == true)
 	{
 		Vehicle.setIsCollided(false);
 		Vehicle.setAcceleration(0);
@@ -467,7 +553,7 @@ void SP2_TrackScene::Update(double dt)
 	}
 	else
 	{
-		//cout << "You Suck" << endl;
+		//cout << "Nope" << endl;
 	}
 
 	//Miscellaneous controls
@@ -503,6 +589,22 @@ void SP2_TrackScene::Update(double dt)
 	cameraTarget.z = Vehicle.newPosition.z * Vehicle.returnCarScale();
 
 	camera.Update(dt);
+	if (cameraPos.x >= 498.f)
+	{
+		cameraPos.x = 497.f;
+	}
+	else if (cameraPos.x <= -498.f)
+	{
+		cameraPos.x = -497.f;
+	}
+	else if (cameraPos.z >= 498.f)
+	{
+		cameraPos.z = 497.f;
+	}
+	else if (cameraPos.z <= -498.f)
+	{
+		cameraPos.z = -497.f;
+	}
 
 }
 
@@ -514,7 +616,7 @@ bool SP2_TrackScene::CollisionChecker(int type, int index, float objX, float obj
 	float maximumXObj;
 	float maximumZObj;
 
-	switch (type) //1 == Speedboost, 2 == Barrier
+	switch (type) //1 == Speedboost, 2 == Barrier, 3 == Finish Line
 	{
 		case 1:
 		{
@@ -524,9 +626,8 @@ bool SP2_TrackScene::CollisionChecker(int type, int index, float objX, float obj
 		}
 		case 2:
 		{
-			maximumXObj = objX / Vehicle.returnCarScale() + length * RoadBlock.returnBarrierScale(index);
-			maximumZObj = objZ / Vehicle.returnCarScale() + width * RoadBlock.returnBarrierScale(index);
-			break;
+			maximumXObj = objX / Vehicle.returnCarScale() + length * Barriers[index]->returnBarrierScale();
+			maximumZObj = objZ / Vehicle.returnCarScale() + width * Barriers[index]->returnBarrierScale();
 		}
 		case 3:
 		{
@@ -555,7 +656,7 @@ bool SP2_TrackScene::CollisionChecker(int type, int index, float objX, float obj
 	}
 	else
 	{
-		//cout << "Collide" << endl;
+		cout << "Collide" << endl;
 		return true;
 	}	
 }
@@ -900,13 +1001,13 @@ void SP2_TrackScene::Render()
 	//
 
 	//Draw Road Blocks in the map (Modelled by Zheng Hong, rendered by Winston)
-	for (int i = 0; i < RoadBlock.returnBarrierQuantity(); i++)
+	for (size_t i = 0; i < BarrierList.size() / BARRIERROWCOUNT; i++)
 	{
 		modelStack.PushMatrix();
 
-		modelStack.Translate(RoadBlock.returnxPos(i), RoadBlock.returnyPos(i), RoadBlock.returnzPos(i));
-		modelStack.Scale(Vehicle.returnCarScale() * RoadBlock.returnBarrierScale(i), Vehicle.returnCarScale() * RoadBlock.returnBarrierScale(i), Vehicle.returnCarScale() * RoadBlock.returnBarrierScale(i));
-		modelStack.Rotate((float)(RoadBlock.returnBarrierRotation(i)), 0, 1, 0);
+		modelStack.Translate(Barriers[i]->returnxPos(), Barriers[i]->returnyPos(), Barriers[i]->returnzPos());
+		modelStack.Scale(Vehicle.returnCarScale() * Barriers[i]->returnBarrierScale(), Vehicle.returnCarScale() * Barriers[i]->returnBarrierScale(), Vehicle.returnCarScale() * Barriers[i]->returnBarrierScale());
+		modelStack.Rotate((float)(Barriers[i]->returnBarrierRotation()), 0, 1, 0);
 		RenderMesh(meshList[GEO_ROADBLOCK], true); //set lighting to true once completed
 		modelStack.PopMatrix();
 	}
