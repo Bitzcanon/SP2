@@ -136,17 +136,13 @@ void SP2_TrackScene::Init()
 	loadSlowBuffCoordinates();
 	initBuff();
 
-	for (int i = 0; i < (SpeedBuffList.size() / 4 )+ ( SlowBuffList.size() / 4 ) ; i ++)
-	{
-		cout << Buffs[i]->returnxPos() << " " << Buffs[i]->returnyPos() << " " << Buffs[i]->returnzPos() << endl;
-	}
-	
+	//remove later
 	tmpBool = false;
 
 	bounceTime = 0;
 	transitionColor = 0;
 	conditionTester = false;
-	condition = "Something Happened ! OWO";
+
 	//Set background color to dark blue (Before this are initialized variables, after is the rest)
 	glClearColor(0.0f, 0.0f, 0.3f, 0.0f);
 
@@ -238,7 +234,7 @@ void SP2_TrackScene::Init()
 
 	//Light parameters
 	//Lower floor lighting
-	light[0].type = Light::LIGHT_POINT;
+	light[0].type = Light::LIGHT_SPOT;
 	light[0].position.Set(0, 60, 0);
 	light[0].color.Set(1, 1, 1);
 	light[0].power = 4.f;
@@ -365,6 +361,21 @@ void SP2_TrackScene::Init()
 void SP2_TrackScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
+
+	if (Application::IsKeyPressed('M'))
+	{
+		Application::SceneSetter = 0;
+	}
+
+	if (Player::changeSomething == true) // reload car model.
+	{
+		cout << Player::color << endl;
+		meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", Player::kart);
+		meshList[GEO_KART]->textureID = LoadTGA(Player::color.c_str());
+		meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels" , Player::wheels);
+		meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
+		Player::changeSomething = false;
+	}
 
 	propellerRotation += (float)(180 * dt);
 

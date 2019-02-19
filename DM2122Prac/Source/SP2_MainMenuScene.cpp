@@ -210,6 +210,7 @@ void SP2_MainMenuScene::Update(double dt)
 		if (arrowY == 30)
 		{
 			Application::SceneSetter = 1;
+			Application::resetTrack = true;
 		}
 		else if (arrowY == 15)
 		{

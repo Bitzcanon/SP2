@@ -149,15 +149,16 @@ private:
 
 	float FPS;
 
-	string condition;
 	bool conditionTester;
 
 	Buff * Buffs[20];
 
+	//Declaration of class instances
 	RenderStrings texts;
 	Barrier RoadBlock;
 	Car Vehicle;
 	Player *playerInstance;
+	RenderStrings text; // text file that stores the car locations
 
 	int transitionColor;
 

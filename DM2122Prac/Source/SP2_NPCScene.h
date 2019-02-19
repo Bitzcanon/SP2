@@ -136,6 +136,7 @@ private:
 	bool CloseToDoor();
 	void MoveNPC(double dt);
 	void UpdateDoor(double dt);
+
 	struct NPC //To keep track of NPC positions
 	{
 		float x, z;
