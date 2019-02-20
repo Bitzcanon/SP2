@@ -16,6 +16,7 @@
 #include "Barrier.h"
 #include "Car.h"
 #include "Player.h"
+#include "Trap.h"
 
 #include <string>
 using namespace std;
@@ -108,6 +109,8 @@ private:
 
 		GEO_SPEEDBUFF,
 		GEO_SLOWBUFF,
+		GEO_TRAP,
+
 		GEO_ROADBLOCK,
 
 		NUM_GEOMETRY,
@@ -145,6 +148,7 @@ private:
 	void initBuff();
 	void loadSlowBuffCoordinates();
 	void loadSpeedBuffCoordinates();
+	void loadTrapCoordinates();
 
 	void initBarrier();
 	void loadBarrierCoordinates();
@@ -154,6 +158,12 @@ private:
 	float FPS;
 
 	bool conditionTester;
+
+	bool ResetStart;
+
+	float ResetTimer;
+
+	double healthPoints;
 
 	Buff * Buffs[20];
 	Barrier *Barriers[ROADBLOCKCOUNT];
@@ -176,6 +186,7 @@ private:
 	bool tmpBool;
 	bool isWon;
 	
+	vector <float> TrapList;
 	vector <float> SpeedBuffList;
 	vector <float> BarrierList;	
 	vector <float> SlowBuffList;

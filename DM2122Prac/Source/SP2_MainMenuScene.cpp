@@ -256,6 +256,7 @@ void SP2_MainMenuScene::Update(double dt)
 				if (arrowY == 0.1)
 				{
 					Application::SceneSetter = sceneNumber;
+					Application::resetScene = false;
 				}
 				else if (arrowY == 0)
 				{

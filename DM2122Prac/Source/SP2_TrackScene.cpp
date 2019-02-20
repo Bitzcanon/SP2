@@ -56,6 +56,25 @@ void SP2_TrackScene::loadSlowBuffCoordinates()
 	}
 }
 
+void SP2_TrackScene::loadTrapCoordinates()
+{
+	ifstream myfile("TextFiles//TrapCoordinates.txt"); // open text file
+
+	if (myfile.is_open()) // open text file
+	{
+		int i = 0;
+		float tmp;
+
+		while (myfile.eof() == false)
+		{
+			myfile >> tmp;
+			i++;
+			TrapList.push_back(tmp);
+		}
+		myfile.close();
+	}
+}
+
 void SP2_TrackScene::loadBarrierCoordinates()
 {
 	ifstream myfile("TextFiles//BarrierCoordinates.txt"); //File directory
@@ -82,14 +101,20 @@ void SP2_TrackScene::initBuff()
 		Buffs[i] = NULL;
 	}
 
+	//new speedbuff
 	for (size_t i = 0; i < (SpeedBuffList.size() / 4); i++)
 	{
 		Buffs[i] = new SpeedBuff;
 	}
-
+	//new slowbuff
 	for (size_t i = (SpeedBuffList.size() / 4); i < ((SpeedBuffList.size() / 4) + (SlowBuffList.size()/4)); i++)
 	{
 		Buffs[i] = new SlowBuff;
+	}
+	// new trap
+	for (size_t i = ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4)); i < ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4) + (TrapList.size() / 4)); i++)
+	{
+		Buffs[i] = new Trap;
 	}
 
 	int counter = 1;
@@ -146,6 +171,33 @@ void SP2_TrackScene::initBuff()
 			counter += 1;
 		}
 	}
+	counter = 1;
+	for (size_t i = 0; i < TrapList.size(); i++) // loop through the total cords in the text file
+	{
+		int loc = (((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4 )) + ( i / 4));
+		// i = 0 , loc = 0 . i = 1 , loc = 0 , i = 2 , loc = 0 , i = 3 , loc = 0 
+		// i = 4 , loc = 1 , i = 5 , loc = 1 , i = 6 , loc = 1 , i = 7 , loc = 1
+		if (counter == 4)
+		{
+			Buffs[loc]->setRotateBy(TrapList[i]);
+			counter = 1;
+		}
+		else if (counter == 3) // 
+		{
+			Buffs[loc]->setzPos(TrapList[i]);
+			counter += 1;
+		}
+		else if (counter == 2) // if k = second number in line
+		{
+			Buffs[loc]->setyPos(TrapList[i]);
+			counter += 1;
+		}
+		else if (counter == 1) // if k = first number in line
+		{
+			Buffs[loc]->setxPos(TrapList[i]);
+			counter += 1;
+		}
+	}
 }
 
 void SP2_TrackScene::initBarrier()
@@ -198,15 +250,22 @@ void SP2_TrackScene::initBarrier()
 
 void SP2_TrackScene::Init()
 {
-	//Loads SpeedBuff coordinates
+	ResetTimer = 0;
+	ResetStart = true;
+
+	//Loads SpeedBuff coordinates and initializes the buffs
 	loadSpeedBuffCoordinates();
 	loadSlowBuffCoordinates();
+	loadTrapCoordinates();
+	loadBarrierCoordinates();
+
 	initBuff();
 	
 	//Loads Barrier coordinates
-	loadBarrierCoordinates();
 	initBarrier();
 	
+	healthPoints = 10;
+
 	tmpBool = false;
 
 	bounceTime = 0;
@@ -373,6 +432,7 @@ void SP2_TrackScene::Init()
 	meshList[GEO_PROMPT] = MeshBuilder::GenerateText("prompt", 16, 16);
 	meshList[GEO_PROMPT]->textureID = LoadTGA("Image//calibri.tga");
 
+
 	//remove later
 	meshList[GEO_TESTCAR] = MeshBuilder::GenerateCube("Car", Color(0, 1, 0), 5, 1, 1);
 
@@ -400,11 +460,14 @@ void SP2_TrackScene::Init()
 
 	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//Plant.obj");
 	meshList[GEO_TREE]->textureID = LoadTGA("Image//Plant.tga");
+
+	meshList[GEO_TRAP] = MeshBuilder::GenerateOBJ("Trap", "OBJ//Trap.obj");
+	meshList[GEO_TRAP]->textureID = LoadTGA("Image//Trap.tga");
+
 	//
 	meshList[GEO_ROADBLOCK] = MeshBuilder::GenerateOBJ("RoadBlock", "OBJ//RoadBlock.obj");
 
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
-
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("Light Sphere", Color(1.f, 1.f, 1.f), 32, 36, 1.f);
 
@@ -430,6 +493,20 @@ void SP2_TrackScene::Init()
 void SP2_TrackScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
+
+	if (healthPoints <= 0 && ResetStart == true) // causes the reset timer to trigger once
+	{
+		ResetTimer = 4;
+		ResetStart = false;
+	}
+	if (ResetTimer > 0) 
+	{
+		ResetTimer -= 1 * dt;
+	}
+	if (ResetTimer < 0)
+	{
+		Application::resetScene = true;
+	}
 
 	if (Application::IsKeyPressed('M'))
 	{
@@ -459,7 +536,6 @@ void SP2_TrackScene::Update(double dt)
 		if (CollisionChecker(1, i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
 		{
 			SpeedBuff::timer = 1;
-			//Buff::activateYet = false;
 		}
 	}
 	//*SlowBuff logic done by Gary*/
@@ -468,7 +544,14 @@ void SP2_TrackScene::Update(double dt)
 		if (CollisionChecker(1 , i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
 		{
 			SlowBuff::timer = 2;
-			//Buff::activateYet = false;
+		}
+	}
+
+	for (size_t i = (SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4); i < ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4) + (TrapList.size() / 4 )); i++)
+	{
+		if (CollisionChecker(1, i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
+		{
+			healthPoints -= 0.05;
 		}
 	}
 	
@@ -478,20 +561,14 @@ void SP2_TrackScene::Update(double dt)
 		SpeedBuff::timer = SpeedBuff::timer - (float)(1 * dt);
 		Vehicle.setSpeed(0.5f);
 	}
-	else if (SpeedBuff::timer < 0 && SpeedBuff::activateYet == false)
-	{
-		SpeedBuff::activateYet = false;
-	}
+
 	//Timer after stepping on SlowBuff
 	if (SlowBuff::timer > 0)
 	{
 		SlowBuff::timer = SlowBuff::timer - (float)(1 * dt);
-		Vehicle.setSpeed(0.05f);
+		Vehicle.setSpeed(0.05);
 	}
-	else if (SlowBuff::timer < 0 && SlowBuff::activateYet == false)
-	{
-		SlowBuff::activateYet = false;
-	}
+
 
 	/*RoadBlock logic done by Winston*/
 	for (size_t i = 0; i < BarrierList.size() / ROADBLOCKROWCOUNT; i++)
@@ -501,6 +578,7 @@ void SP2_TrackScene::Update(double dt)
 			Barrier::BarrierDelay = 0.2f;
 			Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
 			Vehicle.setIsCollided(true);
+			healthPoints -= 1;
 		}
 	}
 	/*World border collision detection logic done by Winston*/
@@ -977,6 +1055,14 @@ void SP2_TrackScene::Render()
 		RenderMesh(meshList[GEO_SLOWBUFF], false);
 		modelStack.PopMatrix();
 	}
+	for (size_t i = ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4)); i < ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4) + (TrapList.size() / 4)); i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 0, 0);
+		modelStack.Scale(Vehicle.returnCarScale(), Vehicle.returnCarScale(), Vehicle.returnCarScale());
+		RenderMesh(meshList[GEO_TRAP], false);
+		modelStack.PopMatrix();
+	}
 	//
 
 	//Draw Road Blocks in the map (Modelled by Zheng Hong, rendered by Winston)
@@ -1020,8 +1106,16 @@ void SP2_TrackScene::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.x), Color(1, 0, 0), 1, -1, 46);
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.y), Color(1, 0, 0), 1, -1, 44);
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.z), Color(1, 0, 0), 1, -1, 42);
+			
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(healthPoints), Color(1 , 1 , 1), 1, -1, 38);
 
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(playerInstance->getCoinCount()), Color(0, 1, 0), 1, -1, 40);
+
+			int countdown = ResetTimer;
+			if (ResetTimer > 0)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(countdown), Color(1, 1, 1), 3, 25, 20);
+			}
 		}
 		modelStack.PopMatrix();
 

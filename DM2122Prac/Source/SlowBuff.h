@@ -8,7 +8,6 @@ public:
 	~SlowBuff();
 
 	static float timer;
-	static bool activateYet;
 };
 
 #endif // !SLOWBUFF_H

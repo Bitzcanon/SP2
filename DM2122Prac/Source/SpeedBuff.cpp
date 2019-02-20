@@ -13,4 +13,3 @@ SpeedBuff::~SpeedBuff()
 }
 
 float::SpeedBuff::timer = 0;
-bool::SpeedBuff::activateYet = false;
