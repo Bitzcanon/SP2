@@ -13,9 +13,6 @@ Buff::~Buff()
 
 }
 
-//init static buffcount = 0;
-
-
 void Buff::setxPos(float x)
 {
 	xPos = x;
