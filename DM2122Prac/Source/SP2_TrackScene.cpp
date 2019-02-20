@@ -18,6 +18,8 @@ SP2_TrackScene::~SP2_TrackScene()
 
 }
 
+static const float SKYBOXSIZE = 2000.f;
+
 void SP2_TrackScene::loadSpeedBuffCoordinates()
 {
 	ifstream myfile("TextFiles//SpeedBuffCoordinates.txt"); // open text file
@@ -89,6 +91,25 @@ void SP2_TrackScene::loadBarrierCoordinates()
 			myfile >> tmp;
 			i++;
 			BarrierList.push_back(tmp);
+		}
+		myfile.close();
+	}
+}
+
+void SP2_TrackScene::loadCheckpointCoordinates()
+{
+	ifstream myfile("TextFiles//CheckpointCoordinates.txt"); //File directory
+
+	if (myfile.is_open()) //Open the text file
+	{
+		int i = 0;
+		float tmp;
+
+		while (myfile.eof() == false)
+		{
+			myfile >> tmp;
+			i++;
+			CheckpointList.push_back(tmp);
 		}
 		myfile.close();
 	}
@@ -248,6 +269,49 @@ void SP2_TrackScene::initBarrier()
 	}
 }
 
+void SP2_TrackScene::initCheckpoint()
+{
+	for (int i = 0; i < CHECKPOINTCOUNT; i++) //Init array container to NULL
+	{
+		Checkpoints[i] = NULL;
+	}
+
+	for (size_t i = 0; i < (CheckpointList.size() / CHECKPOINTROWCOUNT); i++)
+	{
+		Checkpoints[i] = new Checkpoint;
+	}
+
+	int counter = 1;
+	for (size_t i = 0; i < CheckpointList.size(); i++) // loop through the total cords in the text file
+	{
+		int loc = i / CHECKPOINTROWCOUNT;
+		// i = 0 , loc = 0 . i = 1 , loc = 0 , i = 2 , loc = 0 , i = 3 , loc = 0 
+		// i = 4 , loc = 0 , i = 5 , loc = 1 , i = 6 , loc = 1 , i = 7 , loc = 1
+
+		if (counter == 4)
+		{
+			Checkpoints[loc]->setCheckpointRotation(CheckpointList[i]);
+			counter == 1;
+		}
+		else if (counter == 3) // 
+		{
+			Checkpoints[loc]->setzPos(CheckpointList[i]);
+			counter += 1;
+		}
+		else if (counter == 2) // if k = second number in line
+		{
+			Checkpoints[loc]->setyPos(CheckpointList[i]);
+			counter += 1;
+		}
+		else if (counter == 1) // if k = first number in line
+		{
+			Checkpoints[loc]->setxPos(CheckpointList[i]);
+			counter += 1;
+		}
+
+	}
+}
+
 void SP2_TrackScene::Init()
 {
 	ResetTimer = 0;
@@ -263,6 +327,10 @@ void SP2_TrackScene::Init()
 	
 	//Loads Barrier coordinates
 	initBarrier();
+
+	//Loads Checkpoint coordinates
+	/*loadCheckpointCoordinates();
+	initCheckpoint();*/
 	
 	healthPoints = 10;
 
@@ -362,16 +430,16 @@ void SP2_TrackScene::Init()
 
 	//Light parameters
 	//Lower floor lighting
-	light[0].type = Light::LIGHT_SPOT;
-	light[0].position.Set(0, 60, 0);
+	light[0].type = Light::LIGHT_DIRECTIONAL;
+	light[0].position.Set(998, 998, -998);
 	light[0].color.Set(1, 1, 1);
-	light[0].power = 4.f;
+	light[0].power = 2.f;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
 	light[0].cosCutoff = cos(Math::DegreeToRadian(45));
 	light[0].cosInner = cos(Math::DegreeToRadian(30));
-	light[0].exponent = 3.f;
+	light[0].exponent = 1.f;
 	light[0].spotDirection.Set(0.f, 1.f, 0.f);
 
 	// Make sure you pass uniform parameters after glUseProgram()
@@ -473,7 +541,7 @@ void SP2_TrackScene::Init()
 
 	//Set projection to Perspective and load projection matrix
 	Mtx44 projection;
-	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
+	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, SKYBOXSIZE + 1000.f);
 	projectionStack.LoadMatrix(projection);
 
 	//Initialise variables
@@ -559,30 +627,42 @@ void SP2_TrackScene::Update(double dt)
 	if (SpeedBuff::timer > 0)
 	{
 		SpeedBuff::timer = SpeedBuff::timer - (float)(1 * dt);
-		Vehicle.setSpeed(0.5f);
+		//Vehicle.setSpeed(0.5f);
 	}
 
 	//Timer after stepping on SlowBuff
 	if (SlowBuff::timer > 0)
 	{
 		SlowBuff::timer = SlowBuff::timer - (float)(1 * dt);
-		Vehicle.setSpeed(0.05);
+		//Vehicle.setSpeed(0.05);
 	}
 
 
 	/*RoadBlock logic done by Winston*/
 	for (size_t i = 0; i < BarrierList.size() / ROADBLOCKROWCOUNT; i++)
 	{
-		if (CollisionChecker(2, i, Barriers[i]->returnxPos(), Barriers[i]->returnzPos(), 1.4f, 0.9f) == true) //1.6 as the length due to the model being slightly shorter than 2 (as seen in Maya)
+		//Barriers only exist in 90 degree rotation intervals for this game
+		if (Barriers[i]->returnBarrierRotation() == 90 || Barriers[i]->returnBarrierRotation() == 270)
 		{
-			Barrier::BarrierDelay = 0.2f;
-			Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
-			Vehicle.setIsCollided(true);
-			healthPoints -= 1;
+			if (CollisionChecker(2, i, Barriers[i]->returnxPos(), Barriers[i]->returnzPos(), 1.4f, 0.9f) == true)
+			{
+				Barrier::BarrierDelay = 0.2f;
+				Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
+				Vehicle.setIsCollided(true);
+			}
+		}
+		else
+		{
+			if (CollisionChecker(2, i, Barriers[i]->returnxPos(), Barriers[i]->returnzPos(), 0.9f, 1.4f) == true)
+			{
+				Barrier::BarrierDelay = 0.2f;
+				Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
+				Vehicle.setIsCollided(true);
+			}
 		}
 	}
 	/*World border collision detection logic done by Winston*/
-	if ((Vehicle.newPosition.x * 10) >= (CAMERABOUNDSORIGINAL - 4.5f) || ((Vehicle.newPosition.x * 10) <= -(CAMERABOUNDSORIGINAL - 4.5f)) || ((Vehicle.newPosition.z * 10) >= (CAMERABOUNDSORIGINAL - 4.5f)) || ((Vehicle.newPosition.z * 10) <= -(CAMERABOUNDSORIGINAL - 4.5f)))
+	if ((Vehicle.newPosition.x * Vehicle.returnCarScale()) >= (CAMERABOUNDSORIGINAL - 4.5f) || ((Vehicle.newPosition.x * Vehicle.returnCarScale()) <= -(CAMERABOUNDSORIGINAL - 4.5f)) || ((Vehicle.newPosition.z * Vehicle.returnCarScale()) >= (CAMERABOUNDSORIGINAL - 4.5f)) || ((Vehicle.newPosition.z * Vehicle.returnCarScale()) <= -(CAMERABOUNDSORIGINAL - 4.5f)))
 	{
 		Barrier::BarrierDelay = 0.2f;
 		Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
@@ -637,8 +717,8 @@ void SP2_TrackScene::Update(double dt)
 	Vehicle.Update(dt);
 	vehicleSpeed = Vehicle.returnSpeed();
 
-	cameraPos.x = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * Vehicle.returnCarScale();
-	cameraPos.y = Vehicle.newPosition.y + 15;
+	cameraPos.x = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 4) * Vehicle.returnCarScale(); //Multiplied value is the camera angle, bigger number = further from car
+	cameraPos.y = Vehicle.newPosition.y + 20;
 	cameraPos.z = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * Vehicle.returnCarScale();
 
 	cameraTarget.x = Vehicle.newPosition.x * Vehicle.returnCarScale();
@@ -717,8 +797,6 @@ bool SP2_TrackScene::CollisionChecker(int type, int index, float objX, float obj
 		return true;
 	}	
 }
-
-static const float SKYBOXSIZE = 1000.f;
 
 /*FPS counter done by Winston*/
 string SP2_TrackScene::UpdateFrameRate(float fps)
@@ -907,7 +985,7 @@ void SP2_TrackScene::RenderSkybox()
 	//Bottom of Skybox
 	modelStack.PushMatrix();
 	{
-		modelStack.Translate(0, 498.f, 0);
+		modelStack.Translate(0, CAMERABOUNDSORIGINAL, 0);
 		modelStack.Rotate(-90, 1, 0, 0);
 		modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
 		modelStack.Rotate(-90, 0, 0, 1);

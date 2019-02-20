@@ -48,4 +48,4 @@ private:
 	float zPos;
 };
 
-#endif
+#endif //! BARRIER_H
