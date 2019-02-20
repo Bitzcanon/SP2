@@ -291,7 +291,7 @@ void SP2_TrackScene::initCheckpoint()
 		if (counter == 4)
 		{
 			Checkpoints[loc]->setCheckpointRotation(CheckpointList[i]);
-			counter == 1;
+			counter = 1;
 		}
 		else if (counter == 3) // 
 		{
@@ -324,13 +324,13 @@ void SP2_TrackScene::Init()
 	loadBarrierCoordinates();
 
 	initBuff();
-	
+
 	//Loads Barrier coordinates
 	initBarrier();
 
 	//Loads Checkpoint coordinates
-	/*loadCheckpointCoordinates();
-	initCheckpoint();*/
+	loadCheckpointCoordinates();
+	initCheckpoint();
 	
 	healthPoints = 10;
 
@@ -515,6 +515,9 @@ void SP2_TrackScene::Init()
 
 	meshList[GEO_PROPELLER] = MeshBuilder::GenerateOBJ("modelPropeller", "OBJ//Propeller.obj");
 
+	meshList[GEO_CHECKPOINT] = MeshBuilder::GenerateOBJ("modelCheckpoint", "OBJ//Checkpoint.obj");
+	meshList[GEO_CHECKPOINT]->textureID = LoadTGA("Image//Checkpoint.tga");
+
 	/* Gary ENUMS*/
 
 	meshList[GEO_TRACK] = MeshBuilder::GenerateOBJ("modelTrack", "OBJ//Track.obj");
@@ -558,6 +561,8 @@ void SP2_TrackScene::Init()
 	propellerRotation = 0;
 
 	isWon = false;
+	isLapCompleted = false;
+	lapCount = 0;
 }
 
 void SP2_TrackScene::Update(double dt)
@@ -683,16 +688,53 @@ void SP2_TrackScene::Update(double dt)
 		Vehicle.setSpeed(0);
 	}
 
+	/*Checkpoint logic done by Winston*/
+	for (size_t i = 0; i < CheckpointList.size() / CHECKPOINTROWCOUNT; i++)
+	{
+		if (CollisionChecker(4, i, Checkpoints[i]->returnxPos(), Checkpoints[i]->returnzPos(), 1.f, 2.f) == true)
+		{
+			if (Checkpoints[i]->returnIsPassedThrough() == false)
+			{
+				Checkpoints[i]->passedThroughCheckpoint();
+			}
+		}
+	}
+
+	//Check if all checkpoints have been reached (Done by Winston)
+	for (size_t i = 0; i < CheckpointList.size() / CHECKPOINTROWCOUNT; i++)
+	{
+		if (Checkpoints[i]->returnIsPassedThrough() == false)
+		{
+			isLapCompleted = false;
+		}
+		else
+		{
+			isLapCompleted = true;
+		}
+	}
+	
+
 	//Win condition done by Winston
 	if (CollisionChecker(3, 1, 20, 0, 2, 1) == true)
 	{
-		playerInstance->setCoinCount(playerInstance->getCoinCount() + 1);
-		//cout << "You Win!" << endl;
-		isWon = true;
-	}
-	else
-	{
-		//cout << "Nope" << endl;
+		if (isLapCompleted == true)
+		{
+			lapCount++;
+			cout << "NICEU" << endl;
+			for (size_t i = 0; i < CheckpointList.size() / CHECKPOINTROWCOUNT; i++)
+			{
+				Checkpoints[i]->resetCheckpoint();
+			}
+			isLapCompleted = false;
+		}
+		if (lapCount == 3)
+		{
+			isWon = true;
+		}
+		if (isWon == true)
+		{
+			playerInstance->setCoinCount(playerInstance->getCoinCount() + 1);
+		}
 	}
 
 	//Miscellaneous controls
@@ -719,9 +761,9 @@ void SP2_TrackScene::Update(double dt)
 	Vehicle.Update(dt);
 	vehicleSpeed = Vehicle.returnSpeed();
 
-	cameraPos.x = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 4) * Vehicle.returnCarScale(); //Multiplied value is the camera angle, bigger number = further from car
+	cameraPos.x = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * Vehicle.returnCarScale(); //Multiplied value is the camera angle, bigger number = further from car
 	cameraPos.y = Vehicle.newPosition.y + 20;
-	cameraPos.z = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * Vehicle.returnCarScale();
+	cameraPos.z = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * Vehicle.returnCarScale();
 
 	cameraTarget.x = Vehicle.newPosition.x * Vehicle.returnCarScale();
 	cameraTarget.y = Vehicle.newPosition.y;
@@ -755,7 +797,7 @@ bool SP2_TrackScene::CollisionChecker(int type, int index, float objX, float obj
 	float maximumXObj = NULL;
 	float maximumZObj = NULL;
 
-	switch (type) //1 == Speedboost, 2 == Barrier, 3 == Finish Line
+	switch (type) //1 == Speedboost, 2 == Barrier, 3 == Finish Line, 4 == Checkpoint
 	{
 		case 1:
 		{
@@ -773,6 +815,11 @@ bool SP2_TrackScene::CollisionChecker(int type, int index, float objX, float obj
 			maximumXObj = objX / Vehicle.returnCarScale() + length;
 			maximumZObj = objZ / Vehicle.returnCarScale() + width;
 			break;
+		}
+		case 4:
+		{
+			maximumXObj = objX / Vehicle.returnCarScale() + length;
+			maximumZObj = objZ / Vehicle.returnCarScale() + width;
 		}
 	}
 	
@@ -795,7 +842,7 @@ bool SP2_TrackScene::CollisionChecker(int type, int index, float objX, float obj
 	}
 	else
 	{
-		//cout << "Collide" << endl;
+		/*cout << "Collide" << endl;*/
 		return true;
 	}	
 }
@@ -1163,7 +1210,19 @@ void SP2_TrackScene::Render()
 		modelStack.Translate(Barriers[i]->returnxPos(), Barriers[i]->returnyPos(), Barriers[i]->returnzPos());
 		modelStack.Scale(Vehicle.returnCarScale() * Barriers[i]->returnBarrierScale(), Vehicle.returnCarScale() * Barriers[i]->returnBarrierScale(), Vehicle.returnCarScale() * Barriers[i]->returnBarrierScale());
 		modelStack.Rotate((float)(Barriers[i]->returnBarrierRotation()), 0, 1, 0);
-		RenderMesh(meshList[GEO_ROADBLOCK], true); //set lighting to true once completed
+		RenderMesh(meshList[GEO_ROADBLOCK], true);
+		modelStack.PopMatrix();
+	}
+
+	//Draw Checkpoints in the map (Modelled and rendered by Winston)
+	for (size_t i = 0; i < CheckpointList.size() / CHECKPOINTROWCOUNT; i++)
+	{
+		float checkpointScale = Vehicle.returnCarScale() * 2;
+		modelStack.PushMatrix();
+		modelStack.Translate(Checkpoints[i]->returnxPos(), Checkpoints[i]->returnyPos(), Checkpoints[i]->returnzPos());
+		modelStack.Scale(checkpointScale, checkpointScale, checkpointScale);
+		modelStack.Rotate((float)(Checkpoints[i]->returnCheckpointRotation()), 0, 1, 0);
+		RenderMesh(meshList[GEO_CHECKPOINT], true);
 		modelStack.PopMatrix();
 	}
 

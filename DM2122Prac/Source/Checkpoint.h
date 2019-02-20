@@ -22,16 +22,17 @@ public:
 	int returnCheckpointRotation();
 	void setCheckpointRotation(float);
 
-	int returnCheckpointScale();
-	void setCheckpointScale(int);
+	bool returnIsPassedThrough();
+	void passedThroughCheckpoint();
+	void resetCheckpoint();
 
 	int returnCheckpointQuantity(void);
 
 private:
 	int barrierCount;
 
+	bool passedThrough;
 	float rotateBy;
-	float scaleBy;
 	float xPos;
 	float yPos;
 	float zPos;

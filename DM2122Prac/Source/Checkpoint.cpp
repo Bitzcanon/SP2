@@ -4,8 +4,8 @@ using namespace std;
 
 Checkpoint::Checkpoint()
 {
+	passedThrough = false;
 	rotateBy = 0;
-	scaleBy = 0;
 	xPos = 0;
 	yPos = 0;
 	zPos = 0;
@@ -16,6 +16,21 @@ Checkpoint::~Checkpoint()
 
 }
 
+bool Checkpoint::returnIsPassedThrough()
+{
+	return passedThrough;
+}
+
+void Checkpoint::passedThroughCheckpoint()
+{
+	passedThrough = true;
+}
+
+void Checkpoint::resetCheckpoint()
+{
+	passedThrough = false;
+}
+
 int Checkpoint::returnCheckpointRotation()
 {
 	return rotateBy;
@@ -24,16 +39,6 @@ int Checkpoint::returnCheckpointRotation()
 void Checkpoint::setCheckpointRotation(float angle)
 {
 	rotateBy = angle;
-}
-
-int Checkpoint::returnCheckpointScale()
-{
-	return scaleBy;
-}
-
-void Checkpoint::setCheckpointScale(int scaleFactor)
-{
-	scaleBy = scaleFactor;
 }
 
 int Checkpoint::returnCheckpointQuantity()
