@@ -124,7 +124,7 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	Scene *scene[6];
+	Scene *scene[5];
 	//INIT TO NULL
 	for (int i = 0; i < 5; i++)
 	{
