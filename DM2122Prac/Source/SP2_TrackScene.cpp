@@ -532,6 +532,8 @@ void SP2_TrackScene::Init()
 	meshList[GEO_TRAP] = MeshBuilder::GenerateOBJ("Trap", "OBJ//Trap.obj");
 	meshList[GEO_TRAP]->textureID = LoadTGA("Image//Trap.tga");
 
+	meshList[GEO_TESTTRACK] = MeshBuilder::GenerateOBJ("TestTrack", "OBJ//TestTrack.obj");
+
 	//
 	meshList[GEO_ROADBLOCK] = MeshBuilder::GenerateOBJ("RoadBlock", "OBJ//RoadBlock.obj");
 
@@ -1055,13 +1057,23 @@ void SP2_TrackScene::Render()
 	RenderMesh(meshList[GEO_AXES], false);
 
 	//Draw Track (Modelled and rendered by Gary)
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	{
 		float trackScale = Vehicle.returnCarScale() * 2;
 		modelStack.Scale(trackScale, trackScale, trackScale);
 		modelStack.Translate(0, -0.495f, 0);
 
 		RenderMesh(meshList[GEO_TRACK], true);
+	}
+	modelStack.PopMatrix();
+*/
+	modelStack.PushMatrix();
+	{
+		float trackScale = Vehicle.returnCarScale() * 2;
+		modelStack.Scale(trackScale, trackScale, trackScale);
+		modelStack.Translate(0, -0.3, 0);
+
+		RenderMesh(meshList[GEO_TESTTRACK], true);
 	}
 	modelStack.PopMatrix();
 
