@@ -18,7 +18,7 @@ SP2_TrackScene::~SP2_TrackScene()
 
 }
 
-static const float SKYBOXSIZE = 2000.f;
+static const float SKYBOXSIZE = 10000.f;
 
 void SP2_TrackScene::loadSpeedBuffCoordinates()
 {
@@ -1071,9 +1071,9 @@ void SP2_TrackScene::Render()
 	{
 		float trackScale = Vehicle.returnCarScale() * 2;
 		modelStack.Scale(trackScale, trackScale, trackScale);
-		modelStack.Translate(0, -0.3, 0);
+		modelStack.Translate(0, -0.9f, 0);
 
-		RenderMesh(meshList[GEO_TESTTRACK], true);
+		RenderMesh(meshList[GEO_TRACK], true);
 	}
 	modelStack.PopMatrix();
 

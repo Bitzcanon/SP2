@@ -1,7 +1,7 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
-constexpr auto CAMERABOUNDSORIGINAL = 998.f;
+constexpr auto CAMERABOUNDSORIGINAL = 20000.f;
 constexpr auto CAMERABOUNDSCHASE = 373.5f;
 
 constexpr auto ROADBLOCKCOUNT = 9;
