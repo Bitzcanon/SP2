@@ -7,14 +7,14 @@ Car::Car()
 	newPosition = (0.f, 0.f, 0.f);
 
 	//initialize values as 0
-	maxSpeed = 0.2f;
+	maxSpeed = 0.3f;
 	speed = 0;
 
 	accelerationFactor = 0.005f;
 	acceleration = 0;
 	maxAcceleration = 0.5f;
 
-	steerFactor = 1.5f;
+	steerFactor = 2.f; //1.3f
 	steerAngle = 0;
 
 	health = 0;
@@ -25,7 +25,7 @@ Car::Car()
 	playerInstance = Player::getInstance();
 }
 
-float Car::carScale = 10;
+float Car::carScale = 20;
 
 Car::Car(float x, float y, float z, float maxSpeedCar, float accelerationFactorCar, float maxAccelerationCar, float steerFactorCar)
 {
@@ -97,7 +97,7 @@ void Car::Update(double dt)
 
 		if (playerInstance->getMaxSpeedUpgradeStatus() == true)
 		{
-			maxSpeed = 0.3f;
+			maxSpeed = 0.4f;
 		}
 		if (speed > maxSpeed)
 		{
@@ -188,7 +188,7 @@ void Car::decelerateCar(double dt)
 {
 	if (isDrivingForward)
 	{
-		acceleration -= 0.1f;
+		acceleration -= 0.025f;
 		speed += (float)(acceleration * dt);
 		newPosition.x = car.returnXPos() + (sin(Math::DegreeToRadian(steerAngle)) * speed);
 		newPosition.y = car.returnYPos();
@@ -208,7 +208,7 @@ void Car::decelerateCar(double dt)
 	}
 	if (isDrivingBackward)
 	{
-		acceleration += 0.1f;
+		acceleration += 0.025f;
 		speed += (float)(acceleration * dt);
 		newPosition.x = car.returnXPos() + (sin(Math::DegreeToRadian(steerAngle)) * speed);
 		newPosition.y = car.returnYPos();

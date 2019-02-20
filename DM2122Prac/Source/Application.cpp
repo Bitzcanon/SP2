@@ -152,7 +152,7 @@ void Application::Run()
 	{
 		scene[SceneSetter]->Update(m_timer.getElapsedTime());
 
-		if /*(*/(SceneSetter == 1 || SceneSetter == 2 /*|| SceneSetter == 3*/ && resetScene == true) // reset the track everytime u enter from main menu
+		if ((SceneSetter == 1 || SceneSetter == 2) /*|| SceneSetter == 3*/ && resetScene == true) // reset the track everytime u enter from main menu
 		{
 			int i = SceneSetter;
 			scene[i]->Exit();

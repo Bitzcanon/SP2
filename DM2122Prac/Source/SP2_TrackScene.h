@@ -16,6 +16,7 @@
 #include "Barrier.h"
 #include "Car.h"
 #include "Player.h"
+#include "Checkpoint.h"
 
 #include <string>
 using namespace std;
@@ -149,6 +150,9 @@ private:
 	void initBarrier();
 	void loadBarrierCoordinates();
 
+	void initCheckpoint();
+	void loadCheckpointCoordinates();
+
 	string UpdateFrameRate(float string);
 
 	float FPS;
@@ -157,6 +161,7 @@ private:
 
 	Buff * Buffs[20];
 	Barrier *Barriers[ROADBLOCKCOUNT];
+	Checkpoint *Checkpoints[CHECKPOINTCOUNT];
 
 	//Declaration of class instances
 	RenderStrings texts;
@@ -179,6 +184,7 @@ private:
 	vector <float> SpeedBuffList;
 	vector <float> BarrierList;	
 	vector <float> SlowBuffList;
+	vector <float> CheckpointList;
 };
 
 #endif // ! SP2_TrackScene_H

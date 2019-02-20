@@ -150,6 +150,7 @@
     <ClCompile Include="Source\Barrier.cpp" />
     <ClCompile Include="Source\Buff.cpp" />
     <ClCompile Include="Source\Car.cpp" />
+    <ClCompile Include="Source\Checkpoint.cpp" />
     <ClCompile Include="Source\Coins.cpp" />
     <ClCompile Include="Source\FPSCamera.cpp" />
     <ClCompile Include="Source\Location.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="Source\Barrier.h" />
     <ClInclude Include="Source\Buff.h" />
     <ClInclude Include="Source\Car.h" />
+    <ClInclude Include="Source\Checkpoint.h" />
     <ClInclude Include="Source\Definitions.h" />
     <ClInclude Include="Source\SP2_ChaseEnemyScene.h" />
     <ClInclude Include="Source\Coins.h" />
