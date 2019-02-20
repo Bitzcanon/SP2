@@ -13,7 +13,6 @@ public:
 
 	string returnKartString(int);
 	string returnWheelsString(int);
-	string returnWheelString(int);
 	string returnColorString(int);
 
 private:
@@ -21,7 +20,6 @@ private:
 
 	vector <string> KartString;
 	vector <string> WheelsString;
-	vector <string> WheelString;
 
 };
 

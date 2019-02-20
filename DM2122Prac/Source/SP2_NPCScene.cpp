@@ -272,6 +272,7 @@ void SP2_NPCScene::Update(double dt)
 		rotateAngle = 0;
 	}
 
+	// just to test , remove later
 	if (Application::IsKeyPressed('M'))
 	{
 		Application::SceneSetter = 0;
@@ -296,7 +297,6 @@ void SP2_NPCScene::Update(double dt)
 			bounceTime = 0.2f;
 		}
 	}
-
 	if (Application::IsKeyPressed(VK_UP))
 	{
 		if (bounceTime <= 0)

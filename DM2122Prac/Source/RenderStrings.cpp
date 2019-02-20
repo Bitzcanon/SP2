@@ -5,7 +5,6 @@ RenderStrings::RenderStrings()
 {
 	ifstream Karts("TextFiles//KartString.txt");	// open text file
 	ifstream Wheels("TextFiles//WheelsString.txt"); // open text file
-	ifstream Wheel("TextFiles//WheelString.txt");	// open text file
 	ifstream Color("TextFiles//ColorString.txt");	// open text file
 	
 	string tmp; //tmp string var
@@ -36,20 +35,7 @@ RenderStrings::RenderStrings()
 		}
 		Wheels.close();
 	}
-	//store wheel strings
-	if (Wheel.is_open()) 
-	{
-		int i = 0;
-
-		while (Wheel.eof() == false)
-		{
-			Wheel >> tmp;
-			i++;
-			WheelString.push_back(tmp);
-		}
-		Wheel.close();
-	}
-
+	
 	if (Color.is_open()) 
 	{
 		int i = 0;
@@ -75,11 +61,6 @@ string RenderStrings::returnKartString(int x)
 }
 
 string RenderStrings::returnWheelsString(int x)
-{
-	return WheelsString[x];
-}
-
-string RenderStrings::returnWheelString(int x)
 {
 	return WheelsString[x];
 }

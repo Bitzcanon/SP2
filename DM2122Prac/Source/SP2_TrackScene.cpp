@@ -635,7 +635,7 @@ bool SP2_TrackScene::CollisionChecker(int type, int index, float objX, float obj
 	}
 	else
 	{
-		cout << "Collide" << endl;
+		//cout << "Collide" << endl;
 		return true;
 	}	
 }
