@@ -1,74 +1,29 @@
-#include "music.h"
+#include "Music.h"
 
-vector<MLoaded> LoadedFiles;
-
-std::wstring s2ws(const std::string& s)
+Music::Music()
 {
-	int len;
-	int slength = (int)s.length() + 1;
-	len = MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, 0, 0);
-	wchar_t* buf = new wchar_t[len];
-	MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, buf, len);
-	std::wstring r(buf);
-	delete[] buf;
-	return r;
-}
-void Mshutdown()
-{
-	mciSendCommand(MCI_ALL_DEVICE_ID, MCI_CLOSE, MCI_WAIT, NULL);
+	gSoloud.init();
 }
 
-void MusicInit()
+Music::~Music()
 {
-	MLoaded loaded;
-
-	MusicLoad("gamemusic.mp3", "mpegvideo", "gamemusic", "75", &loaded);
-	LoadedFiles.push_back(loaded);
-	LoadedFiles.push_back(loaded);
+	gSoloud.deinit();
 }
-bool MusicLoad(string file, string type, string alias, string initialvolume, MLoaded* Returnfile)
+
+void Music::playBGM(int i)
 {
-	MCIERROR me;
-	string buff;
-	buff = "open \"" + file + "\" type " + type + " alias " + alias;
-	me = mciSendString(s2ws(buff).c_str(), NULL, 0, NULL);
-	if (me == 0)
+	switch (i)
 	{
-		(*Returnfile).status = 0;
-		(*Returnfile).file = file;
-		(*Returnfile).type = type;
-		(*Returnfile).alias = alias;
-		buff = "setaudio " + alias + " volume to " + initialvolume;
-		me = mciSendString(s2ws(buff).c_str(), NULL, 0, NULL);
-		return true;
+	case 0:
+		break;
 	}
-	else
-	{
-		(*Returnfile).status = me;
-		return false;
-	}
+}
 
-}
-bool MusicPlay(string alias, string arguments)
+void  Music::playInstantSound(int i)
 {
-	MCIERROR ME;
-	string constructstring = "play ";
-	constructstring += alias;
-	constructstring += " " + arguments;
-	ME = mciSendString(s2ws(constructstring).c_str(), NULL, 0, NULL);
-	if (ME != 0)
-		return false;
-	else
-		return true;
-}
-bool MusicStop(string alias)
-{
-	MCIERROR ME;
-	string constructstring = "stop ";
-	constructstring += alias;
-	ME = mciSendString(s2ws(constructstring).c_str(), NULL, 0, NULL);
-	if (ME != 0)
-		return false;
-	else
-		return true;
+	switch (i)
+	{
+	case 0:
+		break;
+	}
 }

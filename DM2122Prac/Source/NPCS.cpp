@@ -7,7 +7,6 @@ NPCS::NPCS()
 	x = 0.f; z = 0.f; close = false; interacting = false; direction = false;
 }
 
-
 NPCS::~NPCS()
 {
 }
