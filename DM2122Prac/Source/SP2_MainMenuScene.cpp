@@ -195,7 +195,7 @@ void SP2_MainMenuScene::Init()
 
 	//Set projection to Perspective and load projection matrix
 	Mtx44 projection;
-	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
+	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 500.f);
 	projectionStack.LoadMatrix(projection);
 
 }

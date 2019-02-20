@@ -715,7 +715,7 @@ void SP2_TrackScene::Update(double dt)
 	
 
 	//Win condition done by Winston
-	if (CollisionChecker(3, 1, 20, 0, 2, 1) == true)
+	if (CollisionChecker(3, 1, 45, 0, 4, 1) == true)
 	{
 		if (isLapCompleted == true)
 		{
@@ -1118,7 +1118,7 @@ void SP2_TrackScene::Render()
 	{
 		float trackScale = Vehicle.returnCarScale() * 2;
 		modelStack.Scale(trackScale, trackScale, trackScale);
-		modelStack.Translate(0, -0.9f, 0);
+		modelStack.Translate(0, -0.49f, 0);
 
 		RenderMesh(meshList[GEO_TRACK], true);
 	}
@@ -1128,8 +1128,9 @@ void SP2_TrackScene::Render()
 	modelStack.PushMatrix();
 	{
 		float finishLineScale = Vehicle.returnCarScale() * 2;
+		modelStack.Translate(4.5f, 0, 0);
 		modelStack.Scale(finishLineScale, finishLineScale, finishLineScale);
-		modelStack.Translate(0, -0.49f, 0);
+		modelStack.Translate(0, -0.478f, 0);
 
 		RenderMesh(meshList[GEO_FINISHLINE], true);
 

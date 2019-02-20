@@ -7,7 +7,7 @@ Car::Car()
 	newPosition = (0.f, 0.f, 0.f);
 
 	//initialize values as 0
-	maxSpeed = 0.3f;
+	maxSpeed = 0.4f;
 	speed = 0;
 
 	accelerationFactor = 0.005f;
@@ -101,7 +101,7 @@ void Car::Update(double dt)
 
 			if (playerInstance->getMaxSpeedUpgradeStatus() == true)
 			{
-				maxSpeed = 0.4f;
+				maxSpeed = 0.5f;
 			}
 			if (speed > maxSpeed)
 			{
@@ -142,7 +142,7 @@ void Car::Update(double dt)
 
 			if (playerInstance->getMaxSpeedUpgradeStatus() == true)
 			{
-				maxSpeed = 0.3f;
+				maxSpeed = 0.5f;
 			}
 			if (speed < -maxSpeed) //negative because it is moving in the opposite direction
 			{
@@ -160,7 +160,7 @@ void Car::Update(double dt)
 		{
 			if (playerInstance->getSteerUpgradeStatus() == true)
 			{
-				steerFactor = 2.f;
+				steerFactor = 2.2f;
 			}
 			if (isDrivingForward)
 			{
@@ -172,13 +172,13 @@ void Car::Update(double dt)
 				steerAngle += steerFactor;
 				//speed *= 0.96f;
 			}
-			speed *= 0.96f;
+			speed *= 0.97f;
 		}
 		if (Application::IsKeyPressed(VK_LEFT))
 		{
 			if (playerInstance->getSteerUpgradeStatus() == true)
 			{
-				steerFactor = 2.f;
+				steerFactor = 2.2f;
 			}
 			if (isDrivingForward)
 			{
@@ -188,7 +188,7 @@ void Car::Update(double dt)
 			{
 				steerAngle -= steerFactor;
 			}
-			speed *= 0.96f;
+			speed *= 0.97f;
 		}
 	}
 
@@ -222,7 +222,7 @@ void Car::Update(double dt)
 
 			if (playerInstance->getMaxSpeedUpgradeStatus() == true)
 			{
-				maxSpeed = 0.4f;
+				maxSpeed = 0.5f;
 			}
 			if (speed > maxSpeed)
 			{
@@ -263,7 +263,7 @@ void Car::Update(double dt)
 
 			if (playerInstance->getMaxSpeedUpgradeStatus() == true)
 			{
-				maxSpeed = 0.3f;
+				maxSpeed = 0.5f;
 			}
 			if (speed < -maxSpeed) //negative because it is moving in the opposite direction
 			{
@@ -281,7 +281,7 @@ void Car::Update(double dt)
 		{
 			if (playerInstance->getSteerUpgradeStatus() == true)
 			{
-				steerFactor = 2.f;
+				steerFactor = 2.2f;
 			}
 			if (isDrivingForward)
 			{
@@ -291,12 +291,13 @@ void Car::Update(double dt)
 			{
 				steerAngle += steerFactor;
 			}
+			speed *= 0.97f;
 		}
 		if (Application::IsKeyPressed(VK_RIGHT))
 		{
 			if (playerInstance->getSteerUpgradeStatus() == true)
 			{
-				steerFactor = 2.f;
+				steerFactor = 2.2f;
 			}
 			if (isDrivingForward)
 			{
@@ -306,6 +307,7 @@ void Car::Update(double dt)
 			{
 				steerAngle -= steerFactor;
 			}
+			speed *= 0.97f;
 		}
 	}
 }
