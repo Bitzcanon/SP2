@@ -5,7 +5,6 @@ c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(245
           [
               _Ty=float
           ]
-c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(294): warning C4553: '==': result of expression not used; did you intend '='?
-c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(574): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(1204): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(579): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(1262): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
   DM2122Prac.vcxproj -> C:\Users\Gary Quah\Documents\GitHub\SP2\Debug\Studio Project 2.exe

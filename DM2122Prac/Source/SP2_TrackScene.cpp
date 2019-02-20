@@ -1104,7 +1104,7 @@ void SP2_TrackScene::Render()
 	RenderMesh(meshList[GEO_AXES], false);
 
 	//Draw Track (Modelled and rendered by Gary)
-	/*modelStack.PushMatrix();
+	modelStack.PushMatrix();
 	{
 		float trackScale = Vehicle.returnCarScale() * 2;
 		modelStack.Scale(trackScale, trackScale, trackScale);
@@ -1113,17 +1113,6 @@ void SP2_TrackScene::Render()
 		RenderMesh(meshList[GEO_TRACK], true);
 	}
 	modelStack.PopMatrix();
-*/
-	modelStack.PushMatrix();
-	{
-		float trackScale = Vehicle.returnCarScale() * 2;
-		modelStack.Scale(trackScale, trackScale, trackScale);
-		modelStack.Translate(0, -0.9f, 0);
-
-		RenderMesh(meshList[GEO_TRACK], true);
-	}
-	modelStack.PopMatrix();
-
 	//Draw Finish Line (Modelled and rendered by Winston)
 	modelStack.PushMatrix();
 	{
