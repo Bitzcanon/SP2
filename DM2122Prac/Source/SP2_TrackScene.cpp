@@ -150,12 +150,12 @@ void SP2_TrackScene::initBuff()
 
 void SP2_TrackScene::initBarrier()
 {
-	for (int i = 0; i < BARRIERCOUNT; i++) //Init array container to NULL
+	for (int i = 0; i < ROADBLOCKCOUNT; i++) //Init array container to NULL
 	{
 		Barriers[i] = NULL;
 	}
 
-	for (size_t i = 0; i < (BarrierList.size() / BARRIERROWCOUNT); i++)
+	for (size_t i = 0; i < (BarrierList.size() / ROADBLOCKROWCOUNT); i++)
 	{
 		Barriers[i] = new Barrier;
 	}
@@ -163,7 +163,7 @@ void SP2_TrackScene::initBarrier()
 	int counter = 1;
 	for (size_t i = 0; i < BarrierList.size(); i++) // loop through the total cords in the text file
 	{
-		int loc = i / BARRIERROWCOUNT;
+		int loc = i / ROADBLOCKROWCOUNT;
 		// i = 0 , loc = 0 . i = 1 , loc = 0 , i = 2 , loc = 0 , i = 3 , loc = 0 
 		// i = 4 , loc = 0 , i = 5 , loc = 1 , i = 6 , loc = 1 , i = 7 , loc = 1
 
@@ -494,7 +494,7 @@ void SP2_TrackScene::Update(double dt)
 	}
 
 	/*RoadBlock logic done by Winston*/
-	for (size_t i = 0; i < BarrierList.size() / BARRIERROWCOUNT; i++)
+	for (size_t i = 0; i < BarrierList.size() / ROADBLOCKROWCOUNT; i++)
 	{
 		if (CollisionChecker(2, i, Barriers[i]->returnxPos(), Barriers[i]->returnzPos(), 1.4f, 0.9f) == true) //1.6 as the length due to the model being slightly shorter than 2 (as seen in Maya)
 		{
@@ -504,7 +504,7 @@ void SP2_TrackScene::Update(double dt)
 		}
 	}
 	/*World border collision detection logic done by Winston*/
-	if (((Vehicle.newPosition.x * 10) >= 493.5f) || ((Vehicle.newPosition.x * 10) <= -493.5f) || ((Vehicle.newPosition.z * 10) >= 493.5f) || ((Vehicle.newPosition.z * 10) <= -493.5f))
+	if ((Vehicle.newPosition.x * 10) >= (CAMERABOUNDSORIGINAL - 4.5f) || ((Vehicle.newPosition.x * 10) <= -(CAMERABOUNDSORIGINAL - 4.5f)) || ((Vehicle.newPosition.z * 10) >= (CAMERABOUNDSORIGINAL - 4.5f)) || ((Vehicle.newPosition.z * 10) <= -(CAMERABOUNDSORIGINAL - 4.5f)))
 	{
 		Barrier::BarrierDelay = 0.2f;
 		Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
@@ -568,21 +568,21 @@ void SP2_TrackScene::Update(double dt)
 	cameraTarget.z = Vehicle.newPosition.z * Vehicle.returnCarScale();
 
 	camera.Update(dt);
-	if (cameraPos.x >= 498.f)
+	if (cameraPos.x >= CAMERABOUNDSORIGINAL)
 	{
-		cameraPos.x = 497.f;
+		cameraPos.x = CAMERABOUNDSORIGINAL - 1.f;
 	}
-	else if (cameraPos.x <= -498.f)
+	else if (cameraPos.x <= -CAMERABOUNDSORIGINAL)
 	{
-		cameraPos.x = -497.f;
+		cameraPos.x = -CAMERABOUNDSORIGINAL + 1.f;
 	}
-	else if (cameraPos.z >= 498.f)
+	else if (cameraPos.z >= CAMERABOUNDSORIGINAL)
 	{
-		cameraPos.z = 497.f;
+		cameraPos.z = CAMERABOUNDSORIGINAL - 1.f;
 	}
-	else if (cameraPos.z <= -498.f)
+	else if (cameraPos.z <= -CAMERABOUNDSORIGINAL)
 	{
-		cameraPos.z = -497.f;
+		cameraPos.z = -CAMERABOUNDSORIGINAL + 1.f;
 	}
 
 }
@@ -592,8 +592,8 @@ bool SP2_TrackScene::CollisionChecker(int type, int index, float objX, float obj
 {
 	float minimumXObj = objX / Vehicle.returnCarScale();
 	float minimumZObj = objZ / Vehicle.returnCarScale();
-	float maximumXObj;
-	float maximumZObj;
+	float maximumXObj = NULL;
+	float maximumZObj = NULL;
 
 	switch (type) //1 == Speedboost, 2 == Barrier, 3 == Finish Line
 	{
@@ -980,7 +980,7 @@ void SP2_TrackScene::Render()
 	//
 
 	//Draw Road Blocks in the map (Modelled by Zheng Hong, rendered by Winston)
-	for (size_t i = 0; i < BarrierList.size() / BARRIERROWCOUNT; i++)
+	for (size_t i = 0; i < BarrierList.size() / ROADBLOCKROWCOUNT; i++)
 	{
 		modelStack.PushMatrix();
 

@@ -3,20 +3,14 @@
 #include <iostream>
 using namespace std;
 
-int Player::coinCount = 0;
-
-bool Player::healthUpgrade = false;
-
-bool Player::maxSpeedUpgrade = false;
-
-bool Player::accelerationUpgrade = false;
-
-bool Player::maxAccelerationUpgrade = false;
-
-bool Player::steerUpgrade = false;
-
 Player::Player()
 {
+	coinCount = 0;
+	healthUpgrade = false;
+	maxSpeedUpgrade = false;
+	accelerationUpgrade = false;
+	maxAccelerationUpgrade = false;
+	steerUpgrade = false;
 	//Change constructor to read from text file from save file so as to make sure progress is saved
 }
 
