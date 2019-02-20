@@ -1,28 +1,19 @@
 #pragma once
-#ifndef MUSIC_H
-#define MUSIC_H
+#define WITH_WINMM
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <string>
-#include <Windows.h>
+#include "../../soloud20181119/include/soloud.h"
+#include "../../soloud20181119/include/soloud_wav.h"
 
 using namespace std;
-std::wstring s2ws(const std::string& s);
-void Mshutdown();
-void MusicInit();
-struct MLoaded
+
+class Music
 {
-	std::string file = ""; // Can be empty!
-	std::string type = ""; // Can be empty!
-	std::string alias = ""; // Can be empty!
-	int status;
+public:
+	Music();
+	~Music();
+	void playBGM(int i);
+	void playInstantSound(int i);
+private:
+	SoLoud::Soloud gSoloud;
+	SoLoud::Wav gWave;
 };
-bool MusicLoad(std::string file, std::string type, std::string alias, std::string initalvolume, MLoaded* Returnfile);
-bool MusicPlay(string alias, string arguments);
-bool MusicStop(string alias);
-
-
-
-#endif

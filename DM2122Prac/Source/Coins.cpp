@@ -6,12 +6,10 @@
 
 Coins::Coins()
 {
-	//x = 0.f; z = 0.f; taken = false;
 	taken = false;
 	x = rand() % 990 - 495;
 	z = rand() % 990 - 495;
 }
-
 
 Coins::~Coins()
 {
