@@ -14,13 +14,14 @@ Car::Car()
 	acceleration = 0;
 	maxAcceleration = 0.5f;
 
-	steerFactor = 2.f; //1.3f
+	steerFactor = 1.8f;
 	steerAngle = 0;
 
 	health = 0;
 	isDrivingForward = false;
 	isDrivingBackward = false;
 	isCollidedWithBarrier = false;
+	isInversedControlled = false;
 
 	playerInstance = Player::getInstance();
 }
@@ -44,6 +45,7 @@ Car::Car(float x, float y, float z, float maxSpeedCar, float accelerationFactorC
 	isDrivingBackward = false;
 	isDrivingForward = false;
 	isCollidedWithBarrier = false;
+	isInversedControlled = false;
 
 	playerInstance = Player::getInstance();
 }
@@ -69,117 +71,241 @@ float Car::getZpos(void)
 
 void Car::Update(double dt)
 {
-	if (Application::IsKeyPressed(VK_UP) && isDrivingBackward == false)
+	if (isInversedControlled == false)
 	{
-		if (playerInstance->getAccelerationUpgradeStatus() == true)
+		if (Application::IsKeyPressed(VK_UP) && isDrivingBackward == false)
 		{
-			accelerationFactor = 0.01f;
-		}
-		isDrivingForward = true;
-		isDrivingBackward = false;
-		acceleration += accelerationFactor;
-		speed += (float)(acceleration * dt);
+			if (playerInstance->getAccelerationUpgradeStatus() == true)
+			{
+				accelerationFactor = 0.01f;
+			}
+			isDrivingForward = true;
+			isDrivingBackward = false;
+			acceleration += accelerationFactor;
+			speed += (float)(acceleration * dt);
 
-		newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
-		newPosition.y = car.returnYPos();
-		newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
-		car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
+			newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
+			newPosition.y = car.returnYPos();
+			newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
+			car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
 
 
-		if (playerInstance->getMaxAccelerationUpgradeStatus() == true)
-		{
-			maxAcceleration = 0.7f;
-		}
-		if (acceleration > maxAcceleration)
-		{
-			acceleration = maxAcceleration;
-		}
+			if (playerInstance->getMaxAccelerationUpgradeStatus() == true)
+			{
+				maxAcceleration = 0.7f;
+			}
+			if (acceleration > maxAcceleration)
+			{
+				acceleration = maxAcceleration;
+			}
 
-		if (playerInstance->getMaxSpeedUpgradeStatus() == true)
-		{
-			maxSpeed = 0.4f;
-		}
-		if (speed > maxSpeed)
-		{
-			speed = maxSpeed;
-		}
-	}
-	if (isDrivingForward)
-	{
-		if (!Application::IsKeyPressed(VK_UP))
-		{
-			decelerateCar(dt);
-		}
-	}
-	if (Application::IsKeyPressed(VK_DOWN) && isDrivingForward == false)
-	{
-		if (playerInstance->getAccelerationUpgradeStatus() == true)
-		{
-			accelerationFactor = 0.01f;
-		}
-		isDrivingForward = false;
-		isDrivingBackward = true;
-		acceleration -= accelerationFactor;
-		speed += (float)(acceleration * dt);
-
-		newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
-		newPosition.y = newPosition.y;
-		newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
-		car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
-
-		if (playerInstance->getMaxAccelerationUpgradeStatus() == true)
-		{
-			maxAcceleration = 0.7f;
-		}
-		if (acceleration < -maxAcceleration)
-		{
-			acceleration = -maxAcceleration;
-		}
-
-		if (playerInstance->getMaxSpeedUpgradeStatus() == true)
-		{
-			maxSpeed = 0.3f;
-		}
-		if (speed < -maxSpeed) //negative because it is moving in the opposite direction
-		{
-			speed = -maxSpeed;
-		}
-	}
-	if (isDrivingBackward)
-	{
-		if (!Application::IsKeyPressed(VK_DOWN))
-		{
-			decelerateCar(dt);
-		}
-	}
-	if (Application::IsKeyPressed(VK_RIGHT))
-	{
-		if (playerInstance->getSteerUpgradeStatus() == true)
-		{
-			steerFactor = 2.f;
+			if (playerInstance->getMaxSpeedUpgradeStatus() == true)
+			{
+				maxSpeed = 0.4f;
+			}
+			if (speed > maxSpeed)
+			{
+				speed = maxSpeed;
+			}
 		}
 		if (isDrivingForward)
 		{
-			steerAngle -= steerFactor;
+			if (!Application::IsKeyPressed(VK_UP))
+			{
+				decelerateCar(dt);
+			}
+		}
+		if (Application::IsKeyPressed(VK_DOWN) && isDrivingForward == false)
+		{
+			if (playerInstance->getAccelerationUpgradeStatus() == true)
+			{
+				accelerationFactor = 0.01f;
+			}
+			isDrivingForward = false;
+			isDrivingBackward = true;
+			acceleration -= accelerationFactor;
+			speed += (float)(acceleration * dt);
+
+			newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
+			newPosition.y = newPosition.y;
+			newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
+			car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
+
+			if (playerInstance->getMaxAccelerationUpgradeStatus() == true)
+			{
+				maxAcceleration = 0.7f;
+			}
+			if (acceleration < -maxAcceleration)
+			{
+				acceleration = -maxAcceleration;
+			}
+
+			if (playerInstance->getMaxSpeedUpgradeStatus() == true)
+			{
+				maxSpeed = 0.3f;
+			}
+			if (speed < -maxSpeed) //negative because it is moving in the opposite direction
+			{
+				speed = -maxSpeed;
+			}
 		}
 		if (isDrivingBackward)
 		{
-			steerAngle += steerFactor;
+			if (!Application::IsKeyPressed(VK_DOWN))
+			{
+				decelerateCar(dt);
+			}
+		}
+		if (Application::IsKeyPressed(VK_RIGHT))
+		{
+			if (playerInstance->getSteerUpgradeStatus() == true)
+			{
+				steerFactor = 2.f;
+			}
+			if (isDrivingForward)
+			{
+				steerAngle -= steerFactor;
+				//speed *= 0.96f;
+			}
+			if (isDrivingBackward)
+			{
+				steerAngle += steerFactor;
+				//speed *= 0.96f;
+			}
+			speed *= 0.96f;
+		}
+		if (Application::IsKeyPressed(VK_LEFT))
+		{
+			if (playerInstance->getSteerUpgradeStatus() == true)
+			{
+				steerFactor = 2.f;
+			}
+			if (isDrivingForward)
+			{
+				steerAngle += steerFactor;
+			}
+			if (isDrivingBackward)
+			{
+				steerAngle -= steerFactor;
+			}
+			speed *= 0.96f;
 		}
 	}
-	if (Application::IsKeyPressed(VK_LEFT))
+
+	if (isInversedControlled == true)
 	{
-		if (playerInstance->getSteerUpgradeStatus() == true)
+		if (Application::IsKeyPressed(VK_DOWN) && isDrivingBackward == false)
 		{
-			steerFactor = 2.f;
+			if (playerInstance->getAccelerationUpgradeStatus() == true)
+			{
+				accelerationFactor = 0.01f;
+			}
+			isDrivingForward = true;
+			isDrivingBackward = false;
+			acceleration += accelerationFactor;
+			speed += (float)(acceleration * dt);
+
+			newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
+			newPosition.y = car.returnYPos();
+			newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
+			car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
+
+
+			if (playerInstance->getMaxAccelerationUpgradeStatus() == true)
+			{
+				maxAcceleration = 0.7f;
+			}
+			if (acceleration > maxAcceleration)
+			{
+				acceleration = maxAcceleration;
+			}
+
+			if (playerInstance->getMaxSpeedUpgradeStatus() == true)
+			{
+				maxSpeed = 0.4f;
+			}
+			if (speed > maxSpeed)
+			{
+				speed = maxSpeed;
+			}
 		}
 		if (isDrivingForward)
 		{
-			steerAngle += steerFactor;
+			if (!Application::IsKeyPressed(VK_DOWN))
+			{
+				decelerateCar(dt);
+			}
+		}
+		if (Application::IsKeyPressed(VK_UP) && isDrivingForward == false)
+		{
+			if (playerInstance->getAccelerationUpgradeStatus() == true)
+			{
+				accelerationFactor = 0.01f;
+			}
+			isDrivingForward = false;
+			isDrivingBackward = true;
+			acceleration -= accelerationFactor;
+			speed += (float)(acceleration * dt);
+
+			newPosition.x += (sin(Math::DegreeToRadian(steerAngle)) * speed);
+			newPosition.y = newPosition.y;
+			newPosition.z += (cos(Math::DegreeToRadian(steerAngle)) * speed);
+			car.setLocation(newPosition.x, car.returnYPos(), newPosition.z);
+
+			if (playerInstance->getMaxAccelerationUpgradeStatus() == true)
+			{
+				maxAcceleration = 0.7f;
+			}
+			if (acceleration < -maxAcceleration)
+			{
+				acceleration = -maxAcceleration;
+			}
+
+			if (playerInstance->getMaxSpeedUpgradeStatus() == true)
+			{
+				maxSpeed = 0.3f;
+			}
+			if (speed < -maxSpeed) //negative because it is moving in the opposite direction
+			{
+				speed = -maxSpeed;
+			}
 		}
 		if (isDrivingBackward)
 		{
-			steerAngle -= steerFactor;
+			if (!Application::IsKeyPressed(VK_UP))
+			{
+				decelerateCar(dt);
+			}
+		}
+		if (Application::IsKeyPressed(VK_LEFT))
+		{
+			if (playerInstance->getSteerUpgradeStatus() == true)
+			{
+				steerFactor = 2.f;
+			}
+			if (isDrivingForward)
+			{
+				steerAngle -= steerFactor;
+			}
+			if (isDrivingBackward)
+			{
+				steerAngle += steerFactor;
+			}
+		}
+		if (Application::IsKeyPressed(VK_RIGHT))
+		{
+			if (playerInstance->getSteerUpgradeStatus() == true)
+			{
+				steerFactor = 2.f;
+			}
+			if (isDrivingForward)
+			{
+				steerAngle += steerFactor;
+			}
+			if (isDrivingBackward)
+			{
+				steerAngle -= steerFactor;
+			}
 		}
 	}
 }

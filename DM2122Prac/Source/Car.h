@@ -56,6 +56,7 @@ private:
 	bool isDrivingBackward;
 
 	bool isCollidedWithBarrier;
+	bool isInversedControlled;
 
 	Location car;
 	Player *playerInstance;

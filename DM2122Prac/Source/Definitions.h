@@ -1,6 +1,8 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
+//Done by Winston
+
 constexpr auto CAMERABOUNDSORIGINAL = 998.f;
 constexpr auto CAMERABOUNDSCHASE = 373.5f;
 
