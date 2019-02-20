@@ -33,13 +33,13 @@ private:
 	~Player();
 
 	static Player* instance;
-	static int coinCount;
+	int coinCount;
 
-	static bool healthUpgrade;
-	static bool maxSpeedUpgrade;
-	static bool accelerationUpgrade;
-	static bool maxAccelerationUpgrade;
-	static bool steerUpgrade;
+	bool healthUpgrade;
+	bool maxSpeedUpgrade;
+	bool accelerationUpgrade;
+	bool maxAccelerationUpgrade;
+	bool steerUpgrade;
 
 };
 #endif // !PLAYER_H

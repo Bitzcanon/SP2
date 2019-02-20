@@ -12,6 +12,7 @@
 
 #include "SP2_TrackScene.h"
 #include "SP2_NPCScene.h"
+#include "SP2_ChaseEnemyScene.h"
 
 //Framework prepared by Winston
 
@@ -133,8 +134,8 @@ void Application::Run()
 	scene[0] = new SP2_MainMenuScene();
 
 	scene[1] = new SP2_TrackScene();
-	/*scene[2] = new SP2_CollectionScene();
-	scene[3] = new SP2_SurvivalScene();*/
+	scene[2] = new SP2_ChaseEnemyScene();
+	/*scene[3] = new SP2_SurvivalScene();*/
 	scene[4] = new SP2_NPCScene();
 
 	for (int i = 0; i < 5; i++)
@@ -151,7 +152,7 @@ void Application::Run()
 	{
 		scene[SceneSetter]->Update(m_timer.getElapsedTime());
 
-		if /*(*/(SceneSetter == 1 /*|| SceneSetter == 2 || SceneSetter == 3 )*/ && resetScene == true) // reset the track everytime u enter from main menu
+		if /*(*/(SceneSetter == 1 || SceneSetter == 2 /*|| SceneSetter == 3*/ && resetScene == true) // reset the track everytime u enter from main menu
 		{
 			int i = SceneSetter;
 			scene[i]->Exit();
@@ -161,12 +162,12 @@ void Application::Run()
 				scene[1] = new SP2_TrackScene;
 				scene[1]->Init();
 			}
-			/*else if (i == 2)
+			else if (i == 2)
 			{
-				scene[2] = new SP2_CoinScene;
+				scene[2] = new SP2_ChaseEnemyScene;
 				scene[2]->Init();
 			}
-			else if (i == 3)
+			/*else if (i == 3)
 			{
 				scene[3] = new SP2_SurvivalScene;
 				scene[3]->Init();

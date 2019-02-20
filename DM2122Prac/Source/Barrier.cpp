@@ -10,6 +10,11 @@ float Barrier::BarrierDelay = 0;
 
 Barrier::Barrier()
 {
+	rotateBy = 0;
+	scaleBy = 0;
+	xPos = 0;
+	yPos = 0;
+	zPos = 0;
 	////Storing coordinates in text file over into vector found in 
 	//ifstream myfile("TextFiles//BarrierCoordinates.txt"); //Open text file
 

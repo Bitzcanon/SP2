@@ -167,6 +167,7 @@
     <ClCompile Include="Source\RenderStrings.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SlowBuff.cpp" />
+    <ClCompile Include="Source\SP2_ChaseEnemyScene.cpp" />
     <ClCompile Include="Source\SP2_MainMenuScene.cpp" />
     <ClCompile Include="Source\SP2_NPCScene.cpp" />
     <ClCompile Include="Source\SP2_SurvivalScene.cpp" />
@@ -180,6 +181,8 @@
     <ClInclude Include="Source\Barrier.h" />
     <ClInclude Include="Source\Buff.h" />
     <ClInclude Include="Source\Car.h" />
+    <ClInclude Include="Source\Definitions.h" />
+    <ClInclude Include="Source\SP2_ChaseEnemyScene.h" />
     <ClInclude Include="Source\Coins.h" />
     <ClInclude Include="Source\FPSCamera.h" />
     <ClInclude Include="Source\Location.h" />

@@ -1,9 +1,6 @@
 #ifndef SP2_TrackScene_H
 #define	SP2_TrackScene_H
 
-constexpr auto BARRIERCOUNT = 9;
-constexpr auto BARRIERROWCOUNT = 5;
-
 #include "Scene.h"
 #include "Camera3.h"
 #include "FPSCamera.h"
@@ -11,6 +8,7 @@ constexpr auto BARRIERROWCOUNT = 5;
 #include "MeshBuilder.h"
 #include "MatrixStack.h"
 #include "Light.h"
+#include "Definitions.h"
 
 #include "RenderStrings.h"
 #include "SpeedBuff.h"
@@ -158,7 +156,7 @@ private:
 	bool conditionTester;
 
 	Buff * Buffs[20];
-	Barrier *Barriers[BARRIERCOUNT];
+	Barrier *Barriers[ROADBLOCKCOUNT];
 
 	//Declaration of class instances
 	RenderStrings texts;
