@@ -1,3 +1,11 @@
 ﻿D:\visual studio 2017\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (DM2122Prac.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  Buff.cpp
-LINK : fatal error LNK1168: cannot open C:\Users\Gary Quah\Documents\GitHub\SP2\Debug\Studio Project 2.exe for writing
+  SP2_TrackScene.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(224): warning C4244: 'argument': conversion from '_Ty' to 'int', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(504): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(569): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(1114): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  DM2122Prac.vcxproj -> C:\Users\Gary Quah\Documents\GitHub\SP2\Debug\Studio Project 2.exe

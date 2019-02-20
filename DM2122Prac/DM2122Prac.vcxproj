@@ -174,7 +174,7 @@
     <ClCompile Include="Source\SP2_SurvivalScene.cpp" />
     <ClCompile Include="Source\SP2_TrackScene.cpp" />
     <ClCompile Include="Source\SpeedBuff.cpp" />
-    <ClCompile Include="Source\Traps.cpp" />
+    <ClCompile Include="Source\Trap.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -209,7 +209,7 @@
     <ClInclude Include="Source\SP2_SurvivalScene.h" />
     <ClInclude Include="Source\SP2_TrackScene.h" />
     <ClInclude Include="Source\SpeedBuff.h" />
-    <ClInclude Include="Source\Traps.h" />
+    <ClInclude Include="Source\Trap.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />
   </ItemGroup>

@@ -75,9 +75,6 @@
     <ClCompile Include="Source\Location.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Traps.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\RenderStrings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -103,6 +100,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\SP2_ChaseEnemyScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+
+    <ClCompile Include="Source\Trap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Checkpoint.cpp">
@@ -176,9 +177,6 @@
     <ClInclude Include="Source\Location.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Traps.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\RenderStrings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -208,6 +206,10 @@
     </ClInclude>
     <ClInclude Include="Source\Definitions.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+
+    <ClInclude Include="Source\Trap.h">
+ 	 <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Checkpoint.h">
       <Filter>Header Files</Filter>

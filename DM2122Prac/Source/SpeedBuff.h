@@ -11,7 +11,6 @@ public:
 	~SpeedBuff();
 
 	static float timer;
-	static bool activateYet;
 private:
 	
 };
