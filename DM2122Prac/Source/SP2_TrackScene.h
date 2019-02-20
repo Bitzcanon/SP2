@@ -99,6 +99,8 @@ private:
 		GEO_TRACK,
 		GEO_FINISHLINE,
 		GEO_PROPELLER,
+		GEO_CHECKPOINT,
+		GEO_CHECKPOINTPROPELLER,
 		GEO_TESTCAR,
 		
 		GEO_TREE,
@@ -179,6 +181,8 @@ private:
 	Vector3 cameraTarget;
 
 	bool tmpBool;
+	bool isLapCompleted;
+	int lapCount;
 	bool isWon;
 	
 	vector <float> SpeedBuffList;
