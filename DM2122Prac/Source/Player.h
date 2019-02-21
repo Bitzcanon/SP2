@@ -25,19 +25,33 @@ public:
 	void setMaxAccelerationUpgradeStatus(bool);
 	void setSteerUpgradeStatus(bool);
 
+
+	string returnKart();
+	string returnWheels();
+	string returnColor();
+	bool returnChangeSomething();
+
+	void setKart(string);
+	void setWheels(string);
+	void setColor(string);
+	void setChangeSomething(bool);
+
 	void loadSave();
 	void writeSave();
 
-	static bool changeSomething; // boolean for changing of a car part.
-	static std::string kart; // store kart address
-	static std::string wheels; // store wheel address
-	static std::string color; // store color address
+	
+	
 private:
 	Player();
 	~Player();
 
 	static Player* instance;
 	Save saveFile;
+
+    bool changeSomething; // boolean for changing of a car part.
+	string kart; // store kart address
+	string wheels; // store wheel address
+    string color; // store color address
 	
 	int coinCount;
 

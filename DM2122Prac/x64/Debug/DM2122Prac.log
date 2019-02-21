@@ -1,45 +1,62 @@
-﻿  Application.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\application.h(5): fatal error C1083: Cannot open include file: 'timer.h': No such file or directory
-  Assignment1.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\camera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
-  Assignment2.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\camera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
+﻿D:\visual studio 2017\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (DM2122Prac.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Application.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\application.h(5): fatal error C1083: Cannot open include file: 'timer.h': No such file or directory
+  Barrier.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\barrier.cpp(23): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\barrier.cpp(33): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\barrier.cpp(38): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  Buff.cpp
+  Car.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\car.h(3): fatal error C1083: Cannot open include file: 'Mtx44.h': No such file or directory
+  Checkpoint.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\checkpoint.cpp(36): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+  Coins.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\coins.cpp(10): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\coins.cpp(11): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  FPSCamera.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\fpscamera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
+  Location.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\location.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
+  MenuCamera.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\camera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
+  Music.cpp
   Camera.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\camera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
-  Camera2.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\camera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\camera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
   Camera3.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\camera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\camera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
   LoadOBJ.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\vertex.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\vertex.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
   LoadTGA.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\loadtga.cpp(4): fatal error C1083: Cannot open include file: 'GL\glew.h': No such file or directory
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\loadtga.cpp(4): fatal error C1083: Cannot open include file: 'GL\glew.h': No such file or directory
   main.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\application.h(5): fatal error C1083: Cannot open include file: 'timer.h': No such file or directory
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\application.h(5): fatal error C1083: Cannot open include file: 'timer.h': No such file or directory
   Mesh.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\vertex.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\vertex.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
   MeshBuilder.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\vertex.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
-  SceneModel.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\camera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
-  SceneSkybox.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\camera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
-  SceneTexture.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\camera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
-  Scene1.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\scene1.cpp(2): fatal error C1083: Cannot open include file: 'GL\glew.h': No such file or directory
-  Scene2.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\scene2.cpp(2): fatal error C1083: Cannot open include file: 'GL\glew.h': No such file or directory
-  Scene3.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\camera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
-  Scene4.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\camera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
-  SceneLight.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\camera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
-  shader.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\shader.cpp(12): fatal error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\vertex.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
+  NPCS.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\npcs.cpp(119): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  Player.cpp
+  RenderStrings.cpp
   Generating Code...
   Compiling...
+  Save.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\save.cpp(37): warning C4101: 'tmp': unreferenced local variable
+  shader.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\shader.cpp(12): fatal error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+  SlowBuff.cpp
+  SP2_ChaseEnemyScene.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\camera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
+  SP2_MainMenuScene.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\camera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
+  SP2_NPCScene.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\camera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
+  SP2_SurvivalScene.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\camera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
+  SP2_TrackScene.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\camera.h(4): fatal error C1083: Cannot open include file: 'Vector3.h': No such file or directory
+  SpeedBuff.cpp
+  Trap.cpp
   Utility.cpp
-d:\documents\visual studio 2017\projects\dm2122prac\dm2122prac\source\utility.h(4): fatal error C1083: Cannot open include file: 'Mtx44.h': No such file or directory
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\utility.h(4): fatal error C1083: Cannot open include file: 'Mtx44.h': No such file or directory
   Generating Code...

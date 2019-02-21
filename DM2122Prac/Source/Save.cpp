@@ -13,6 +13,7 @@ void Save::readFrom()
 	ifstream saveFile("TextFiles//save.txt"); //Open text file to read
 	string row;
 	int tmp;
+	string tmp2;
 
 	if (saveFile.is_open())
 	{
@@ -22,6 +23,12 @@ void Save::readFrom()
 			tmp = stoi(row);
 			dataStorage[i] = tmp;
 		}
+
+		for (size_t i = 0; i < 3; i++)
+		{
+			saveFile >> tmp2;
+			dataStorageStrings[i] = tmp2;
+		}
 		saveFile.close();
 	}
 	else
@@ -30,7 +37,7 @@ void Save::readFrom()
 	}
 }
 
-void Save::writeTo(int coinCount, int healthUpgrade, int maxSpeedUpgrade, int accelerationUpgrade, int maxAccelerationUpgrade, int steerUpgrade)
+void Save::writeTo(int coinCount, int healthUpgrade, int maxSpeedUpgrade, int accelerationUpgrade, int maxAccelerationUpgrade, int steerUpgrade , string kart , string wheels , string color)
 {
 	ofstream saveFile("TextFiles//save.txt"); //Open text file to read
 	string row;
@@ -43,7 +50,12 @@ void Save::writeTo(int coinCount, int healthUpgrade, int maxSpeedUpgrade, int ac
 		saveFile << maxSpeedUpgrade << endl;
 		saveFile << accelerationUpgrade << endl;
 		saveFile << maxAccelerationUpgrade << endl;
-		saveFile << steerUpgrade;
+		saveFile << steerUpgrade << endl;
+
+		saveFile << kart << endl;
+		saveFile << wheels << endl;
+		saveFile << color;
+
 		saveFile.close();
 	}
 }

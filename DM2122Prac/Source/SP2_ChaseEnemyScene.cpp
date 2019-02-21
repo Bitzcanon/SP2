@@ -248,9 +248,12 @@ void SP2_ChaseEnemyScene::Init()
 	meshList[GEO_TESTCAR] = MeshBuilder::GenerateCube("Car", Color(0, 1, 0), 5, 1, 1);
 
 	//Default init for kart
-	meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", Player::kart);
-	meshList[GEO_KART]->textureID = LoadTGA(Player::color.c_str());
-	meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Car", Player::wheels);
+	meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", playerInstance->returnKart());
+	meshList[GEO_KART]->textureID = LoadTGA(playerInstance->returnColor().c_str());
+
+	meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Car", playerInstance->returnWheels());
+	meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
+
 	//Default init for kart
 	meshList[GEO_ROADBLOCK] = MeshBuilder::GenerateOBJ("RoadBlock", "OBJ//RoadBlock.obj");
 	meshList[GEO_MAZETILE] = MeshBuilder::GenerateOBJ("MazeTile", "OBJ//MazeTile.obj");
@@ -281,16 +284,6 @@ void SP2_ChaseEnemyScene::Update(double dt)
 	if (Application::IsKeyPressed('M'))
 	{
 		Application::SceneSetter = 0;
-	}
-
-	if (Player::changeSomething == true) // reload car model.
-	{
-		cout << Player::color << endl;
-		meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", Player::kart);
-		meshList[GEO_KART]->textureID = LoadTGA(Player::color.c_str());
-		meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels", Player::wheels);
-		meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
-		Player::changeSomething = false;
 	}
 
 	if (bounceTime > 0) //updating bouncetime

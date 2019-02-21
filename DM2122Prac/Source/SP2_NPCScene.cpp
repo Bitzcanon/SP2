@@ -310,9 +310,10 @@ void SP2_NPCScene::Update(double dt)
 			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
 			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
 			//EDIT STATIC PLAYER VAR
-			Player::kart = text.returnKartString(transitionBody);
-			Player::color = text.returnColorString(transitionColor);
-			Player::changeSomething = true;
+			
+			playerInstance->setColor(text.returnColorString(transitionColor));
+			playerInstance->setChangeSomething(true);
+
 			bounceTime = 0.2f;
 		}
 	}
@@ -329,9 +330,8 @@ void SP2_NPCScene::Update(double dt)
 			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
 			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
 			//EDIT STATIC PLAYER VAR
-			Player::kart = text.returnKartString(transitionBody);
-			Player::color = text.returnColorString(transitionColor);
-			Player::changeSomething = true;
+			playerInstance->setKart(text.returnKartString(transitionBody));
+			playerInstance->setChangeSomething(true);
 			bounceTime = 0.2f;
 		}
 	}
@@ -349,9 +349,8 @@ void SP2_NPCScene::Update(double dt)
 			meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels", text.returnWheelsString(transitionWheels));
 			meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
 			//EDIT STATIC PLAYER VAR
-			Player::wheels = text.returnWheelsString(transitionWheels);
-			Player::color = "Image//Colors//Gray.tga";
-			Player::changeSomething = true;
+			playerInstance->setWheels(text.returnWheelsString(transitionWheels));
+			playerInstance->setChangeSomething(true);
 			bounceTime = 0.2f;
 		}
 	}
