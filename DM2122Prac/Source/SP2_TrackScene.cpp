@@ -10,7 +10,7 @@
 
 SP2_TrackScene::SP2_TrackScene()
 {
-	
+	playerInstance = Player::getInstance();
 }
 
 SP2_TrackScene::~SP2_TrackScene()
@@ -339,6 +339,8 @@ void SP2_TrackScene::Init()
 	bounceTime = 0;
 	conditionTester = false;
 
+
+
 	//Set background color to dark blue (Before this are initialized variables, after is the rest)
 	glClearColor(0.0f, 0.0f, 0.3f, 0.0f);
 
@@ -552,9 +554,6 @@ void SP2_TrackScene::Init()
 	projectionStack.LoadMatrix(projection);
 
 	//Initialise variables
-
-	playerInstance = Player::getInstance();
-
 	vehicleSpeed = 0;
 
 	cameraPos = (Vehicle.newPosition.x, Vehicle.newPosition.y, Vehicle.newPosition.z);
@@ -1296,6 +1295,8 @@ void SP2_TrackScene::Render()
 
 void SP2_TrackScene::Exit()
 {
+	playerInstance->writeSave();
+
 	// Cleanup here
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{

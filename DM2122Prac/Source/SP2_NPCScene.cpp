@@ -12,7 +12,7 @@
 
 SP2_NPCScene::SP2_NPCScene()
 {
-	
+	playerInstance = Player::getInstance();
 }
 
 SP2_NPCScene::~SP2_NPCScene()
@@ -848,6 +848,7 @@ void SP2_NPCScene::Render()
 
 void SP2_NPCScene::Exit()
 {
+	playerInstance->writeSave();
 	// Cleanup here
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{

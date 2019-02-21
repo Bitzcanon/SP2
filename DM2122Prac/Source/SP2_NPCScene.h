@@ -138,6 +138,7 @@ private:
 	
 	RenderStrings text;
 	string UpdateFrameRate(float string);
+	Player *playerInstance;
 
 	float FPS;
 	float rotateAngle;
