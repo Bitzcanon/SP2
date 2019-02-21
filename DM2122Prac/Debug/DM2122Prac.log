@@ -1,12 +1,3 @@
-﻿D:\visual studio 2017\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (DM2122Prac.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  SP2_SurvivalScene.cpp
-  SP2_TrackScene.cpp
-c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(245): warning C4244: 'argument': conversion from '_Ty' to 'int', possible loss of data
-          with
-          [
-              _Ty=float
-          ]
-c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(579): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(1252): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-  Generating Code...
-  DM2122Prac.vcxproj -> C:\Users\Gary Quah\Documents\GitHub\SP2\Debug\Studio Project 2.exe
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (DM2122Prac.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  SP2_ChaseEnemyScene.cpp
+  DM2122Prac.vcxproj -> D:\Documents\GitHub\SP2\Debug\Studio Project 2.exe
