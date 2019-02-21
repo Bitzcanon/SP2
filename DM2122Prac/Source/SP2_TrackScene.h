@@ -173,7 +173,7 @@ private:
 
 	double healthPoints;
 
-	Buff * Buffs[20];
+	Buff * Buffs[50];
 	Barrier *Barriers[ROADBLOCKCOUNT];
 	Checkpoint *Checkpoints[CHECKPOINTCOUNT];
 

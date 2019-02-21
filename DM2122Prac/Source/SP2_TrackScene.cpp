@@ -117,7 +117,7 @@ void SP2_TrackScene::loadCheckpointCoordinates()
 
 void SP2_TrackScene::initBuff()
 {
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 50; i++)
 	{
 		Buffs[i] = NULL;
 	}
@@ -1210,7 +1210,6 @@ void SP2_TrackScene::Render()
 	for (size_t i = 0; i < BarrierList.size() / ROADBLOCKROWCOUNT; i++)
 	{
 		modelStack.PushMatrix();
-
 		modelStack.Translate(Barriers[i]->returnxPos(), Barriers[i]->returnyPos(), Barriers[i]->returnzPos());
 		modelStack.Scale(Vehicle.returnCarScale() * Barriers[i]->returnBarrierScale(), Vehicle.returnCarScale() * Barriers[i]->returnBarrierScale(), Vehicle.returnCarScale() * Barriers[i]->returnBarrierScale());
 		modelStack.Rotate((float)(Barriers[i]->returnBarrierRotation()), 0, 1, 0);
