@@ -102,6 +102,11 @@ private:
 		GEO_CHOCO,
 		GEO_GARAGEDOOR,
 		GEO_COIN,
+		GEO_MARKET1,
+		GEO_MARKET2,
+		GEO_MARKET3,
+		GEO_MARKET4,
+		GEO_MARKET5,
 
 		GEO_MENU,
 
@@ -135,6 +140,10 @@ private:
 	bool CloseToNPC(); //For the mechanic NPC, which is sitting down
 	bool CloseToDoor();
 	void UpdateDoor(double dt);
+	void UpdateInteraction(int i);
+	void UpdateMerchant(int i);
+	void RenderMarketPlace();
+	string NPCRandomText();
 	
 	RenderStrings text;
 	string UpdateFrameRate(float string);
@@ -146,10 +155,11 @@ private:
 	int transitionWheels;
 	float bounceTime;
 	bool interact;
-	NPCS NPCs[2];
+	NPCS NPCs[7];
 	float GarageDoorY, GarageDoorRotate;
 	bool GarageOpen;
 	Coins coins[2];
+	string NPCtext;
 
 	bool doMenu;
 };
