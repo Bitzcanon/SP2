@@ -655,7 +655,7 @@ void SP2_TrackScene::Update(double dt)
 		{
 			if (CollisionChecker(2, i, Barriers[i]->returnxPos(), Barriers[i]->returnzPos(), 1.4f, 0.9f) == true)
 			{
-				Barrier::BarrierDelay = 0.2f;
+				Barrier::BarrierDelay = 0.4f;
 				Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
 				Vehicle.setIsCollided(true);
 			}
@@ -664,7 +664,7 @@ void SP2_TrackScene::Update(double dt)
 		{
 			if (CollisionChecker(2, i, Barriers[i]->returnxPos(), Barriers[i]->returnzPos(), 0.9f, 1.4f) == true)
 			{
-				Barrier::BarrierDelay = 0.2f;
+				Barrier::BarrierDelay = 0.4f;
 				Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
 				Vehicle.setIsCollided(true);
 			}
@@ -673,7 +673,7 @@ void SP2_TrackScene::Update(double dt)
 	/*World border collision detection logic done by Winston*/
 	if ((Vehicle.newPosition.x * Vehicle.returnCarScale()) >= (CAMERABOUNDSORIGINAL - 4.5f) || ((Vehicle.newPosition.x * Vehicle.returnCarScale()) <= -(CAMERABOUNDSORIGINAL - 4.5f)) || ((Vehicle.newPosition.z * Vehicle.returnCarScale()) >= (CAMERABOUNDSORIGINAL - 4.5f)) || ((Vehicle.newPosition.z * Vehicle.returnCarScale()) <= -(CAMERABOUNDSORIGINAL - 4.5f)))
 	{
-		Barrier::BarrierDelay = 0.2f;
+		Barrier::BarrierDelay = 0.4f;
 		Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
 		Vehicle.setIsCollided(true);
 	}
@@ -734,6 +734,7 @@ void SP2_TrackScene::Update(double dt)
 	{
 		if (isLapCompleted == true)
 		{
+			cout << "NICEU" << endl;
 			lapCount++;
 			for (size_t i = 0; i < CheckpointList.size() / CHECKPOINTROWCOUNT; i++)
 			{
