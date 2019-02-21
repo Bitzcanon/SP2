@@ -17,9 +17,9 @@ Coins::~Coins()
 
 void Coins::CoinCollision(float playerx, float playerz)
 {
-	if (playerx > x - 10.f && playerx < x + 10.f)
+	if (playerx > x - 20.f && playerx < x + 20.f)
 	{
-		if (playerz > z - 10.f && playerz < z + 10.f)
+		if (playerz > z - 20.f && playerz < z + 20.f)
 		{
 			taken = true;
 		}

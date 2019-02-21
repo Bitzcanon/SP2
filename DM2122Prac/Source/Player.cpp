@@ -11,18 +11,21 @@ Player::Player()
 	maxSpeedUpgrade = saveFile.dataStorage[2];
 	accelerationUpgrade = saveFile.dataStorage[3];
 	maxAccelerationUpgrade = saveFile.dataStorage[4];
-	steerUpgrade = saveFile.dataStorage[5];
+	steerUpgrade = saveFile.dataStorage[5];		
+
+	//store into string array
+	kart = saveFile.dataStorageStrings[0];
+	wheels = saveFile.dataStorageStrings[1];
+	color = saveFile.dataStorageStrings[2];
+
+	//
+	changeSomething = false;
 }
 
 Player::~Player()
 {
-}
 
-bool Player::changeSomething = false;
-string Player::kart = "OBJ//Kart1.obj";
-string Player::wheels = "OBJ//Wheels1.obj";
-string Player::color = "Image/Colors/Red.tga";
-//
+}
 
 Player* Player::instance = nullptr;
 
@@ -34,7 +37,49 @@ Player* Player::getInstance()
 	}
 	return instance;
 }
+//
+void Player::setColor(string x)
+{
+	color = x;
+}
 
+
+string Player::returnColor()
+{
+	return color;
+}
+
+void Player::setChangeSomething(bool x)
+{
+	changeSomething = x;
+}
+
+bool Player::returnChangeSomething()
+{
+	return changeSomething;
+}
+
+//
+void Player::setKart(string x)
+{
+	kart = x;
+}
+
+string Player::returnKart()
+{
+	return kart;
+}
+
+string Player::returnWheels()
+{
+	return wheels;
+}
+
+void Player::setWheels(string x)
+{
+	wheels = x;
+}
+//
 void Player::loadSave()
 {
 	saveFile.readFrom();
@@ -42,7 +87,7 @@ void Player::loadSave()
 
 void Player::writeSave()
 {
-	saveFile.writeTo(coinCount, healthUpgrade, maxSpeedUpgrade, accelerationUpgrade, maxAccelerationUpgrade, steerUpgrade);
+	saveFile.writeTo(coinCount, healthUpgrade, maxSpeedUpgrade, accelerationUpgrade, maxAccelerationUpgrade, steerUpgrade , kart , wheels , color);
 }
 
 int Player::getCoinCount(void)

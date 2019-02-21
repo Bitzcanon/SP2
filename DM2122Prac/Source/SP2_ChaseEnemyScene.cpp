@@ -248,9 +248,12 @@ void SP2_ChaseEnemyScene::Init()
 	meshList[GEO_TESTCAR] = MeshBuilder::GenerateCube("Car", Color(0, 1, 0), 5, 1, 1);
 
 	//Default init for kart
-	meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", Player::kart);
-	meshList[GEO_KART]->textureID = LoadTGA(Player::color.c_str());
-	meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Car", Player::wheels);
+	meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", playerInstance->returnKart());
+	meshList[GEO_KART]->textureID = LoadTGA(playerInstance->returnColor().c_str());
+
+	meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Car", playerInstance->returnWheels());
+	meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
+
 	//Default init for kart
 	meshList[GEO_ROADBLOCK] = MeshBuilder::GenerateOBJ("RoadBlock", "OBJ//RoadBlock.obj");
 	meshList[GEO_MAZETILE] = MeshBuilder::GenerateOBJ("MazeTile", "OBJ//MazeTile.obj");
@@ -259,6 +262,9 @@ void SP2_ChaseEnemyScene::Init()
 
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("Light Sphere", Color(1.f, 1.f, 1.f), 32, 36, 1.f);
+
+	meshList[GEO_COINS] = MeshBuilder::GenerateOBJ("coin", "OBJ//Coin.obj");
+	meshList[GEO_COINS]->textureID = LoadTGA("Image//PlaceholderCoinTexture.tgaa");
 
 	//Set projection to Perspective and load projection matrix
 	Mtx44 projection;
@@ -272,6 +278,57 @@ void SP2_ChaseEnemyScene::Init()
 	cameraTarget = (Vehicle.newPosition.x + 1, Vehicle.newPosition.y + 1, Vehicle.newPosition.z + 10);
 
 	isWon = false;
+
+	initCoins();
+}
+
+void SP2_ChaseEnemyScene::initCoins()
+{
+	coin[0].SetCoinCoords(150.f, 175.f);
+	coin[1].SetCoinCoords(150.f, 125.f);
+	coin[2].SetCoinCoords(150.f, 75.f);
+	coin[3].SetCoinCoords(150.f, 25.f);
+	coin[4].SetCoinCoords(150.f, -25.f);
+	coin[5].SetCoinCoords(150.f, -75.f);
+	coin[6].SetCoinCoords(150.f, -125.f);
+	coin[7].SetCoinCoords(150.f, -175.f);
+	coin[8].SetCoinCoords(50.f, 175.f);
+	coin[9].SetCoinCoords(50.f, 125.f);
+	coin[10].SetCoinCoords(50.f, 75.f);
+	coin[11].SetCoinCoords(50.f, 25.f);
+	coin[12].SetCoinCoords(50.f, -25.f);
+	coin[13].SetCoinCoords(50.f, -75.f);
+	coin[14].SetCoinCoords(50.f, -125.f);
+	coin[15].SetCoinCoords(50.f, -175.f);
+	coin[16].SetCoinCoords(-50.f, 175.f);
+	coin[17].SetCoinCoords(-50.f, 125.f);
+	coin[18].SetCoinCoords(-50.f, 75.f);
+	coin[19].SetCoinCoords(-50.f, 25.f);
+	coin[20].SetCoinCoords(-50.f, -25.f);
+	coin[21].SetCoinCoords(-50.f, -75.f);
+	coin[22].SetCoinCoords(-50.f, -125.f);
+	coin[23].SetCoinCoords(-50.f, -175.f);
+	coin[24].SetCoinCoords(-150.f, 175.f);
+	coin[25].SetCoinCoords(-150.f, 125.f);
+	coin[26].SetCoinCoords(-150.f, 75.f);
+	coin[27].SetCoinCoords(-150.f, 25.f);
+	coin[28].SetCoinCoords(-150.f, -25.f);
+	coin[29].SetCoinCoords(-150.f, -75.f);
+	coin[30].SetCoinCoords(-150.f, -125.f);
+	coin[31].SetCoinCoords(-150.f, -175.f);
+}
+
+int SP2_ChaseEnemyScene::countCoins()
+{
+	int count = 0;
+	for (int i = 0; i < 32; i++)
+	{
+		if (coin[i].CheckTaken())
+		{
+			count++;
+		}
+	}
+	return count;
 }
 
 void SP2_ChaseEnemyScene::Update(double dt)
@@ -281,16 +338,6 @@ void SP2_ChaseEnemyScene::Update(double dt)
 	if (Application::IsKeyPressed('M'))
 	{
 		Application::SceneSetter = 0;
-	}
-
-	if (Player::changeSomething == true) // reload car model.
-	{
-		cout << Player::color << endl;
-		meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", Player::kart);
-		meshList[GEO_KART]->textureID = LoadTGA(Player::color.c_str());
-		meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels", Player::wheels);
-		meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
-		Player::changeSomething = false;
 	}
 
 	if (bounceTime > 0) //updating bouncetime
@@ -378,6 +425,10 @@ void SP2_ChaseEnemyScene::Update(double dt)
 		cameraPos.z = -CAMERABOUNDSCHASE + 1.f;
 	}
 
+	for (int i = 0; i < 32; i++)
+	{
+		coin[i].CoinCollision(cameraPos.x, cameraPos.z);
+	}
 }
 
 /*Original logic done by Gary, Function and code organization done by Winston*/
@@ -711,6 +762,19 @@ void SP2_ChaseEnemyScene::Render()
 		modelStack.PopMatrix();
 	}
 
+	//Draw coins in the map (Stuff by Afiq)
+	for (int i = 0; i < 32; i++)
+	{
+		if (!coin[i].CheckTaken())
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(coin[i].getX(), 0.f, coin[i].getZ());
+			modelStack.Scale(5.f, 5.f, 5.f);
+			RenderMesh(meshList[GEO_COINS], false);
+			modelStack.PopMatrix();
+		}
+	}
+
 	//Draw Skybox
 	modelStack.PushMatrix();
 	{
@@ -740,6 +804,8 @@ void SP2_ChaseEnemyScene::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.x), Color(1, 0, 0), 1, -1, 46);
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.y), Color(1, 0, 0), 1, -1, 44);
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.z), Color(1, 0, 0), 1, -1, 42);
+
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(countCoins()), Color(1, 0, 0), 1, -1, 38);
 
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(playerInstance->getCoinCount()), Color(0, 1, 0), 1, -1, 40);
 		}

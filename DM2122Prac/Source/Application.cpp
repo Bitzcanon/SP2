@@ -135,7 +135,7 @@ void Application::Run()
 
 	scene[1] = new SP2_TrackScene();
 	scene[2] = new SP2_ChaseEnemyScene();
-	/*scene[3] = new SP2_SurvivalScene();*/
+//	scene[3] = new SP2_SurvivalScene();
 	scene[4] = new SP2_NPCScene();
 
 	for (int i = 0; i < 5; i++)
