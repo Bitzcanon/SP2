@@ -14,10 +14,12 @@ public:
 	Save();
 	~Save();
 	void readFrom();
-	void writeTo(int coinCount, int healthUpgrade, int maxSpeedUpgrade, int accelerationUpgrade, int maxAccelerationUpgrade, int steerUpgrade);
+	void writeTo(int coinCount, int healthUpgrade, int maxSpeedUpgrade, int accelerationUpgrade, int maxAccelerationUpgrade, int steerUpgrade, string kart, string wheels, string color);
 
 	int getDataStorage(void);
 	int dataStorage[6];
+	string dataStorageStrings[3];
+
 private:
 };
 

@@ -4,3 +4,6 @@
 0
 0
 0
+OBJ//Kart3.obj
+OBJ//Wheels1.obj
+Image//Colors//Orange.tga

@@ -506,10 +506,12 @@ void SP2_TrackScene::Init()
 	meshList[GEO_TESTCAR] = MeshBuilder::GenerateCube("Car", Color(0, 1, 0), 5, 1, 1);
 
 	//Default init for kart
-	meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", Player::kart);
-	meshList[GEO_KART]->textureID = LoadTGA(Player::color.c_str());
-	meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Car", Player::wheels);
-	//Default init for kart
+	meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", playerInstance->returnKart());
+	meshList[GEO_KART]->textureID = LoadTGA(playerInstance->returnColor().c_str());
+
+	meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Car", playerInstance->returnWheels());
+	meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
+	//
 
 	meshList[GEO_FINISHLINE] = MeshBuilder::GenerateOBJ("modelFinishLine", "OBJ//FinishLine.obj");
 	meshList[GEO_FINISHLINE]->textureID = LoadTGA("Image//FinishLine.tga");
@@ -588,14 +590,15 @@ void SP2_TrackScene::Update(double dt)
 		Application::SceneSetter = 0;
 	}
 
-	if (Player::changeSomething == true) // reload car model.
+	if (playerInstance->returnChangeSomething() == true) // reload car model.
 	{
-		cout << Player::color << endl;
-		meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", Player::kart);
-		meshList[GEO_KART]->textureID = LoadTGA(Player::color.c_str());
-		meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels" , Player::wheels);
+	//	cout << Player::color << endl;
+		meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", playerInstance->returnKart());
+		meshList[GEO_KART]->textureID = LoadTGA(playerInstance->returnColor().c_str());
+
+		meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels" , playerInstance->returnWheels());
 		meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
-		Player::changeSomething = false;
+		playerInstance->setChangeSomething(false);
 	}
 
 	propellerRotation += (float)(180 * dt);
