@@ -248,6 +248,20 @@ void SP2_NPCScene::Init()
 	meshList[GEO_COIN] = MeshBuilder::GenerateOBJ("coin", "OBJ//Coin.obj");
 	meshList[GEO_COIN]->textureID = LoadTGA("Image//PlaceholderCoinTexture.tga");
 
+	meshList[GEO_MARKET1] = MeshBuilder::GenerateOBJ("market1", "OBJ/MarketPlace.obj");
+	meshList[GEO_MARKET1]->textureID = LoadTGA("Image//MarketTexture1.tga");
+
+	meshList[GEO_MARKET2] = MeshBuilder::GenerateOBJ("market2", "OBJ/MarketPlace.obj");
+	meshList[GEO_MARKET2]->textureID = LoadTGA("Image//MarketTexture2.tga");
+
+	meshList[GEO_MARKET3] = MeshBuilder::GenerateOBJ("market3", "OBJ/MarketPlace.obj");
+	meshList[GEO_MARKET3]->textureID = LoadTGA("Image//MarketTexture3.tga");
+
+	meshList[GEO_MARKET4] = MeshBuilder::GenerateOBJ("market4", "OBJ/MarketPlace.obj");
+	meshList[GEO_MARKET4]->textureID = LoadTGA("Image//MarketTexture4.tga");
+
+	meshList[GEO_MARKET5] = MeshBuilder::GenerateOBJ("market5", "OBJ/MarketPlace.obj");
+	meshList[GEO_MARKET5]->textureID = LoadTGA("Image//MarketTexture5.tga");
 	//Set projection to Perspective and load projection matrix
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
@@ -255,6 +269,11 @@ void SP2_NPCScene::Init()
 
 	NPCs[0].setCoordsNPC(-20.f, 20.f);  //sets the coordinates of the npcs
 	NPCs[1].setCoordsNPC(6.f, -50.f);
+	NPCs[2].setCoordsNPC(61.f, 20.f); NPCs[2].setDirection(2);
+	NPCs[3].setCoordsNPC(61.f, 38.f); NPCs[3].setDirection(2);
+	NPCs[4].setCoordsNPC(0.f, 59.f); NPCs[4].setDirection(1);
+	NPCs[5].setCoordsNPC(-61.f, 20.f);
+	NPCs[6].setCoordsNPC(-61.f, 38.f);
 	GarageDoorY = 6.685f; GarageDoorRotate = 0.f; GarageOpen = false;
 	//coins[0].SetCoinCoords(10.f, 50.f); coins[1].SetCoinCoords(100.f, 90.f);
 }
@@ -399,9 +418,51 @@ void SP2_NPCScene::Update(double dt)
 		NPCs[i].MoveNPC(dt, i);
 	}
 
+	if (Application::IsKeyPressed('E') && CloseToNPC() && !interact)
+	{
+		interact = true;
+		bounceTime = 0.2f;
+	}
+
+	for (int i = 0; i < 7; i++)
+	{
+		if (Application::IsKeyPressed('R') && NPCs[i].CloseToNPC(camera.position.x, camera.position.z) && !NPCs[i].IsInteracting() && bounceTime <= 0)
+		{
+			NPCtext = NPCRandomText();
+			NPCs[i].Interacts(1);
+			bounceTime = 0.2f;
+		}
+		if (NPCs[i].IsInteracting() && i < 2)
+		{
+			UpdateInteraction(i);
+		}
+		else if (NPCs[i].IsInteracting() && i >= 2)
+		{
+			UpdateMerchant(i);
+		}
+	}
 	UpdateDoor(dt);
-	coins[0].CoinCollision(camera.position.x, camera.position.z);
-	coins[1].CoinCollision(camera.position.x, camera.position.z);
+	//coins[0].CoinCollision(camera.position.x, camera.position.z);
+	//coins[1].CoinCollision(camera.position.x, camera.position.z);
+}
+
+void SP2_NPCScene::UpdateInteraction(int i)
+{
+
+	if (Application::IsKeyPressed('R') && bounceTime <= 0)
+	{
+		NPCs[i].Interacts(0);
+		bounceTime = 0.2f;
+	}
+}
+
+void SP2_NPCScene::UpdateMerchant(int i)
+{
+	if (Application::IsKeyPressed('R') && bounceTime <= 0)
+	{
+		NPCs[i].Interacts(0);
+		bounceTime = 0.2f;
+	}
 }
 
 void SP2_NPCScene::UpdateDoor(double dt)
@@ -663,6 +724,63 @@ bool SP2_NPCScene::CloseToDoor()
 	return false;
 }
 
+void SP2_NPCScene::RenderMarketPlace()
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 0.f, 290.f);
+	modelStack.Scale(5.f, 5.f, 5.f);
+	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_MARKET1], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(300.f, 0.f, 200.f);
+	modelStack.Scale(5.f, 5.f, 5.f);
+	modelStack.Rotate(90.f, 0.f, -1.f, 0.f);
+	RenderMesh(meshList[GEO_MARKET2], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-300.f, 0.f, 200.f);
+	modelStack.Scale(5.f, 5.f, 5.f);
+	modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_MARKET3], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-300.f, 0.f, 100.f);
+	modelStack.Scale(5.f, 5.f, 5.f);
+	modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_MARKET4], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(300.f, 0.f, 100.f);
+	modelStack.Scale(5.f, 5.f, 5.f);
+	modelStack.Rotate(90.f, 0.f, -1.f, 0.f);
+	RenderMesh(meshList[GEO_MARKET5], false);
+	modelStack.PopMatrix();
+}
+
+string SP2_NPCScene::NPCRandomText()
+{
+	switch (rand() % 4)
+	{
+	case 0:
+		return "Hi there! I can see that you have potential as a driver!";
+		break;
+	case 1:
+		return "Hi!";
+		break;
+	case 2:
+		return "Hello there!";
+		break;
+	case 3:
+		return "I hope your driving is good!";
+		break;
+	}
+}
+
 void SP2_NPCScene::Render()
 {
 	//Clear color & depth buffer every time
@@ -734,7 +852,7 @@ void SP2_NPCScene::Render()
 	RenderMesh(meshList[GEO_NPC_MECHANIC], false);
 	modelStack.PopMatrix();
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 7; i++)
 	{
 		modelStack.PushMatrix();
 		modelStack.Scale(5.f, 5.f, 5.f);
@@ -742,6 +860,11 @@ void SP2_NPCScene::Render()
 		switch (i)
 		{
 		case 0:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+		case 6:
 			modelStack.Rotate(NPCs[i].getDirection() * 90.f, 0.f, 1.f, 0.f);
 			break;
 		case 1:
@@ -758,7 +881,7 @@ void SP2_NPCScene::Render()
 	RenderMesh(meshList[GEO_CHOCO], true);
 	modelStack.PopMatrix();
 
-	for (int i = 0; i < 2; i++)
+	/*for (int i = 0; i < 2; i++)
 	{
 		if (!coins[i].CheckTaken())
 		{
@@ -768,7 +891,7 @@ void SP2_NPCScene::Render()
 			RenderMesh(meshList[GEO_COIN], true);
 			modelStack.PopMatrix();
 		}
-	}
+	}*/
 
 	modelStack.PushMatrix();
 	modelStack.Scale(5.f, 5.f, 5.f);
@@ -777,17 +900,19 @@ void SP2_NPCScene::Render()
 	RenderMesh(meshList[GEO_GARAGEDOOR], false);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-		modelStack.Translate(-240, 10, -380);
-		modelStack.Rotate(rotateAngle, 0, 1, 0);
-		modelStack.Scale(50, 50, 50);
-		RenderMesh(meshList[GEO_KART], true);
+	RenderMarketPlace();
 
-			modelStack.PushMatrix();
-			RenderMesh(meshList[GEO_WHEELS], true);
-			modelStack.PopMatrix();
-			modelStack.PopMatrix();
-			
+	modelStack.PushMatrix();
+	modelStack.Translate(-240, 10, -380);
+	modelStack.Rotate(rotateAngle, 0, 1, 0);
+	modelStack.Scale(50, 50, 50);
+	RenderMesh(meshList[GEO_KART], true);
+
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_WHEELS], true);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
 	//Draw Skybox
 	modelStack.PushMatrix();
 	{
@@ -797,7 +922,7 @@ void SP2_NPCScene::Render()
 		modelStack.PushMatrix();
 		{
 			RenderTextOnScreen(meshList[GEO_TEXT], UpdateFrameRate(FPS), Color(1, 1, 0), 2, 72, 55);
-			
+
 		}
 		modelStack.PopMatrix();
 
@@ -834,7 +959,14 @@ void SP2_NPCScene::Render()
 	}
 	if (NPCs[0].CloseToNPC(camera.position.x, camera.position.z) || NPCs[1].CloseToNPC(camera.position.x, camera.position.z))
 	{
-	RenderTextOnScreen(meshList[GEO_TEXT], "Press E to interact with NPC", Color(1, 1, 0), 1, -1, 10);
+		if (!NPCs[0].IsInteracting() && !NPCs[1].IsInteracting())
+		{
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press R to interact with NPC", Color(1, 1, 0), 1, -1, 10);
+		}
+		else if (NPCs[0].IsInteracting() || NPCs[1].IsInteracting())
+		{
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press R to exit interact with NPC", Color(1, 1, 0), 1, -1, 10);
+		}
 	}
 	if (CloseToDoor() && !GarageOpen)
 	{
@@ -843,6 +975,40 @@ void SP2_NPCScene::Render()
 	else if (CloseToDoor() && GarageOpen)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to close garage door", Color(1, 1, 0), 1, -1, 10);
+	}
+
+	if (NPCs[0].IsInteracting() || NPCs[1].IsInteracting())
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], NPCtext, Color(1, 1, 0), 1, -1, 12);
+	}
+
+	for (int i = 2; i < 7; i++)
+	{
+		if (NPCs[i].CloseToNPC(camera.position.x, camera.position.z) && !NPCs[i].IsInteracting())
+		{
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press R to interact with merchant NPC", Color(1, 1, 0), 1, -1, 10);
+		}
+		if (NPCs[i].IsInteracting())
+		{
+			switch (i)
+			{
+			case 2:
+				RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's health?", Color(1, 1, 0), 1, -1, 12);
+				break;
+			case 3:
+				RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's max speed?", Color(1, 1, 0), 1, -1, 12);
+				break;
+			case 4:
+				RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's acceleration?", Color(1, 1, 0), 1, -1, 12);
+				break;
+			case 5:
+				RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's max acceleration?", Color(1, 1, 0), 1, -1, 12);
+				break;
+			case 6:
+				RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's steering?", Color(1, 1, 0), 1, -1, 12);
+				break;
+			}
+		}
 	}
 }
 
