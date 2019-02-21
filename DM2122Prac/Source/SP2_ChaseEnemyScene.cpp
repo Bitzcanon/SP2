@@ -10,7 +10,7 @@
 
 SP2_ChaseEnemyScene::SP2_ChaseEnemyScene()
 {
-
+	playerInstance = Player::getInstance();
 }
 
 SP2_ChaseEnemyScene::~SP2_ChaseEnemyScene()
@@ -266,9 +266,6 @@ void SP2_ChaseEnemyScene::Init()
 	projectionStack.LoadMatrix(projection);
 
 	//Initialise variables
-
-	playerInstance = Player::getInstance();
-
 	vehicleSpeed = 0;
 
 	cameraPos = (Vehicle.newPosition.x, Vehicle.newPosition.y, Vehicle.newPosition.z);
@@ -754,6 +751,7 @@ void SP2_ChaseEnemyScene::Render()
 
 void SP2_ChaseEnemyScene::Exit()
 {
+	playerInstance->writeSave();
 	// Cleanup here
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
