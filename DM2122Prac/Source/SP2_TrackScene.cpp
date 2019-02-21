@@ -17,7 +17,6 @@ SP2_TrackScene::~SP2_TrackScene()
 {
 
 }
-
 static const float SKYBOXSIZE = 10000.f;
 
 void SP2_TrackScene::loadSpeedBuffCoordinates()
@@ -117,7 +116,7 @@ void SP2_TrackScene::loadCheckpointCoordinates()
 
 void SP2_TrackScene::initBuff()
 {
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 100; i++)
 	{
 		Buffs[i] = NULL;
 	}
@@ -332,7 +331,7 @@ void SP2_TrackScene::Init()
 	loadCheckpointCoordinates();
 	initCheckpoint();
 	
-	healthPoints = 10;
+	durability = 50;
 
 	tmpBool = false;
 
@@ -571,7 +570,7 @@ void SP2_TrackScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
 
-	if (healthPoints <= 0 && ResetStart == true) // causes the reset timer to trigger once
+	if (durability <= 0 && ResetStart == true) // causes the reset timer to trigger once
 	{
 		ResetTimer = 4;
 		ResetStart = false;
@@ -623,12 +622,12 @@ void SP2_TrackScene::Update(double dt)
 			SlowBuff::timer = 2;
 		}
 	}
-
+	//*Trap logic done by Gary*/
 	for (size_t i = (SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4); i < ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4) + (TrapList.size() / 4 )); i++)
 	{
 		if (CollisionChecker(1, i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
 		{
-			healthPoints -= 0.05;
+			durability -= 0.5;
 		}
 	}
 	
@@ -636,16 +635,15 @@ void SP2_TrackScene::Update(double dt)
 	if (SpeedBuff::timer > 0)
 	{
 		SpeedBuff::timer = SpeedBuff::timer - (float)(1 * dt);
-		//Vehicle.setSpeed(0.5f);
+		Vehicle.setSpeed(0.5f);
 	}
 
 	//Timer after stepping on SlowBuff
 	if (SlowBuff::timer > 0)
 	{
 		SlowBuff::timer = SlowBuff::timer - (float)(1 * dt);
-		//Vehicle.setSpeed(0.05);
+		Vehicle.setSpeed(0.2);
 	}
-
 
 	/*RoadBlock logic done by Winston*/
 	for (size_t i = 0; i < BarrierList.size() / ROADBLOCKROWCOUNT; i++)
@@ -655,7 +653,7 @@ void SP2_TrackScene::Update(double dt)
 		{
 			if (CollisionChecker(2, i, Barriers[i]->returnxPos(), Barriers[i]->returnzPos(), 1.4f, 0.9f) == true)
 			{
-				Barrier::BarrierDelay = 0.2f;
+				Barrier::BarrierDelay = 0.4f;
 				Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
 				Vehicle.setIsCollided(true);
 			}
@@ -664,7 +662,7 @@ void SP2_TrackScene::Update(double dt)
 		{
 			if (CollisionChecker(2, i, Barriers[i]->returnxPos(), Barriers[i]->returnzPos(), 0.9f, 1.4f) == true)
 			{
-				Barrier::BarrierDelay = 0.2f;
+				Barrier::BarrierDelay = 0.4f;
 				Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
 				Vehicle.setIsCollided(true);
 			}
@@ -673,7 +671,7 @@ void SP2_TrackScene::Update(double dt)
 	/*World border collision detection logic done by Winston*/
 	if ((Vehicle.newPosition.x * Vehicle.returnCarScale()) >= (CAMERABOUNDSORIGINAL - 4.5f) || ((Vehicle.newPosition.x * Vehicle.returnCarScale()) <= -(CAMERABOUNDSORIGINAL - 4.5f)) || ((Vehicle.newPosition.z * Vehicle.returnCarScale()) >= (CAMERABOUNDSORIGINAL - 4.5f)) || ((Vehicle.newPosition.z * Vehicle.returnCarScale()) <= -(CAMERABOUNDSORIGINAL - 4.5f)))
 	{
-		Barrier::BarrierDelay = 0.2f;
+		Barrier::BarrierDelay = 0.4f;
 		Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
 		Vehicle.setIsCollided(true);
 	}
@@ -734,6 +732,7 @@ void SP2_TrackScene::Update(double dt)
 	{
 		if (isLapCompleted == true)
 		{
+			cout << "NICEU" << endl;
 			lapCount++;
 			for (size_t i = 0; i < CheckpointList.size() / CHECKPOINTROWCOUNT; i++)
 			{
@@ -1198,7 +1197,7 @@ void SP2_TrackScene::Render()
 	for (size_t i = ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4)); i < ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4) + (TrapList.size() / 4)); i++)
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(0, 0, 0);
+		modelStack.Translate(Buffs[i]->returnxPos(), Buffs[i]->returnyPos(), Buffs[i]->returnzPos());
 		modelStack.Scale(Vehicle.returnCarScale(), Vehicle.returnCarScale(), Vehicle.returnCarScale());
 		RenderMesh(meshList[GEO_TRAP], false);
 		modelStack.PopMatrix();
@@ -1209,7 +1208,6 @@ void SP2_TrackScene::Render()
 	for (size_t i = 0; i < BarrierList.size() / ROADBLOCKROWCOUNT; i++)
 	{
 		modelStack.PushMatrix();
-
 		modelStack.Translate(Barriers[i]->returnxPos(), Barriers[i]->returnyPos(), Barriers[i]->returnzPos());
 		modelStack.Scale(Vehicle.returnCarScale() * Barriers[i]->returnBarrierScale(), Vehicle.returnCarScale() * Barriers[i]->returnBarrierScale(), Vehicle.returnCarScale() * Barriers[i]->returnBarrierScale());
 		modelStack.Rotate((float)(Barriers[i]->returnBarrierRotation()), 0, 1, 0);
@@ -1268,10 +1266,14 @@ void SP2_TrackScene::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.x), Color(1, 0, 0), 1, -1, 46);
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.y), Color(1, 0, 0), 1, -1, 44);
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.z), Color(1, 0, 0), 1, -1, 42);
-			
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(healthPoints), Color(1 , 1 , 1), 1, -1, 38);
 
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(playerInstance->getCoinCount()), Color(0, 1, 0), 1, -1, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Durability:", Color(1, 1, 1), 1, -1, 38);
+			if (durability >= 0)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(durability), Color(1, 1, 1), 1, 10, 38);
+			}
+
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(playerInstance->getCoinCount()), Color(0, 1, 0), 1, -1, 60);
 
 			int countdown = ResetTimer;
 			if (ResetTimer > 0)

@@ -301,10 +301,10 @@ void SP2_ChaseEnemyScene::Update(double dt)
 		bounceTime -= (float)(1 * dt);
 	}
 
-	/*RoadBlock logic done by Winston*/
+	/*Maze Tile logic done by Winston*/
 	for (size_t i = 0; i < BarrierList.size() / MAZETILEROWCOUNT; i++)
 	{
-		if (CollisionChecker(1, i, Barriers[i]->returnxPos(), Barriers[i]->returnzPos(), 2.f, 2.f) == true)
+		if (CollisionChecker(1, i, Barriers[i]->returnxPos(), Barriers[i]->returnzPos(), 1.9f, 1.9f) == true)
 		{
 			Barrier::BarrierDelay = 0.2f;
 			Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
@@ -312,7 +312,7 @@ void SP2_ChaseEnemyScene::Update(double dt)
 		}
 	}
 	/*World border collision detection logic done by Winston*/
-	if (((Vehicle.newPosition.x * 10) >= (CAMERABOUNDSCHASE - 4.5f)) || ((Vehicle.newPosition.x * 10) <= -(CAMERABOUNDSCHASE - 4.5f)) || ((Vehicle.newPosition.z * 10) >= (CAMERABOUNDSCHASE - 4.5f)) || ((Vehicle.newPosition.z * 10) <= -(CAMERABOUNDSCHASE - 4.5f)))
+	if (((Vehicle.newPosition.x * (Vehicle.returnCarScale() / 4)) >= (CAMERABOUNDSCHASE - 4.5f)) || ((Vehicle.newPosition.x * (Vehicle.returnCarScale() / 4)) <= -(CAMERABOUNDSCHASE - 4.5f)) || ((Vehicle.newPosition.z * (Vehicle.returnCarScale() / 4)) >= (CAMERABOUNDSCHASE - 4.5f)) || ((Vehicle.newPosition.z * (Vehicle.returnCarScale() / 4)) <= -(CAMERABOUNDSCHASE - 4.5f)))
 	{
 		Barrier::BarrierDelay = 0.2f;
 		Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
@@ -355,13 +355,13 @@ void SP2_ChaseEnemyScene::Update(double dt)
 	Vehicle.Update(dt);
 	vehicleSpeed = Vehicle.returnSpeed();
 
-	cameraPos.x = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * Vehicle.returnCarScale();
-	cameraPos.y = Vehicle.newPosition.y + 15;
-	cameraPos.z = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * Vehicle.returnCarScale();
+	cameraPos.x = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * (Vehicle.returnCarScale() / 4);
+	cameraPos.y = Vehicle.newPosition.y + 10;
+	cameraPos.z = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * (Vehicle.returnCarScale() / 4);
 
-	cameraTarget.x = Vehicle.newPosition.x * Vehicle.returnCarScale();
+	cameraTarget.x = Vehicle.newPosition.x * (Vehicle.returnCarScale() / 4);
 	cameraTarget.y = Vehicle.newPosition.y;
-	cameraTarget.z = Vehicle.newPosition.z * Vehicle.returnCarScale();
+	cameraTarget.z = Vehicle.newPosition.z * (Vehicle.returnCarScale() / 4);
 
 	camera.Update(dt);
 	if (cameraPos.x >= CAMERABOUNDSCHASE)
@@ -386,8 +386,8 @@ void SP2_ChaseEnemyScene::Update(double dt)
 /*Original logic done by Gary, Function and code organization done by Winston*/
 bool SP2_ChaseEnemyScene::CollisionChecker(int type, int index, float objX, float objZ, float length, float width)
 {
-	float minimumXObj = objX / Vehicle.returnCarScale();
-	float minimumZObj = objZ / Vehicle.returnCarScale();
+	float minimumXObj = objX / (Vehicle.returnCarScale() / 4);
+	float minimumZObj = objZ / (Vehicle.returnCarScale() / 4);
 	float maximumXObj = NULL;
 	float maximumZObj = NULL;
 
@@ -395,8 +395,8 @@ bool SP2_ChaseEnemyScene::CollisionChecker(int type, int index, float objX, floa
 	{
 	case 1:
 	{
-		maximumXObj = objX / Vehicle.returnCarScale() + length;
-		maximumZObj = objZ / Vehicle.returnCarScale() + width;
+		maximumXObj = objX / (Vehicle.returnCarScale() / 4) + length;
+		maximumZObj = objZ / (Vehicle.returnCarScale() / 4) + width;
 		break;
 	}
 	/*case 2:
@@ -429,7 +429,7 @@ bool SP2_ChaseEnemyScene::CollisionChecker(int type, int index, float objX, floa
 	}
 }
 
-static const float SKYBOXSIZE = 750.f;
+static const float SKYBOXSIZE = 500.f;
 
 /*FPS counter done by Winston*/
 string SP2_ChaseEnemyScene::UpdateFrameRate(float fps)
@@ -618,7 +618,7 @@ void SP2_ChaseEnemyScene::RenderSkybox()
 	//Bottom of Skybox
 	modelStack.PushMatrix();
 	{
-		modelStack.Translate(0, 373.5f, 0);
+		modelStack.Translate(0, CAMERABOUNDSCHASE, 0);
 		modelStack.Rotate(-90, 1, 0, 0);
 		modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
 		modelStack.Rotate(-90, 0, 0, 1);
@@ -690,7 +690,7 @@ void SP2_ChaseEnemyScene::Render()
 	//Draw Test Car (Modelled by Gary, rendered by Winston)
 	modelStack.PushMatrix();
 	{
-		modelStack.Scale(Vehicle.returnCarScale(), Vehicle.returnCarScale(), Vehicle.returnCarScale());
+		modelStack.Scale(Vehicle.returnCarScale() / 4, Vehicle.returnCarScale() / 4, Vehicle.returnCarScale() / 4);
 
 		modelStack.Translate(Vehicle.newPosition.x, Vehicle.newPosition.y, Vehicle.newPosition.z);
 		modelStack.Rotate(Vehicle.steerAngle, 0, 1, 0);
@@ -709,7 +709,7 @@ void SP2_ChaseEnemyScene::Render()
 		modelStack.PushMatrix();
 
 		modelStack.Translate(Barriers[i]->returnxPos(), Barriers[i]->returnyPos(), Barriers[i]->returnzPos());
-		modelStack.Scale(Vehicle.returnCarScale(), Vehicle.returnCarScale(), Vehicle.returnCarScale());
+		modelStack.Scale(Vehicle.returnCarScale() / 4, Vehicle.returnCarScale() / 4, Vehicle.returnCarScale() / 4);
 		RenderMesh(meshList[GEO_MAZETILE], true); //set lighting to true once completed
 		modelStack.PopMatrix();
 	}

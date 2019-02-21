@@ -102,11 +102,13 @@
     <ClCompile Include="Source\SP2_ChaseEnemyScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-
     <ClCompile Include="Source\Trap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Checkpoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Save.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -207,11 +209,13 @@
     <ClInclude Include="Source\Definitions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-
     <ClInclude Include="Source\Trap.h">
- 	 <Filter>Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Checkpoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Save.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

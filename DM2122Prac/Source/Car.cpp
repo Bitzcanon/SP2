@@ -316,6 +316,10 @@ void Car::decelerateCar(double dt)
 {
 	if (isDrivingForward)
 	{
+		if (acceleration >= 0)
+		{
+			acceleration = 0;
+		}
 		acceleration -= 0.025f;
 		speed += (float)(acceleration * dt);
 		newPosition.x = car.returnXPos() + (sin(Math::DegreeToRadian(steerAngle)) * speed);
@@ -336,6 +340,10 @@ void Car::decelerateCar(double dt)
 	}
 	if (isDrivingBackward)
 	{
+		if (acceleration <= 0)
+		{
+			acceleration = 0;
+		}
 		acceleration += 0.025f;
 		speed += (float)(acceleration * dt);
 		newPosition.x = car.returnXPos() + (sin(Math::DegreeToRadian(steerAngle)) * speed);
