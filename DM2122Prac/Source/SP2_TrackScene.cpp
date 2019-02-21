@@ -1301,7 +1301,6 @@ void SP2_TrackScene::Render()
 void SP2_TrackScene::Exit()
 {
 	playerInstance->writeSave();
-
 	// Cleanup here
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
