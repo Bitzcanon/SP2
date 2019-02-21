@@ -1,42 +1,6 @@
-newmtl initialShadingGroup
+newmtl Track:initialShadingGroup
 illum 4
 Kd 0.50 0.50 0.50
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-Ni 1.00
-newmtl npc_fountain:lambert3SG
-illum 4
-Kd 0.78 0.78 0.78
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-Ni 1.00
-newmtl npc_fountain:lambert5SG
-illum 4
-Kd 0.00 0.69 1.00
-Ka 0.00 0.00 0.00
-Tf 0.35 0.35 0.35
-Ni 1.00
-newmtl npc_fountain:lambert6SG
-illum 4
-Kd 1.00 1.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-Ni 1.00
-newmtl npc_fountain1:lambert3SG
-illum 4
-Kd 0.78 0.78 0.78
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-Ni 1.00
-newmtl npc_fountain1:lambert5SG
-illum 4
-Kd 0.00 0.69 1.00
-Ka 0.00 0.00 0.00
-Tf 0.35 0.35 0.35
-Ni 1.00
-newmtl npc_fountain1:lambert6SG
-illum 4
-Kd 1.00 1.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 Ni 1.00
