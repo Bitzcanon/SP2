@@ -513,10 +513,12 @@ void SP2_TrackScene::Init()
 	meshList[GEO_FINISHLINE] = MeshBuilder::GenerateOBJ("modelFinishLine", "OBJ//FinishLine.obj");
 	meshList[GEO_FINISHLINE]->textureID = LoadTGA("Image//FinishLine.tga");
 
-	meshList[GEO_PROPELLER] = MeshBuilder::GenerateOBJ("modelPropeller", "OBJ//Propeller.obj");
+	meshList[GEO_PROPELLERFINISH] = MeshBuilder::GenerateOBJ("modelPropeller", "OBJ//PropellerFinish.obj");
 
 	meshList[GEO_CHECKPOINT] = MeshBuilder::GenerateOBJ("modelCheckpoint", "OBJ//Checkpoint.obj");
 	meshList[GEO_CHECKPOINT]->textureID = LoadTGA("Image//Checkpoint.tga");
+
+	meshList[GEO_PROPELLERCHECKPOINT] = MeshBuilder::GenerateOBJ("modelPropeller", "OBJ//PropellerCheckpoint.obj");
 
 	/* Gary ENUMS*/
 
@@ -576,7 +578,7 @@ void SP2_TrackScene::Update(double dt)
 	}
 	if (ResetTimer > 0) 
 	{
-		ResetTimer -= 1 * dt;
+		ResetTimer -= (float)(1 * dt);
 	}
 	if (ResetTimer < 0)
 	{
@@ -691,11 +693,24 @@ void SP2_TrackScene::Update(double dt)
 	/*Checkpoint logic done by Winston*/
 	for (size_t i = 0; i < CheckpointList.size() / CHECKPOINTROWCOUNT; i++)
 	{
-		if (CollisionChecker(4, i, Checkpoints[i]->returnxPos(), Checkpoints[i]->returnzPos(), 1.f, 2.f) == true)
+		if (Checkpoints[i]->returnCheckpointRotation() == 90 || Checkpoints[i]->returnCheckpointRotation() == 270)
 		{
-			if (Checkpoints[i]->returnIsPassedThrough() == false)
+			if (CollisionChecker(4, i, Checkpoints[i]->returnxPos(), Checkpoints[i]->returnzPos(), 1.f, 4.f) == true)
 			{
-				Checkpoints[i]->passedThroughCheckpoint();
+				if (Checkpoints[i]->returnIsPassedThrough() == false)
+				{
+					Checkpoints[i]->passedThroughCheckpoint();
+				}
+			}
+		}
+		else
+		{
+			if (CollisionChecker(4, i, Checkpoints[i]->returnxPos(), Checkpoints[i]->returnzPos(), 4.f, 1.f) == true)
+			{
+				if (Checkpoints[i]->returnIsPassedThrough() == false)
+				{
+					Checkpoints[i]->passedThroughCheckpoint();
+				}
 			}
 		}
 	}
@@ -720,7 +735,6 @@ void SP2_TrackScene::Update(double dt)
 		if (isLapCompleted == true)
 		{
 			lapCount++;
-			cout << "NICEU" << endl;
 			for (size_t i = 0; i < CheckpointList.size() / CHECKPOINTROWCOUNT; i++)
 			{
 				Checkpoints[i]->resetCheckpoint();
@@ -1117,27 +1131,26 @@ void SP2_TrackScene::Render()
 	modelStack.PushMatrix();
 	{
 		float finishLineScale = Vehicle.returnCarScale() * 2;
-		modelStack.Translate(4.5f, 0, 0);
+		modelStack.Translate(44.5f, 0, 0);
 		modelStack.Scale(finishLineScale, finishLineScale, finishLineScale);
-		modelStack.Translate(0, -0.478f, 0);
 
 		RenderMesh(meshList[GEO_FINISHLINE], true);
 
 		//Draw Propeller (Modelled and rendered by Winston)
 		modelStack.PushMatrix();
 		{
-			modelStack.Translate(-0.15f, 3.25f, 0);
+			modelStack.Translate(-1.15f, 3.25f, 0);
 			modelStack.Rotate(propellerRotation, 0, 1, 0);
-			RenderMesh(meshList[GEO_PROPELLER], true);
+			RenderMesh(meshList[GEO_PROPELLERFINISH], true);
 		}
 		modelStack.PopMatrix();
 
 		//Draw Propeller (Modelled and rendered by Winston)
 		modelStack.PushMatrix();
 		{
-			modelStack.Translate(2.15f, 3.25f, 0);
+			modelStack.Translate(1.15f, 3.25f, 0);
 			modelStack.Rotate(-propellerRotation, 0, 1, 0);
-			RenderMesh(meshList[GEO_PROPELLER], true);
+			RenderMesh(meshList[GEO_PROPELLERFINISH], true);
 		}
 		modelStack.PopMatrix();
 
@@ -1209,10 +1222,20 @@ void SP2_TrackScene::Render()
 	{
 		float checkpointScale = Vehicle.returnCarScale() * 2;
 		modelStack.PushMatrix();
-		modelStack.Translate(Checkpoints[i]->returnxPos(), Checkpoints[i]->returnyPos(), Checkpoints[i]->returnzPos());
-		modelStack.Scale(checkpointScale, checkpointScale, checkpointScale);
-		modelStack.Rotate((float)(Checkpoints[i]->returnCheckpointRotation()), 0, 1, 0);
-		RenderMesh(meshList[GEO_CHECKPOINT], true);
+		{
+			modelStack.Translate(Checkpoints[i]->returnxPos(), Checkpoints[i]->returnyPos(), Checkpoints[i]->returnzPos());
+			modelStack.Scale(checkpointScale, checkpointScale, checkpointScale);
+			modelStack.Rotate((float)(Checkpoints[i]->returnCheckpointRotation()), 0, 1, 0);
+			RenderMesh(meshList[GEO_CHECKPOINT], true);
+
+			//Draw Checkpoint Propeller (Modelled and rendered by Winston)
+			modelStack.PushMatrix();
+			{
+				modelStack.Rotate(propellerRotation, 0, 1, 0);
+				RenderMesh(meshList[GEO_PROPELLERCHECKPOINT], true);
+			}
+			modelStack.PopMatrix();
+		}
 		modelStack.PopMatrix();
 	}
 
