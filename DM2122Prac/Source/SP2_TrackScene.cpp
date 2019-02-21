@@ -330,15 +330,11 @@ void SP2_TrackScene::Init()
 	//Loads Checkpoint coordinates
 	loadCheckpointCoordinates();
 	initCheckpoint();
-	
-	durability = 50;
 
 	tmpBool = false;
 
 	bounceTime = 0;
 	conditionTester = false;
-
-
 
 	//Set background color to dark blue (Before this are initialized variables, after is the rest)
 	glClearColor(0.0f, 0.0f, 0.3f, 0.0f);
@@ -553,6 +549,7 @@ void SP2_TrackScene::Init()
 	projectionStack.LoadMatrix(projection);
 
 	//Initialise variables
+	healthLive = Vehicle.returnHealth();
 	vehicleSpeed = 0;
 
 	cameraPos = (Vehicle.newPosition.x, Vehicle.newPosition.y, Vehicle.newPosition.z);
@@ -569,7 +566,9 @@ void SP2_TrackScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
 
-	if (durability <= 0 && ResetStart == true) // causes the reset timer to trigger once
+	healthLive = Vehicle.returnHealth();
+
+	if (healthLive <= 0 && ResetStart == true) // causes the reset timer to trigger once
 	{
 		ResetTimer = 4;
 		ResetStart = false;
@@ -626,7 +625,7 @@ void SP2_TrackScene::Update(double dt)
 	{
 		if (CollisionChecker(1, i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
 		{
-			durability -= 0.5;
+			Vehicle.setHealth(healthLive - 0.5);
 		}
 	}
 	
@@ -1266,10 +1265,10 @@ void SP2_TrackScene::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.y), Color(1, 0, 0), 1, -1, 44);
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.z), Color(1, 0, 0), 1, -1, 42);
 
-			RenderTextOnScreen(meshList[GEO_TEXT], "Durability:", Color(1, 1, 1), 1, -1, 38);
-			if (durability >= 0)
+			RenderTextOnScreen(meshList[GEO_TEXT], "Health:", Color(1, 1, 1), 1, -1, 38);
+			if (healthLive >= 0)
 			{
-				RenderTextOnScreen(meshList[GEO_TEXT], to_string(durability), Color(1, 1, 1), 1, 10, 38);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(healthLive), Color(1, 1, 1), 1, 10, 38);
 			}
 
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(playerInstance->getCoinCount()), Color(0, 1, 0), 1, -1, 60);

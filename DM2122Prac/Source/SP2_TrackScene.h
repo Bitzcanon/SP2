@@ -171,7 +171,7 @@ private:
 
 	float ResetTimer;
 
-	int durability;
+	int healthLive;
 
 	Buff * Buffs[100];
 	Barrier *Barriers[ROADBLOCKCOUNT];
@@ -179,8 +179,8 @@ private:
 
 	//Declaration of class instances
 	RenderStrings texts;
-	Car Vehicle;
 	Player *playerInstance;
+	Car Vehicle;
 	RenderStrings text; // text file that stores the car locations
 
 	float bounceTime;
