@@ -5,17 +5,18 @@ using namespace std;
 
 Player::Player()
 {
-	saveFile.readFrom();
-	coinCount = saveFile.dataStorage[0];
-	healthUpgrade = saveFile.dataStorage[1];
-	maxSpeedUpgrade = saveFile.dataStorage[2];
-	accelerationUpgrade = saveFile.dataStorage[3];
-	maxAccelerationUpgrade = saveFile.dataStorage[4];
-	steerUpgrade = saveFile.dataStorage[5];
+	coinCount = 0;
+	healthUpgrade = false;
+	maxSpeedUpgrade = false;
+	accelerationUpgrade = false;
+	maxAccelerationUpgrade = false;
+	steerUpgrade = false;
+	//Change constructor to read from text file from save file so as to make sure progress is saved
 }
 
 Player::~Player()
 {
+
 }
 
 bool Player::changeSomething = false;
@@ -33,16 +34,6 @@ Player* Player::getInstance()
 		instance = new Player();
 	}
 	return instance;
-}
-
-void Player::loadSave()
-{
-	saveFile.readFrom();
-}
-
-void Player::writeSave()
-{
-	saveFile.writeTo(coinCount, healthUpgrade, maxSpeedUpgrade, accelerationUpgrade, maxAccelerationUpgrade, steerUpgrade);
 }
 
 int Player::getCoinCount(void)

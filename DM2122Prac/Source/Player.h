@@ -1,7 +1,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #include <string>
-#include "Save.h"
 
 //Done by Winston, used Singleton Pattern to create only 1 instance of Player throughout the entire program
 
@@ -25,9 +24,6 @@ public:
 	void setMaxAccelerationUpgradeStatus(bool);
 	void setSteerUpgradeStatus(bool);
 
-	void loadSave();
-	void writeSave();
-
 	static bool changeSomething; // boolean for changing of a car part.
 	static std::string kart; // store kart address
 	static std::string wheels; // store wheel address
@@ -37,8 +33,6 @@ private:
 	~Player();
 
 	static Player* instance;
-	Save saveFile;
-	
 	int coinCount;
 
 	bool healthUpgrade;

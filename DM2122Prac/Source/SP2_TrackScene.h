@@ -171,9 +171,9 @@ private:
 
 	float ResetTimer;
 
-	int durability;
+	double healthPoints;
 
-	Buff * Buffs[100];
+	Buff * Buffs[50];
 	Barrier *Barriers[ROADBLOCKCOUNT];
 	Checkpoint *Checkpoints[CHECKPOINTCOUNT];
 
