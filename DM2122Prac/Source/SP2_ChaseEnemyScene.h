@@ -14,6 +14,7 @@
 #include "Barrier.h"
 #include "Car.h"
 #include "Player.h"
+#include "Coins.h"
 
 #include <string>
 using namespace std;
@@ -101,6 +102,7 @@ private:
 
 		GEO_ROADBLOCK,
 		GEO_MAZETILE,
+		GEO_COINS,
 
 		NUM_GEOMETRY,
 	};
@@ -137,6 +139,9 @@ private:
 	void initBarrier();
 	void loadBarrierCoordinates();
 
+	void initCoins();
+	int countCoins();
+
 	string UpdateFrameRate(float string);
 
 	float FPS;
@@ -158,6 +163,8 @@ private:
 	bool isWon;
 
 	vector <float> BarrierList;
+
+	Coins coin[32];
 };
 
 #endif // ! SP2_CHASEENEMYSCENE_H
