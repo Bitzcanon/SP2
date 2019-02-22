@@ -60,6 +60,27 @@ void Save::writeTo(int coinCount, int healthUpgrade, int maxSpeedUpgrade, int ac
 	}
 }
 
+void Save::resetSave()
+{
+	ofstream saveFile("TextFiles//save.txt"); //Open text file to read
+
+	if (saveFile.is_open())
+	{
+		saveFile << 0 << endl;
+		saveFile << 0 << endl;
+		saveFile << 0 << endl;
+		saveFile << 0 << endl;
+		saveFile << 0 << endl;
+		saveFile << 0 << endl;
+
+		saveFile << "OBJ//Kart1.obj" << endl;
+		saveFile << "OBJ//Wheels1.obj" << endl;
+		saveFile << "Image//Colors//Green.tga";
+
+		saveFile.close();
+	}
+}
+
 int Save::getDataStorage()
 {
 	return *dataStorage;

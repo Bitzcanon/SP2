@@ -15,6 +15,7 @@ public:
 	~Save();
 	void readFrom();
 	void writeTo(int coinCount, int healthUpgrade, int maxSpeedUpgrade, int accelerationUpgrade, int maxAccelerationUpgrade, int steerUpgrade, string kart, string wheels, string color);
+	void resetSave();
 
 	int getDataStorage(void);
 	int dataStorage[6];

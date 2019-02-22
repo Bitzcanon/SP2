@@ -569,6 +569,7 @@ void SP2_TrackScene::Update(double dt)
 	FPS = 1.f / (float)dt;
 
 	healthLive = Vehicle.returnHealth();
+	propellerRotation += (float)(180 * dt);
 
 	if (healthLive <= 0 && ResetStart == true) // causes the reset timer to trigger once
 	{
@@ -600,7 +601,7 @@ void SP2_TrackScene::Update(double dt)
 		playerInstance->setChangeSomething(false);
 	}
 
-	propellerRotation += (float)(180 * dt);
+	
 
 	if (bounceTime > 0) //updating bouncetime
 	{
@@ -631,12 +632,22 @@ void SP2_TrackScene::Update(double dt)
 			Vehicle.setHealth(healthLive - 0.5);
 		}
 	}
+
+	float defaultSpeed;
+	if (playerInstance->getMaxSpeedUpgradeStatus() == true)
+	{
+		defaultSpeed = 0.5f;
+	}
+	else
+	{
+		defaultSpeed = 0.4f;
+	}
 	
 	//Timer after stepping on SpeedBuff
 	if (SpeedBuff::timer > 0)
 	{
 		SpeedBuff::timer = SpeedBuff::timer - (float)(1 * dt);
-		Vehicle.setSpeed(0.5f);
+		Vehicle.setSpeed(defaultSpeed * 1.3f);
 	}
 
 	//Timer after stepping on SlowBuff
@@ -741,7 +752,7 @@ void SP2_TrackScene::Update(double dt)
 			}
 			isLapCompleted = false;
 		}
-		if (lapCount == 3)
+		if (lapCount == 3) //3 laps is needed to win the game
 		{
 			isWon = true;
 		}
@@ -775,9 +786,18 @@ void SP2_TrackScene::Update(double dt)
 	Vehicle.Update(dt);
 	vehicleSpeed = Vehicle.returnSpeed();
 
-	cameraPos.x = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * Vehicle.returnCarScale(); //Multiplied value is the camera angle, bigger number = further from car
-	cameraPos.y = Vehicle.newPosition.y + 20;
-	cameraPos.z = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * Vehicle.returnCarScale();
+	if (!Application::IsKeyPressed('B'))
+	{
+		cameraPos.x = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * Vehicle.returnCarScale(); //Multiplied value is the camera angle, bigger number = further from car
+		cameraPos.y = Vehicle.newPosition.y + 20;
+		cameraPos.z = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * Vehicle.returnCarScale();
+	}
+	if (Application::IsKeyPressed('B'))
+	{
+		cameraPos.x = (Vehicle.newPosition.x + sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * Vehicle.returnCarScale(); //Multiplied value is the camera angle, bigger number = further from car
+		cameraPos.y = Vehicle.newPosition.y + 20;
+		cameraPos.z = (Vehicle.newPosition.z + cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * Vehicle.returnCarScale();
+	}
 
 	cameraTarget.x = Vehicle.newPosition.x * Vehicle.returnCarScale();
 	cameraTarget.y = Vehicle.newPosition.y;
@@ -1114,8 +1134,11 @@ void SP2_TrackScene::Render()
 		glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
-	//Draw Axes (For debugging purposes)
-	RenderMesh(meshList[GEO_AXES], false);
+	if (DEBUG)
+	{
+		//Draw Axes (For debugging purposes)
+		RenderMesh(meshList[GEO_AXES], false);
+	}
 
 	//Draw Track (Modelled and rendered by Gary)
 	modelStack.PushMatrix();
@@ -1246,35 +1269,45 @@ void SP2_TrackScene::Render()
 		//Draw UI (Logic and rendering done by Winston)
 		modelStack.PushMatrix();
 		{
+			//FPS counter to display on the top right
 			RenderTextOnScreen(meshList[GEO_TEXT], UpdateFrameRate(FPS), Color(1, 1, 0), 2, 72, 55);
 
-			//Player's Position (FOR DEBUG PURPOSES)
-			int vehiclePosX = static_cast<int>(Vehicle.newPosition.x); //Convert x coordinate of the vehicle to 2 digits for display
-			int vehiclePosZ = static_cast<int>(Vehicle.newPosition.z); //Convert z coordinate of the vehicle to 2 digits for display
-
-			int cameraX = static_cast<int>(cameraPos.x); //Convert x coordinate of the camera to 2 digits for display
-			int cameraY = static_cast<int>(cameraPos.y); //Convert y coordinate of the camera to 2 digits for display
-			int cameraZ = static_cast<int>(cameraPos.z); //Convert z coordinate of the camera to 2 digits for display
-
+			//Player Car's speed
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehicleSpeed), Color(1, 1, 0), 1, -1, 58);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehiclePosX), Color(1, 1, 0), 1, -1, 56);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehiclePosZ), Color(1, 1, 0), 1, -1, 54);
 
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraX), Color(1, 0, 0), 1, -1, 52);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraY), Color(1, 0, 0), 1, -1, 50);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraZ), Color(1, 0, 0), 1, -1, 48);
+			//Player's Position (FOR DEBUG PURPOSES)
+			if (DEBUG)
+			{
+				int vehiclePosX = static_cast<int>(Vehicle.newPosition.x); //Convert x coordinate of the vehicle to 2 digits for display
+				int vehiclePosZ = static_cast<int>(Vehicle.newPosition.z); //Convert z coordinate of the vehicle to 2 digits for display
 
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.x), Color(1, 0, 0), 1, -1, 46);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.y), Color(1, 0, 0), 1, -1, 44);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.z), Color(1, 0, 0), 1, -1, 42);
+				int cameraX = static_cast<int>(cameraPos.x); //Convert x coordinate of the camera to 2 digits for display
+				int cameraY = static_cast<int>(cameraPos.y); //Convert y coordinate of the camera to 2 digits for display
+				int cameraZ = static_cast<int>(cameraPos.z); //Convert z coordinate of the camera to 2 digits for display
+
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehiclePosX), Color(1, 1, 0), 1, -1, 56); //Relative to orignial position, not world position
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehiclePosZ), Color(1, 1, 0), 1, -1, 54);
+
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraX), Color(1, 0, 0), 1, -1, 52);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraY), Color(1, 0, 0), 1, -1, 50);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraZ), Color(1, 0, 0), 1, -1, 48);
+
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.x), Color(1, 0, 0), 1, -1, 46);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.y), Color(1, 0, 0), 1, -1, 44);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.z), Color(1, 0, 0), 1, -1, 42);
+			}
 
 			RenderTextOnScreen(meshList[GEO_TEXT], "Health:", Color(1, 1, 1), 1, -1, 38);
 			if (healthLive >= 0)
 			{
-				RenderTextOnScreen(meshList[GEO_TEXT], to_string(healthLive), Color(1, 1, 1), 1, 10, 38);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(healthLive), Color(1, 1, 1), 1, 8, 38);
 			}
 
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(playerInstance->getCoinCount()), Color(0, 1, 0), 1, -1, 60);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Coins:", Color(1, 1, 1), 1, -1, 36);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(playerInstance->getCoinCount()), Color(1, 1, 1), 1, 8, 36);
+
+			RenderTextOnScreen(meshList[GEO_TEXT], "Laps:", Color(1, 1, 1), 1, -1, 34);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(lapCount), Color(1, 1, 1), 1, 8, 34);
 
 			int countdown = ResetTimer;
 			if (ResetTimer > 0)
