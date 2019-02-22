@@ -10,7 +10,7 @@
 
 SP2_MainMenuScene::SP2_MainMenuScene()
 {
-
+	playerInstance = Player::getInstance();
 }
 
 SP2_MainMenuScene::~SP2_MainMenuScene()
@@ -23,6 +23,7 @@ void SP2_MainMenuScene::Init()
 	bounceTime = 0;
 	arrowY = 0.2;
 	isMenu = true;
+	isInstructions = false;
 	rotateAngle = 0;
 
 	for (int i = 0; i < 3; i++)
@@ -261,11 +262,6 @@ void SP2_MainMenuScene::Update(double dt)
 		camera.position.z -= 100 * dt;
 	}
 
-	if (Application::IsKeyPressed('U'))
-	{
-		cout << arrowY << endl;
-	}
-	
 	if (transitionTime > 7)
 	{
 		if (Application::IsKeyPressed(VK_UP))
@@ -287,57 +283,66 @@ void SP2_MainMenuScene::Update(double dt)
 
 		if (Application::IsKeyPressed(VK_RETURN))
 		{
+			
 			if (bounceTime <= 0)
 			{
 				bounceTime = 0.2;
-				if (isMenu == true) // if player is at the menu ,
+				
+				if (isInstructions == true)
 				{
-					if (arrowY == 0.2)
-					{
-						sceneNumber = 1;
-						meshList[GEO_MENU]->textureID = LoadTGA("Image//ConfirmMenu.tga");
-						arrowY = 0;
-						isMenu = false;
-					}
-					else if (arrowY == 0.1)
-					{
-						sceneNumber = 2;
-						meshList[GEO_MENU]->textureID = LoadTGA("Image//ConfirmMenu.tga");
-						arrowY = 0;
-						isMenu = false;
-					}
-					else if (arrowY == 0)
-					{
-						sceneNumber = 3;
-						meshList[GEO_MENU]->textureID = LoadTGA("Image//ConfirmMenu.tga");
-						arrowY = 0;
-						isMenu = false;
-					}
-					else if (arrowY == -0.1)
-					{
-						Application::SceneSetter = 4;
-					}
-					else if (arrowY == -0.2)
-					{
-						Application::SceneSetter = 10;
-					}
+					meshList[GEO_MENU]->textureID = LoadTGA("Image//MainMenu.tga");
+					isInstructions = false;
+					isMenu = true;
+					arrowY = 0.2;
 				}
-				else if (isMenu == false)
+				else if (isInstructions == false)
 				{
-					if (arrowY == 0.1)
+					if (isMenu == true) // if player is at the menu ,
 					{
-						Application::SceneSetter = sceneNumber;
-						Application::resetScene = false;
+						if (arrowY == 0.2)
+						{
+							sceneNumber = 1;
+							meshList[GEO_MENU]->textureID = LoadTGA("Image//ConfirmMenu.tga");
+							arrowY = 0.1;
+							isMenu = false;
+						}
+						else if (arrowY == 0.1)
+						{
+							meshList[GEO_MENU]->textureID = LoadTGA("Image//Controls.tga");
+							arrowY = -0.4;
+							isMenu = false;
+							isInstructions = true;
+						}
+						else if (arrowY == 0)
+						{
+							playerInstance->resetSaveFile();
+						}
+						else if (arrowY == -0.1)
+						{
+							Application::SceneSetter = 4;
+						}
+						else if (arrowY == -0.2)
+						{
+							Application::SceneSetter = 10;
+						}
 					}
-					else if (arrowY == 0)
+					else if (isMenu == false && isInstructions == false)
 					{
-						Application::SceneSetter = sceneNumber;
-						Application::resetScene = true;
-					}
-					else if (arrowY == -0.1)
-					{
-						meshList[GEO_MENU]->textureID = LoadTGA("Image//MainMenu.tga");
-						isMenu = true;
+						if (arrowY == 0.1)
+						{
+							Application::SceneSetter = sceneNumber;
+							Application::resetScene = false;
+						}
+						else if (arrowY == 0)
+						{
+							Application::SceneSetter = sceneNumber;
+							Application::resetScene = true;
+						}
+						else if (arrowY == -0.1)
+						{
+							meshList[GEO_MENU]->textureID = LoadTGA("Image//MainMenu.tga");
+							isMenu = true;
+						}
 					}
 				}
 			}
@@ -345,27 +350,30 @@ void SP2_MainMenuScene::Update(double dt)
 
 		if (Application::IsKeyPressed(VK_UP))
 		{
-			if (isMenu == true)
+			if (isInstructions == false)
 			{
-				if (bounceTime <= 0)
+				if (isMenu == true)
 				{
-					bounceTime = 0.1f;
-					arrowY += 0.1;
-					if (arrowY > 0.3)
+					if (bounceTime <= 0)
 					{
-						arrowY = -0.2;
+						bounceTime = 0.1f;
+						arrowY += 0.1;
+						if (arrowY > 0.3)
+						{
+							arrowY = -0.2;
+						}
 					}
 				}
-			}
-			else if (isMenu == false)
-			{
-				if (bounceTime <= 0)
+				else if (isMenu == false)
 				{
-					bounceTime = 0.1f;
-					arrowY += 0.1;
-					if (arrowY > 0.1)
+					if (bounceTime <= 0)
 					{
-						arrowY = -0.1;
+						bounceTime = 0.1f;
+						arrowY += 0.1;
+						if (arrowY > 0.1)
+						{
+							arrowY = -0.1;
+						}
 					}
 				}
 			}
@@ -373,27 +381,30 @@ void SP2_MainMenuScene::Update(double dt)
 
 		if (Application::IsKeyPressed(VK_DOWN))
 		{
-			if (isMenu == true)
+			if (isInstructions == false)
 			{
-				if (bounceTime <= 0)
+				if (isMenu == true)
 				{
-					bounceTime = 0.1f;
-					arrowY -= 0.1;
-					if (arrowY < -0.3)
+					if (bounceTime <= 0)
 					{
-						arrowY = 0.2;
+						bounceTime = 0.1f;
+						arrowY -= 0.1;
+						if (arrowY < -0.3)
+						{
+							arrowY = 0.2;
+						}
 					}
 				}
-			}
-			else if (isMenu == false)
-			{
-				if (bounceTime <= 0)
+				else if (isMenu == false)
 				{
-					bounceTime = 0.1f;
-					arrowY -= 0.1;
-					if (arrowY < -0.1)
+					if (bounceTime <= 0)
 					{
-						arrowY = 0.1;
+						bounceTime = 0.1f;
+						arrowY -= 0.1;
+						if (arrowY < -0.1)
+						{
+							arrowY = 0.1;
+						}
 					}
 				}
 			}

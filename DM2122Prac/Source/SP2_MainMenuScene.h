@@ -8,6 +8,10 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include <string>
+#include "Player.h"
+
+
+
 
 using namespace std;
 
@@ -131,6 +135,8 @@ private:
 	float FPS;
 
 	bool isMenu;
+	bool isInstructions;
+
 	bool transition[3];
 	float rotateAngle;
 
@@ -138,6 +144,8 @@ private:
 	float tmpx;
 	float tmpy;
 	float tmpz;
+	
+	Player * playerInstance;
 
 	float transitionTime;
 

@@ -81,6 +81,8 @@ void SP2_ChaseEnemyScene::Init()
 	loadBarrierCoordinates();
 	initBarrier();
 
+	timer = 30;
+
 	bounceTime = 0;
 
 	//Set background color to dark blue (Before this are initialized variables, after is the rest)
@@ -334,8 +336,10 @@ int SP2_ChaseEnemyScene::countCoins()
 void SP2_ChaseEnemyScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
+	
+	timer -= (float)(1 * dt);
 
-	if (Application::IsKeyPressed('M'))
+	if (timer <= 0)
 	{
 		Application::SceneSetter = 0;
 	}

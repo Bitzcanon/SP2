@@ -37,6 +37,11 @@ Player* Player::getInstance()
 	}
 	return instance;
 }
+void Player::resetSaveFile()
+{
+	saveFile.resetSave();
+}
+
 //
 void Player::setColor(string x)
 {

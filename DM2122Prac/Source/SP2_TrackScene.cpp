@@ -833,7 +833,7 @@ void SP2_TrackScene::Update(double dt)
 		}
 		if (isWon == true)
 		{
-			playerInstance->setCoinCount(playerInstance->getCoinCount() + 1);
+			Application::SceneSetter = 2;
 		}
 	}
 
