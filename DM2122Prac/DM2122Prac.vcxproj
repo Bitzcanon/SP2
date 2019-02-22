@@ -152,6 +152,7 @@
     <ClCompile Include="Source\Car.cpp" />
     <ClCompile Include="Source\Checkpoint.cpp" />
     <ClCompile Include="Source\Coins.cpp" />
+    <ClCompile Include="Source\DamageBuff.cpp" />
     <ClCompile Include="Source\FPSCamera.cpp" />
     <ClCompile Include="Source\Location.cpp" />
     <ClCompile Include="Source\MenuCamera.cpp" />
@@ -166,6 +167,7 @@
     <ClCompile Include="Source\NPCS.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\RenderStrings.cpp" />
+    <ClCompile Include="Source\ReverseBuff.cpp" />
     <ClCompile Include="Source\Save.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SlowBuff.cpp" />
@@ -175,7 +177,6 @@
     <ClCompile Include="Source\SP2_SurvivalScene.cpp" />
     <ClCompile Include="Source\SP2_TrackScene.cpp" />
     <ClCompile Include="Source\SpeedBuff.cpp" />
-    <ClCompile Include="Source\Trap.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -184,7 +185,9 @@
     <ClInclude Include="Source\Buff.h" />
     <ClInclude Include="Source\Car.h" />
     <ClInclude Include="Source\Checkpoint.h" />
+    <ClInclude Include="Source\DamageBuff.h" />
     <ClInclude Include="Source\Definitions.h" />
+    <ClInclude Include="Source\ReverseBuff.h" />
     <ClInclude Include="Source\Save.h" />
     <ClInclude Include="Source\SP2_ChaseEnemyScene.h" />
     <ClInclude Include="Source\Coins.h" />
@@ -211,7 +214,6 @@
     <ClInclude Include="Source\SP2_SurvivalScene.h" />
     <ClInclude Include="Source\SP2_TrackScene.h" />
     <ClInclude Include="Source\SpeedBuff.h" />
-    <ClInclude Include="Source\Trap.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />
   </ItemGroup>

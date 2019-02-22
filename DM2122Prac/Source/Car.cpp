@@ -21,6 +21,7 @@ Car::Car()
 	isDrivingForward = false;
 	isDrivingBackward = false;
 	isCollidedWithBarrier = false;
+
 	isInversedControlled = false;
 
 	init = false;
@@ -56,6 +57,16 @@ Car::Car(float x, float y, float z, float maxSpeedCar, float accelerationFactorC
 
 Car::~Car()
 {
+}
+
+void Car::setInverseControls(bool x)
+{
+	isInversedControlled = x;
+}
+
+bool Car::returnInverseControls()
+{
+	return isInversedControlled;
 }
 
 int Car::returnHealth(void)

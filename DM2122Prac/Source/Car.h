@@ -33,6 +33,10 @@ public:
 
 	void decelerateCar(double dt);
 
+	void setInverseControls(bool);
+	bool returnInverseControls();
+	
+
 	void setIsCollided(bool);
 	bool returnIsCollided(void);
 

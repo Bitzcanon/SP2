@@ -23,6 +23,14 @@ void SP2_MainMenuScene::Init()
 	bounceTime = 0;
 	arrowY = 0.2;
 	isMenu = true;
+
+	transitionTime = 0;
+
+	tmpx = 0;
+	tmpy = 0;
+	tmpz = 0;
+
+	tmpAngle = 25;
 	//Set background color to dark blue (Before this are initialized variables, after is the rest)
 	glClearColor(0.0f, 0.0f, 0.3f, 0.0f);
 
@@ -108,15 +116,16 @@ void SP2_MainMenuScene::Init()
 	//Use our shader
 	glUseProgram(m_programID);
 
-	//Initialise initial Camera position
-	camera.Init(Vector3(0, 20, 1), Vector3(0, 20, 0), Vector3(0, 1, 0)); //For Camera3
+	//Initialise initial Camera position x y z target up
+	//camera.Init(Vector3(0, 20, 1), Vector3(0, 20, 0), Vector3(0, 1, 0)); //For MainMenu Camera
+	camera.Init(Vector3(0, 40, 120)); //For FPS Camera (Only for NPCScene, testing in TrackScene
 
 	//Light parameters
 	//Lower floor lighting
 	light[0].type = Light::LIGHT_POINT;
 	light[0].position.Set(0, 60, 0);
 	light[0].color.Set(1, 1, 1);
-	light[0].power = 4.f;
+	light[0].power = 10.f;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
@@ -178,13 +187,19 @@ void SP2_MainMenuScene::Init()
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
 
-	//
 	meshList[GEO_MENU] = MeshBuilder::GenerateQuad("Menu", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_MENU]->textureID = LoadTGA("Image//MainMenu.tga");
+
+	meshList[GEO_TITLE] = MeshBuilder::GenerateQuad("Title", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_TITLE]->textureID = LoadTGA("Image//Title1.tga");
+
+	meshList[GEO_MODEL1] = MeshBuilder::GenerateOBJ("Model1", "OBJ//Kart3.obj");
+	meshList[GEO_MODEL1]->textureID = LoadTGA("Image//Colors//Blue.tga");
 
 	meshList[GEO_ARROW] = MeshBuilder::GenerateOBJ("Arrow", "OBJ//Arrow.obj");
 
 	meshList[GEO_BACKGROUND] = MeshBuilder::GenerateQuad("Background", Color(0, 0, 0), 1.f, 1.f);
+	meshList[GEO_TITLEBACKGROUND] = MeshBuilder::GenerateQuad("Background", Color(1, 1, 1), 1.f, 1.f);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
@@ -197,21 +212,55 @@ void SP2_MainMenuScene::Init()
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 500.f);
 	projectionStack.LoadMatrix(projection);
-
 }
 
 void SP2_MainMenuScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
 
-	if (Application::IsKeyPressed('G'))
+	transitionTime += 1 * dt;
+
+	if (transitionTime < 10)
 	{
-		Application::SceneSetter = 1;
+		if (transitionTime < 3)
+		{
+
+		}
+		else if (transitionTime < 6)
+		{
+			meshList[GEO_TITLE]->textureID = LoadTGA("Image//Title2.tga");
+		}
+		else if (transitionTime < 9)
+		{
+			meshList[GEO_TITLE]->textureID = LoadTGA("Image//Title3.tga");
+		}
+	}
+
+	if (Application::IsKeyPressed('G')) //tester key
+	{
+		tmpAngle += 10 * dt;
 	}
 
 	if (Application::IsKeyPressed('U'))
 	{
 		cout << arrowY << endl;
+	}
+
+	if (Application::IsKeyPressed(VK_UP))
+	{
+		tmpy += 1 * dt;
+	}
+	else if (Application::IsKeyPressed(VK_LEFT))
+	{
+		tmpz -= 1 * dt;
+	}
+	else if (Application::IsKeyPressed(VK_DOWN))
+	{
+		tmpy -= 1 * dt;
+	} 
+	else if (Application::IsKeyPressed(VK_RIGHT))
+	{
+		tmpz += 1* dt;
 	}
 
 	if (Application::IsKeyPressed(VK_RETURN))
@@ -488,7 +537,7 @@ void SP2_MainMenuScene::Render()
 	//Define the view/ camera lookat and load the view matrix
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z, camera.target.x, camera.target.y, camera.target.z, camera.up.x, camera.up.y, camera.up.z);
-	//viewStack.LookAt(cameraPosX, cameraPosY, cameraPosZ, cameraTargetX, cameraTargetY, cameraTargetZ, 0, 1, 0); //Switch to this once all implementations are done
+	//viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z, camera.target.x, camera.target.y, camera.target.z, camera.up.x, camera.up.y, camera.up.z);
 
 	modelStack.LoadIdentity();
 	if (light[0].type == Light::LIGHT_DIRECTIONAL)
@@ -545,7 +594,7 @@ void SP2_MainMenuScene::Render()
 
 	modelStack.PushMatrix();
 		modelStack.Translate(0, 20, -120);
-		modelStack.Scale(120 , 100 , 100);
+		modelStack.Scale(100 , 100 , 100);
 		RenderMesh(meshList[GEO_MENU], false);
 
 	modelStack.PushMatrix();
@@ -555,6 +604,26 @@ void SP2_MainMenuScene::Render()
 		RenderMesh(meshList[GEO_ARROW], false); //set lighting to true once completed
 		modelStack.PopMatrix();
 		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 1, 0);
+		modelStack.Scale(200, 200, 200);
+		RenderMesh(meshList[GEO_TITLEBACKGROUND], false); //set lighting to true once completed
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 20 , 0);
+		modelStack.Scale(100, 100, 100);
+		RenderMesh(meshList[GEO_TITLE], false); //set lighting to true once completed
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0 , 0 , 0);
+		modelStack.Rotate(tmpAngle, 1, 0, 0);
+		modelStack.Scale(10 , 10 , 10);
+		RenderMesh(meshList[GEO_MODEL1], true); //set lighting to true once completed
+		modelStack.PopMatrix();
+		
 
 }
 
