@@ -278,44 +278,44 @@ void SP2_ChaseEnemyScene::Init()
 	cameraTarget = (Vehicle.newPosition.x + 1, Vehicle.newPosition.y + 1, Vehicle.newPosition.z + 10);
 
 	isWon = false;
-
+	coinappeared = false;
 	initCoins();
 }
 
 void SP2_ChaseEnemyScene::initCoins()
 {
 	coin[0].SetCoinCoords(150.f, 175.f);
-	coin[1].SetCoinCoords(150.f, 125.f);
-	coin[2].SetCoinCoords(150.f, 75.f);
-	coin[3].SetCoinCoords(150.f, 25.f);
-	coin[4].SetCoinCoords(150.f, -25.f);
-	coin[5].SetCoinCoords(150.f, -75.f);
-	coin[6].SetCoinCoords(150.f, -125.f);
-	coin[7].SetCoinCoords(150.f, -175.f);
-	coin[8].SetCoinCoords(50.f, 175.f);
-	coin[9].SetCoinCoords(50.f, 125.f);
-	coin[10].SetCoinCoords(50.f, 75.f);
-	coin[11].SetCoinCoords(50.f, 25.f);
-	coin[12].SetCoinCoords(50.f, -25.f);
-	coin[13].SetCoinCoords(50.f, -75.f);
-	coin[14].SetCoinCoords(50.f, -125.f);
-	coin[15].SetCoinCoords(50.f, -175.f);
-	coin[16].SetCoinCoords(-50.f, 175.f);
-	coin[17].SetCoinCoords(-50.f, 125.f);
-	coin[18].SetCoinCoords(-50.f, 75.f);
+	coin[1].SetCoinCoords(150.f, -175.f);	
+	coin[2].SetCoinCoords(150.f, 25.f);	
+	coin[3].SetCoinCoords(150.f, -75.f);
+	coin[4].SetCoinCoords(150.f, -125.f);
+	coin[5].SetCoinCoords(50.f, -25.f);	
+	coin[6].SetCoinCoords(-150.f, -75.f);
+	coin[7].SetCoinCoords(50.f, 175.f);
+	coin[8].SetCoinCoords(150.f, 125.f);	
+	coin[9].SetCoinCoords(50.f, 75.f);
+	coin[10].SetCoinCoords(50.f, 25.f);
+	coin[11].SetCoinCoords(-50.f, 175.f);	
+	coin[12].SetCoinCoords(50.f, -125.f);
+	coin[13].SetCoinCoords(50.f, -175.f);
+	coin[14].SetCoinCoords(-50.f, -125.f);	
+	coin[15].SetCoinCoords(-50.f, -25.f);	
+	coin[16].SetCoinCoords(-50.f, 125.f);
+	coin[17].SetCoinCoords(-150.f, 75.f);	
+	coin[18].SetCoinCoords(50.f, 125.f);	
 	coin[19].SetCoinCoords(-50.f, 25.f);
-	coin[20].SetCoinCoords(-50.f, -25.f);
-	coin[21].SetCoinCoords(-50.f, -75.f);
-	coin[22].SetCoinCoords(-50.f, -125.f);
-	coin[23].SetCoinCoords(-50.f, -175.f);
-	coin[24].SetCoinCoords(-150.f, 175.f);
-	coin[25].SetCoinCoords(-150.f, 125.f);
-	coin[26].SetCoinCoords(-150.f, 75.f);
-	coin[27].SetCoinCoords(-150.f, 25.f);
-	coin[28].SetCoinCoords(-150.f, -25.f);
-	coin[29].SetCoinCoords(-150.f, -75.f);
+	coin[20].SetCoinCoords(-150.f, -25.f);	
+	coin[21].SetCoinCoords(150.f, 75.f);	
+	coin[22].SetCoinCoords(-150.f, -175.f);
+	coin[23].SetCoinCoords(-50.f, -75.f);
+	coin[24].SetCoinCoords(150.f, -25.f);		
+	coin[25].SetCoinCoords(-150.f, 175.f);	
+	coin[26].SetCoinCoords(-150.f, 125.f);	
+	coin[27].SetCoinCoords(-50.f, 75.f);	
+	coin[28].SetCoinCoords(-150.f, 25.f);
+	coin[29].SetCoinCoords(50.f, -75.f);
 	coin[30].SetCoinCoords(-150.f, -125.f);
-	coin[31].SetCoinCoords(-150.f, -175.f);
+	coin[31].SetCoinCoords(-50.f, -175.f);
 }
 
 int SP2_ChaseEnemyScene::countCoins()
@@ -427,7 +427,23 @@ void SP2_ChaseEnemyScene::Update(double dt)
 
 	for (int i = 0; i < 32; i++)
 	{
-		coin[i].CoinCollision(cameraPos.x, cameraPos.z);
+		if (coin[i].hasAppeared() && !coin[i].CheckTaken())
+		{
+			coin[i].CoinCollision(cameraPos.x, cameraPos.z);
+		}
+	}
+
+	for (int i = 0; i < 32; i++)
+	{
+		if (coin[i].hasAppeared() && !coin[i].CheckTaken())
+		{
+			break;
+		}
+		if (!coin[i].CheckTaken() && !coin[i].hasAppeared())
+		{
+			coin[i].appears();
+			break;
+		}
 	}
 }
 
@@ -765,12 +781,12 @@ void SP2_ChaseEnemyScene::Render()
 	//Draw coins in the map (Stuff by Afiq)
 	for (int i = 0; i < 32; i++)
 	{
-		if (!coin[i].CheckTaken())
+		if (!coin[i].CheckTaken() && coin[i].hasAppeared())
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(coin[i].getX(), 0.f, coin[i].getZ());
 			modelStack.Scale(5.f, 5.f, 5.f);
-			RenderMesh(meshList[GEO_COINS], false);
+			RenderMesh(meshList[GEO_COINS], true);
 			modelStack.PopMatrix();
 		}
 	}

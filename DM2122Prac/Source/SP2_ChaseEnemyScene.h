@@ -165,6 +165,7 @@ private:
 	vector <float> BarrierList;
 
 	Coins coin[32];
+	bool coinappeared;
 };
 
 #endif // ! SP2_CHASEENEMYSCENE_H
