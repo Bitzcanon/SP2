@@ -25,6 +25,7 @@ public:
 	void setMaxAccelerationUpgradeStatus(bool);
 	void setSteerUpgradeStatus(bool);
 
+	void resetSaveFile();
 
 	string returnKart();
 	string returnWheels();

@@ -81,6 +81,8 @@ void SP2_ChaseEnemyScene::Init()
 	loadBarrierCoordinates();
 	initBarrier();
 
+	timer = 30;
+
 	bounceTime = 0;
 
 	//Set background color to dark blue (Before this are initialized variables, after is the rest)
@@ -337,8 +339,10 @@ int SP2_ChaseEnemyScene::countCoins()
 void SP2_ChaseEnemyScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
+	
+	timer -= (float)(1 * dt);
 
-	if (Application::IsKeyPressed('M'))
+	if (timer <= 0)
 	{
 		Application::SceneSetter = 0;
 	}
@@ -823,29 +827,32 @@ void SP2_ChaseEnemyScene::Render()
 		{
 			RenderTextOnScreen(meshList[GEO_TEXT], UpdateFrameRate(FPS), Color(1, 1, 0), 2, 72, 55);
 
-			//Player's Position (FOR DEBUG PURPOSES)
-			int vehiclePosX = static_cast<int>(Vehicle.newPosition.x); //Convert x coordinate of the vehicle to 2 digits for display
-			int vehiclePosZ = static_cast<int>(Vehicle.newPosition.z); //Convert z coordinate of the vehicle to 2 digits for display
+			if (DEBUG)
+			{
+				//Player's Position (FOR DEBUG PURPOSES)
+				int vehiclePosX = static_cast<int>(Vehicle.newPosition.x); //Convert x coordinate of the vehicle to 2 digits for display
+				int vehiclePosZ = static_cast<int>(Vehicle.newPosition.z); //Convert z coordinate of the vehicle to 2 digits for display
 
-			int cameraX = static_cast<int>(cameraPos.x); //Convert x coordinate of the camera to 2 digits for display
-			int cameraY = static_cast<int>(cameraPos.y); //Convert y coordinate of the camera to 2 digits for display
-			int cameraZ = static_cast<int>(cameraPos.z); //Convert z coordinate of the camera to 2 digits for display
+				int cameraX = static_cast<int>(cameraPos.x); //Convert x coordinate of the camera to 2 digits for display
+				int cameraY = static_cast<int>(cameraPos.y); //Convert y coordinate of the camera to 2 digits for display
+				int cameraZ = static_cast<int>(cameraPos.z); //Convert z coordinate of the camera to 2 digits for display
 
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehicleSpeed), Color(1, 1, 0), 1, -1, 58);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehiclePosX), Color(1, 1, 0), 1, -1, 56);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehiclePosZ), Color(1, 1, 0), 1, -1, 54);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehicleSpeed), Color(1, 1, 0), 1, -1, 58);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehiclePosX), Color(1, 1, 0), 1, -1, 56);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehiclePosZ), Color(1, 1, 0), 1, -1, 54);
 
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraX), Color(1, 0, 0), 1, -1, 52);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraY), Color(1, 0, 0), 1, -1, 50);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraZ), Color(1, 0, 0), 1, -1, 48);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraX), Color(1, 0, 0), 1, -1, 52);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraY), Color(1, 0, 0), 1, -1, 50);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraZ), Color(1, 0, 0), 1, -1, 48);
 
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.x), Color(1, 0, 0), 1, -1, 46);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.y), Color(1, 0, 0), 1, -1, 44);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.z), Color(1, 0, 0), 1, -1, 42);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.x), Color(1, 0, 0), 1, -1, 46);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.y), Color(1, 0, 0), 1, -1, 44);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.z), Color(1, 0, 0), 1, -1, 42);
 
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(countCoins()), Color(1, 0, 0), 1, -1, 38);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(countCoins()), Color(1, 0, 0), 1, -1, 38);
 
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(playerInstance->getCoinCount()), Color(0, 1, 0), 1, -1, 40);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(playerInstance->getCoinCount()), Color(0, 1, 0), 1, -1, 40);
+			}
 		}
 		modelStack.PopMatrix();
 

@@ -144,7 +144,6 @@ private:
 	void UpdateInteraction(int i);
 	void UpdateMerchant(int i);
 	void RenderMarketPlace();
-	bool UpgradeCar(int upgradeType);
 	string NPCRandomText();
 	
 	RenderStrings text;

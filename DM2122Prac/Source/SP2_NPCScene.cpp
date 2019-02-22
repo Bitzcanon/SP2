@@ -848,43 +848,6 @@ string SP2_NPCScene::NPCRandomText()
 	}
 }
 
-bool SP2_NPCScene::UpgradeCar(int upgradeType)
-{
-	switch (upgradeType)
-	{
-	case 1:
-	{
-		playerInstance->setHealthUpgradeStatus(true);
-		return true;
-		break;
-	}
-	case 2:
-	{
-		playerInstance->setMaxSpeedUpgradeStatus(true);
-		return true;
-		break;
-	}
-	case 3:
-	{
-		playerInstance->setAccelerationUpgradeStatus(true);
-		return true;
-		break;
-	}
-	case 4:
-	{
-		playerInstance->setMaxAccelerationUpgradeStatus(true);
-		return true;
-		break;
-	}
-	case 5:
-	{
-		playerInstance->setSteerUpgradeStatus(true);
-		return true;
-		break;
-	}
-	}
-}
-
 void SP2_NPCScene::Render()
 {
 	//Clear color & depth buffer every time

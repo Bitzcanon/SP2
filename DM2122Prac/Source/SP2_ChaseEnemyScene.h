@@ -146,6 +146,8 @@ private:
 
 	float FPS;
 
+	float timer;
+
 	Barrier *Barriers[MAZETILECOUNT];
 
 	//Declaration of class instances
