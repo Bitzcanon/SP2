@@ -19,6 +19,7 @@ public:
 	~Music();
 	void playBGM(int i);
 	void playInstantSound(int i);
+	void stopMusic();
 private:
 	//SoLoud::Soloud gSoloud;
 	//SoLoud::Wav gWave;

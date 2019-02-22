@@ -28,3 +28,8 @@ void  Music::playInstantSound(int i)
 		break;
 	}
 }
+
+void Music::stopMusic()
+{
+	PlaySound(TEXT("MyAppSound"), NULL, SND_APPLICATION);
+}

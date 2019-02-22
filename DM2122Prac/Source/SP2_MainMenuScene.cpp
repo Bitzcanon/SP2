@@ -333,11 +333,13 @@ void SP2_MainMenuScene::Update(double dt)
 					{
 						if (arrowY == 0.1)
 						{
+							bgm.stopMusic();
 							Application::SceneSetter = sceneNumber;
 							Application::resetScene = false;
 						}
 						else if (arrowY == 0)
 						{
+							bgm.stopMusic();
 							Application::SceneSetter = sceneNumber;
 							Application::resetScene = true;
 						}
