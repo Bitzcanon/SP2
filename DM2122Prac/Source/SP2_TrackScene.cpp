@@ -530,7 +530,7 @@ void SP2_TrackScene::Init()
 	}
 	//Skyboxes: http://www.custommapmakers.org/skyboxes.php
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//Colors//Blue.tga");
+	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
 
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("RIGHT", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
@@ -618,11 +618,29 @@ void SP2_TrackScene::Init()
 	isWon = false;
 	isLapCompleted = false;
 	lapCount = 0;
+
+	healthUpgradeLive = playerInstance->getHealthUpgradeStatus();
+	speedUpgradeLive = playerInstance->getMaxSpeedUpgradeStatus();
+	accelerationUpgradeLive = playerInstance->getAccelerationUpgradeStatus();
+	maxAccelerationUpgradeLive = playerInstance->getMaxAccelerationUpgradeStatus();
+	steerUpgradeLive = playerInstance->getSteerUpgradeStatus();
+	
+	displayUpgrades = true;
+
+	timer = 0.f;
 }
 
 void SP2_TrackScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
+
+	timer += (float)(1 * dt);
+
+	healthUpgradeLive = playerInstance->getHealthUpgradeStatus();
+	speedUpgradeLive = playerInstance->getMaxSpeedUpgradeStatus();
+	accelerationUpgradeLive = playerInstance->getAccelerationUpgradeStatus();
+	maxAccelerationUpgradeLive = playerInstance->getMaxAccelerationUpgradeStatus();
+	steerUpgradeLive = playerInstance->getSteerUpgradeStatus();
 
 	propellerRotation += (float)(180 * dt);
 
@@ -651,6 +669,16 @@ void SP2_TrackScene::Update(double dt)
 	if (Application::IsKeyPressed('M'))
 	{
 		Application::SceneSetter = 0;
+	}
+
+	//Toggle between showing upgrades active in the UI
+	if (Application::IsKeyPressed('B'))
+	{
+		if (bounceTime <= 0)
+		{
+			bounceTime = 0.3f;
+			displayUpgrades = !displayUpgrades;
+		}
 	}
 
 	if (playerInstance->returnChangeSomething() == true) // reload car model if something has changed.
@@ -819,7 +847,6 @@ void SP2_TrackScene::Update(double dt)
 	{
 		if (isLapCompleted == true)
 		{
-			cout << "NICEU" << endl;
 			lapCount++;
 			for (size_t i = 0; i < CheckpointList.size() / CHECKPOINTROWCOUNT; i++)
 			{
@@ -861,13 +888,13 @@ void SP2_TrackScene::Update(double dt)
 	Vehicle.Update(dt);
 	vehicleSpeed = Vehicle.returnSpeed();
 
-	if (!Application::IsKeyPressed('B'))
+	if (!Application::IsKeyPressed(VK_SPACE))
 	{
 		cameraPos.x = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * Vehicle.returnCarScale(); //Multiplied value is the camera angle, bigger number = further from car
 		cameraPos.y = Vehicle.newPosition.y + 20;
 		cameraPos.z = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * Vehicle.returnCarScale();
 	}
-	if (Application::IsKeyPressed('B'))
+	if (Application::IsKeyPressed(VK_SPACE))
 	{
 		cameraPos.x = (Vehicle.newPosition.x + sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * Vehicle.returnCarScale(); //Multiplied value is the camera angle, bigger number = further from car
 		cameraPos.y = Vehicle.newPosition.y + 20;
@@ -1162,7 +1189,6 @@ void SP2_TrackScene::Render()
 	//Define the view/ camera lookat and load the view matrix
 	viewStack.LoadIdentity();
 	//viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z, camera.target.x, camera.target.y, camera.target.z, camera.up.x, camera.up.y, camera.up.z);
-	//viewStack.LookAt(cameraPosX, cameraPosY, cameraPosZ, cameraTargetX, cameraTargetY, cameraTargetZ, 0, 1, 0); //Switch to this once all implementations are done
 	viewStack.LookAt(cameraPos.x, cameraPos.y, cameraPos.z, cameraTarget.x, cameraTarget.y, cameraTarget.z, 0, 1, 0); //Switch to this once all implementations are done
 
 	modelStack.LoadIdentity();
@@ -1357,6 +1383,9 @@ void SP2_TrackScene::Render()
 			//FPS counter to display on the top right
 			RenderTextOnScreen(meshList[GEO_TEXT], UpdateFrameRate(FPS), Color(1, 1, 0), 2, 72, 55);
 
+			//Timer
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(timer), Color(1, 1, 0), 1, 72, 53);
+
 			//Player Car's speed
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehicleSpeed), Color(1, 1, 0), 1, -1, 58);
 
@@ -1393,6 +1422,16 @@ void SP2_TrackScene::Render()
 
 			RenderTextOnScreen(meshList[GEO_TEXT], "Laps:", Color(1, 1, 1), 1, -1, 34);
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(lapCount), Color(1, 1, 1), 1, 8, 34);
+
+			if (displayUpgrades == true)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Upgrades:", Color(1, 1, 1), 1, -1, 32);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Health Upgrade", Color(!healthUpgradeLive, healthUpgradeLive, 0), 1, -1, 30);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Max Speed Upgrade", Color(!speedUpgradeLive, speedUpgradeLive, 0), 1, -1, 28);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Acceleration Upgrade", Color(!accelerationUpgradeLive, accelerationUpgradeLive, 0), 1, -1, 26);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Max Acceleration Upgrade", Color(!maxAccelerationUpgradeLive, maxAccelerationUpgradeLive, 0), 1, -1, 24);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Steering Upgrade", Color(!steerUpgradeLive, steerUpgradeLive, 0), 1, -1, 22);
+			}
 
 			int countdown = ResetTimer;
 			if (ResetTimer > 0)

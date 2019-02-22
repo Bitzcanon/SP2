@@ -177,7 +177,14 @@ private:
 
 	float ResetTimer;
 
+	bool healthUpgradeLive;
+	bool speedUpgradeLive;
+	bool accelerationUpgradeLive;
+	bool maxAccelerationUpgradeLive;
+	bool steerUpgradeLive;
 	int healthLive;
+
+	bool displayUpgrades;
 
 	Buff * Buffs[100];
 	Barrier *Barriers[ROADBLOCKCOUNT];
@@ -197,6 +204,8 @@ private:
 
 	Vector3 cameraPos;
 	Vector3 cameraTarget;
+
+	float timer;
 
 	bool tmpBool;
 	bool isLapCompleted;
