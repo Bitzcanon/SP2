@@ -3,6 +3,8 @@
 
 //Done by Winston
 
+constexpr auto DEBUG = 0;
+
 constexpr auto CAMERABOUNDSORIGINAL = 4998.f;
 constexpr auto CAMERABOUNDSCHASE = 248.f;
 
@@ -14,5 +16,7 @@ constexpr auto CHECKPOINTROWCOUNT = 4; //How many elements there are in each row
 
 constexpr auto MAZETILECOUNT = 44;
 constexpr auto MAZETILEROWCOUNT = 3;
+
+constexpr auto UPGRADEPRICE = 10;
 
 #endif // !DEFINITIONS_H
