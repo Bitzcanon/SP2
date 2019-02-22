@@ -33,8 +33,15 @@ public:
 
 	void decelerateCar(double dt);
 
+	void setInverseControls(bool);
+	bool returnInverseControls();
+	
+
 	void setIsCollided(bool);
 	bool returnIsCollided(void);
+
+	int returnHealth(void);
+	void setHealth(int);
 
 	Vector3 newPosition;
 	float steerAngle;
@@ -49,14 +56,15 @@ private:
 	float accelerationFactor;
 	float steerFactor;
 
-	float health;
-	//float weight;
+	int health;
 
 	bool isDrivingForward;
 	bool isDrivingBackward;
 
 	bool isCollidedWithBarrier;
 	bool isInversedControlled;
+
+	bool init;
 
 	Location car;
 	Player *playerInstance;

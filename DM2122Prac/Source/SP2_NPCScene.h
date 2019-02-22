@@ -13,6 +13,7 @@
 #include "Player.h"
 #include "Coins.h"
 #include "NPCS.h"
+#include "Definitions.h"
 
 #include <string>
 using namespace std;
@@ -143,6 +144,7 @@ private:
 	void UpdateInteraction(int i);
 	void UpdateMerchant(int i);
 	void RenderMarketPlace();
+	bool UpgradeCar(int upgradeType);
 	string NPCRandomText();
 	
 	RenderStrings text;
@@ -161,6 +163,12 @@ private:
 	bool GarageOpen;
 	Coins coins[2];
 	string NPCtext;
+
+	bool healthUpgradeLive;
+	bool speedUpgradeLive;
+	bool accelerationUpgradeLive;
+	bool maxAccelerationUpgradeLive;
+	bool steerUpgradeLive;
 
 	bool doMenu;
 };

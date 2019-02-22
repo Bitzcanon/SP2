@@ -17,11 +17,14 @@ Car::Car()
 	steerFactor = 1.8f;
 	steerAngle = 0;
 
-	health = 0;
+	health = 30;
 	isDrivingForward = false;
 	isDrivingBackward = false;
 	isCollidedWithBarrier = false;
+
 	isInversedControlled = false;
+
+	init = false;
 
 	playerInstance = Player::getInstance();
 }
@@ -41,17 +44,39 @@ Car::Car(float x, float y, float z, float maxSpeedCar, float accelerationFactorC
 	speed = 0;
 	acceleration = 0;
 	steerAngle = 0;
-	health = 0;
+	health = 30;
 	isDrivingBackward = false;
 	isDrivingForward = false;
 	isCollidedWithBarrier = false;
 	isInversedControlled = false;
+
+	init = false;
 
 	playerInstance = Player::getInstance();
 }
 
 Car::~Car()
 {
+}
+
+void Car::setInverseControls(bool x)
+{
+	isInversedControlled = x;
+}
+
+bool Car::returnInverseControls()
+{
+	return isInversedControlled;
+}
+
+int Car::returnHealth(void)
+{
+	return health;
+}
+
+void Car::setHealth(int input)
+{
+	health = input;
 }
 
 float Car::getXpos(void)
@@ -71,6 +96,13 @@ float Car::getZpos(void)
 
 void Car::Update(double dt)
 {
+
+	if (playerInstance->getHealthUpgradeStatus() == true && init == false)
+	{
+		health = 40;
+		init = true;
+	}
+
 	if (isInversedControlled == false)
 	{
 		if (Application::IsKeyPressed(VK_UP) && isDrivingBackward == false)

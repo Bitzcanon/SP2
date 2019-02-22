@@ -264,7 +264,7 @@ void SP2_ChaseEnemyScene::Init()
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("Light Sphere", Color(1.f, 1.f, 1.f), 32, 36, 1.f);
 
 	meshList[GEO_COINS] = MeshBuilder::GenerateOBJ("coin", "OBJ//Coin.obj");
-	meshList[GEO_COINS]->textureID = LoadTGA("Image//PlaceholderCoinTexture.tgaa");
+	meshList[GEO_COINS]->textureID = LoadTGA("Image//PlaceholderCoinTexture.tga");
 
 	//Set projection to Perspective and load projection matrix
 	Mtx44 projection;

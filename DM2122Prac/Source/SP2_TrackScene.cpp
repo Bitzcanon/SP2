@@ -18,10 +18,9 @@ SP2_TrackScene::~SP2_TrackScene()
 
 }
 static const float SKYBOXSIZE = 10000.f;
-
 void SP2_TrackScene::loadSpeedBuffCoordinates()
 {
-	ifstream myfile("TextFiles//SpeedBuffCoordinates.txt"); // open text file
+	ifstream myfile("TextFiles//Buffs//SpeedBuffCoordinates.txt"); // open text file
 
 	if (myfile.is_open()) // open text file
 	{
@@ -40,7 +39,7 @@ void SP2_TrackScene::loadSpeedBuffCoordinates()
 
 void SP2_TrackScene::loadSlowBuffCoordinates()
 {
-	ifstream myfile("TextFiles//SlowBuffCoordinates.txt"); // open text file
+	ifstream myfile("TextFiles//Buffs//SlowBuffCoordinates.txt"); // open text file
 
 	if (myfile.is_open()) // open text file
 	{
@@ -57,9 +56,9 @@ void SP2_TrackScene::loadSlowBuffCoordinates()
 	}
 }
 
-void SP2_TrackScene::loadTrapCoordinates()
+void SP2_TrackScene::loadDamageBuffCoordinates()
 {
-	ifstream myfile("TextFiles//TrapCoordinates.txt"); // open text file
+	ifstream myfile("TextFiles//Buffs//DamageBuffCoordinates.txt"); // open text file
 
 	if (myfile.is_open()) // open text file
 	{
@@ -70,7 +69,26 @@ void SP2_TrackScene::loadTrapCoordinates()
 		{
 			myfile >> tmp;
 			i++;
-			TrapList.push_back(tmp);
+			DamageBuffList.push_back(tmp);
+		}
+		myfile.close();
+	}
+}
+
+void SP2_TrackScene::loadReverseBuffCoordinates()
+{
+	ifstream myfile("TextFiles//Buffs//ReverseBuffCoordinates.txt"); // open text file
+
+	if (myfile.is_open()) // open text file
+	{
+		int i = 0;
+		float tmp;
+
+		while (myfile.eof() == false)
+		{
+			myfile >> tmp;
+			i++;
+			ReverseBuffList.push_back(tmp);
 		}
 		myfile.close();
 	}
@@ -114,7 +132,7 @@ void SP2_TrackScene::loadCheckpointCoordinates()
 	}
 }
 
-void SP2_TrackScene::initBuff()
+void SP2_TrackScene::initBuffs()
 {
 	for (int i = 0; i < 100; i++)
 	{
@@ -131,10 +149,15 @@ void SP2_TrackScene::initBuff()
 	{
 		Buffs[i] = new SlowBuff;
 	}
-	// new trap
-	for (size_t i = ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4)); i < ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4) + (TrapList.size() / 4)); i++)
+	// new DamageBuff
+	for (size_t i = ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4)); i < ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4) + (DamageBuffList.size() / 4)); i++)
 	{
-		Buffs[i] = new Trap;
+		Buffs[i] = new DamageBuff;
+	}
+	// new reverseBuff
+	for (size_t i = ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4) + (DamageBuffList.size()/4)); i < ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4) + (DamageBuffList.size() / 4) + (ReverseBuffList.size() / 4)); i++)
+	{
+		Buffs[i] = new ReverseBuff;
 	}
 
 	int counter = 1;
@@ -192,29 +215,57 @@ void SP2_TrackScene::initBuff()
 		}
 	}
 	counter = 1;
-	for (size_t i = 0; i < TrapList.size(); i++) // loop through the total cords in the text file
+	for (size_t i = 0; i < DamageBuffList.size(); i++) // loop through the total cords in the text file
 	{
 		int loc = (((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4 )) + ( i / 4));
 		// i = 0 , loc = 0 . i = 1 , loc = 0 , i = 2 , loc = 0 , i = 3 , loc = 0 
 		// i = 4 , loc = 1 , i = 5 , loc = 1 , i = 6 , loc = 1 , i = 7 , loc = 1
 		if (counter == 4)
 		{
-			Buffs[loc]->setRotateBy(TrapList[i]);
+			Buffs[loc]->setRotateBy(DamageBuffList[i]);
 			counter = 1;
 		}
 		else if (counter == 3) // 
 		{
-			Buffs[loc]->setzPos(TrapList[i]);
+			Buffs[loc]->setzPos(DamageBuffList[i]);
 			counter += 1;
 		}
 		else if (counter == 2) // if k = second number in line
 		{
-			Buffs[loc]->setyPos(TrapList[i]);
+			Buffs[loc]->setyPos(DamageBuffList[i]);
 			counter += 1;
 		}
 		else if (counter == 1) // if k = first number in line
 		{
-			Buffs[loc]->setxPos(TrapList[i]);
+			Buffs[loc]->setxPos(DamageBuffList[i]);
+			counter += 1;
+		}
+	}
+
+	counter = 1;
+	for (size_t i = 0; i < ReverseBuffList.size(); i++) // loop through the total cords in the text file
+	{
+		int loc = (((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4) + (DamageBuffList.size() / 4)) + (i / 4));
+		// i = 0 , loc = 0 . i = 1 , loc = 0 , i = 2 , loc = 0 , i = 3 , loc = 0 
+		// i = 4 , loc = 1 , i = 5 , loc = 1 , i = 6 , loc = 1 , i = 7 , loc = 1
+		if (counter == 4)
+		{
+			Buffs[loc]->setRotateBy(ReverseBuffList[i]);
+			counter = 1;
+		}
+		else if (counter == 3) // 
+		{
+			Buffs[loc]->setzPos(ReverseBuffList[i]);
+			counter += 1;
+		}
+		else if (counter == 2) // if k = second number in line
+		{
+			Buffs[loc]->setyPos(ReverseBuffList[i]);
+			counter += 1;
+		}
+		else if (counter == 1) // if k = first number in line
+		{
+			Buffs[loc]->setxPos(ReverseBuffList[i]);
 			counter += 1;
 		}
 	}
@@ -319,10 +370,11 @@ void SP2_TrackScene::Init()
 	//Loads SpeedBuff coordinates and initializes the buffs
 	loadSpeedBuffCoordinates();
 	loadSlowBuffCoordinates();
-	loadTrapCoordinates();
+	loadDamageBuffCoordinates();
+	loadReverseBuffCoordinates();
 	loadBarrierCoordinates();
 
-	initBuff();
+	initBuffs();
 
 	//Loads Barrier coordinates
 	initBarrier();
@@ -330,15 +382,11 @@ void SP2_TrackScene::Init()
 	//Loads Checkpoint coordinates
 	loadCheckpointCoordinates();
 	initCheckpoint();
-	
-	durability = 50;
 
 	tmpBool = false;
 
 	bounceTime = 0;
 	conditionTester = false;
-
-
 
 	//Set background color to dark blue (Before this are initialized variables, after is the rest)
 	glClearColor(0.0f, 0.0f, 0.3f, 0.0f);
@@ -533,12 +581,16 @@ void SP2_TrackScene::Init()
 
 	meshList[GEO_SLOWBUFF] = MeshBuilder::GenerateOBJ("SlowBuff", "OBJ//Boost.obj");
 	meshList[GEO_SLOWBUFF]->textureID = LoadTGA("Image//SlowBuffTexture.tga");
+	
+	meshList[GEO_DAMAGEBUFF] = MeshBuilder::GenerateOBJ("DamageBuff", "OBJ//DamageBuff.obj");
+	meshList[GEO_DAMAGEBUFF]->textureID = LoadTGA("Image//DamageBuff.tga");
+
+	meshList[GEO_REVERSEBUFF] = MeshBuilder::GenerateOBJ("DamageBuff", "OBJ//ReverseBuff.obj");
+	meshList[GEO_REVERSEBUFF]->textureID = LoadTGA("Image//ReverseBuff.tga");
 
 	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//Plant.obj");
 	meshList[GEO_TREE]->textureID = LoadTGA("Image//Plant.tga");
 
-	meshList[GEO_TRAP] = MeshBuilder::GenerateOBJ("Trap", "OBJ//Trap.obj");
-	meshList[GEO_TRAP]->textureID = LoadTGA("Image//Trap.tga");
 
 	meshList[GEO_TESTTRACK] = MeshBuilder::GenerateOBJ("TestTrack", "OBJ//TestTrack.obj");
 
@@ -555,6 +607,7 @@ void SP2_TrackScene::Init()
 	projectionStack.LoadMatrix(projection);
 
 	//Initialise variables
+	healthLive = Vehicle.returnHealth();
 	vehicleSpeed = 0;
 
 	cameraPos = (Vehicle.newPosition.x, Vehicle.newPosition.y, Vehicle.newPosition.z);
@@ -571,7 +624,17 @@ void SP2_TrackScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
 
-	if (durability <= 0 && ResetStart == true) // causes the reset timer to trigger once
+	propellerRotation += (float)(180 * dt);
+
+	if (bounceTime > 0) //updating bouncetime
+	{
+		bounceTime -= (float)(1 * dt);
+	}
+
+	healthLive = Vehicle.returnHealth();
+	propellerRotation += (float)(180 * dt);
+
+	if (healthLive <= 0 && ResetStart == true) // causes the reset timer to trigger once
 	{
 		ResetTimer = 4;
 		ResetStart = false;
@@ -590,7 +653,7 @@ void SP2_TrackScene::Update(double dt)
 		Application::SceneSetter = 0;
 	}
 
-	if (playerInstance->returnChangeSomething() == true) // reload car model.
+	if (playerInstance->returnChangeSomething() == true) // reload car model if something has changed.
 	{
 	//	cout << Player::color << endl;
 		meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", playerInstance->returnKart());
@@ -599,13 +662,6 @@ void SP2_TrackScene::Update(double dt)
 		meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels" , playerInstance->returnWheels());
 		meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
 		playerInstance->setChangeSomething(false);
-	}
-
-	propellerRotation += (float)(180 * dt);
-
-	if (bounceTime > 0) //updating bouncetime
-	{
-		bounceTime -= (float)(1 * dt);
 	}
 
 	//*Speedbuff logic done by Gary*/
@@ -624,20 +680,40 @@ void SP2_TrackScene::Update(double dt)
 			SlowBuff::timer = 2;
 		}
 	}
-	//*Trap logic done by Gary*/
-	for (size_t i = (SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4); i < ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4) + (TrapList.size() / 4 )); i++)
+	//*DamageBuff logic done by Gary*/
+	for (size_t i = (SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4); i < ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4) + (DamageBuffList.size() / 4 )); i++)
 	{
 		if (CollisionChecker(1, i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
 		{
-			durability -= 0.5;
+			Vehicle.setHealth(healthLive - 0.5);
 		}
+	}
+
+	for (size_t i = ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4) + (DamageBuffList.size() / 4)); i < ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4) + (DamageBuffList.size() / 4) + (ReverseBuffList.size() / 4)); i++)
+	{
+		if (CollisionChecker(1, i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
+		{
+			ReverseBuff::timer = 5;
+			Vehicle.setInverseControls(true);
+		}
+	}
+
+	float defaultSpeed;
+
+	if (playerInstance->getMaxSpeedUpgradeStatus() == true)
+	{
+		defaultSpeed = 0.5f;
+	}
+	else
+	{
+		defaultSpeed = 0.4f;
 	}
 	
 	//Timer after stepping on SpeedBuff
 	if (SpeedBuff::timer > 0)
 	{
 		SpeedBuff::timer = SpeedBuff::timer - (float)(1 * dt);
-		Vehicle.setSpeed(0.5f);
+		Vehicle.setSpeed(defaultSpeed * 1.3f);
 	}
 
 	//Timer after stepping on SlowBuff
@@ -645,6 +721,15 @@ void SP2_TrackScene::Update(double dt)
 	{
 		SlowBuff::timer = SlowBuff::timer - (float)(1 * dt);
 		Vehicle.setSpeed(0.2);
+	}
+
+	if (ReverseBuff::timer > 0)
+	{
+		ReverseBuff::timer = ReverseBuff::timer - (float)(1 * dt);
+	}
+	else
+	{
+		Vehicle.setInverseControls(false);
 	}
 
 	/*RoadBlock logic done by Winston*/
@@ -742,7 +827,7 @@ void SP2_TrackScene::Update(double dt)
 			}
 			isLapCompleted = false;
 		}
-		if (lapCount == 3)
+		if (lapCount == 3) //3 laps is needed to win the game
 		{
 			isWon = true;
 		}
@@ -776,9 +861,18 @@ void SP2_TrackScene::Update(double dt)
 	Vehicle.Update(dt);
 	vehicleSpeed = Vehicle.returnSpeed();
 
-	cameraPos.x = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * Vehicle.returnCarScale(); //Multiplied value is the camera angle, bigger number = further from car
-	cameraPos.y = Vehicle.newPosition.y + 20;
-	cameraPos.z = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * Vehicle.returnCarScale();
+	if (!Application::IsKeyPressed('B'))
+	{
+		cameraPos.x = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * Vehicle.returnCarScale(); //Multiplied value is the camera angle, bigger number = further from car
+		cameraPos.y = Vehicle.newPosition.y + 20;
+		cameraPos.z = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * Vehicle.returnCarScale();
+	}
+	if (Application::IsKeyPressed('B'))
+	{
+		cameraPos.x = (Vehicle.newPosition.x + sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * Vehicle.returnCarScale(); //Multiplied value is the camera angle, bigger number = further from car
+		cameraPos.y = Vehicle.newPosition.y + 20;
+		cameraPos.z = (Vehicle.newPosition.z + cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 5) * Vehicle.returnCarScale();
+	}
 
 	cameraTarget.x = Vehicle.newPosition.x * Vehicle.returnCarScale();
 	cameraTarget.y = Vehicle.newPosition.y;
@@ -1115,8 +1209,11 @@ void SP2_TrackScene::Render()
 		glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
-	//Draw Axes (For debugging purposes)
-	RenderMesh(meshList[GEO_AXES], false);
+	if (DEBUG)
+	{
+		//Draw Axes (For debugging purposes)
+		RenderMesh(meshList[GEO_AXES], false);
+	}
 
 	//Draw Track (Modelled and rendered by Gary)
 	modelStack.PushMatrix();
@@ -1196,12 +1293,22 @@ void SP2_TrackScene::Render()
 		RenderMesh(meshList[GEO_SLOWBUFF], false);
 		modelStack.PopMatrix();
 	}
-	for (size_t i = ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4)); i < ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4) + (TrapList.size() / 4)); i++)
+
+	for (size_t i = ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4)); i < ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4) + (DamageBuffList.size() / 4)); i++)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(Buffs[i]->returnxPos(), Buffs[i]->returnyPos(), Buffs[i]->returnzPos());
 		modelStack.Scale(Vehicle.returnCarScale(), Vehicle.returnCarScale(), Vehicle.returnCarScale());
-		RenderMesh(meshList[GEO_TRAP], false);
+		RenderMesh(meshList[GEO_DAMAGEBUFF], false);
+		modelStack.PopMatrix();
+	}
+
+	for (size_t i = ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4) + (DamageBuffList.size() / 4)); i < ((SpeedBuffList.size() / 4) + (SlowBuffList.size() / 4) + (DamageBuffList.size() / 4) + (ReverseBuffList.size()/4)); i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(Buffs[i]->returnxPos(), Buffs[i]->returnyPos(), Buffs[i]->returnzPos());
+		modelStack.Scale(Vehicle.returnCarScale(), Vehicle.returnCarScale(), Vehicle.returnCarScale());
+		RenderMesh(meshList[GEO_REVERSEBUFF], false);
 		modelStack.PopMatrix();
 	}
 	//
@@ -1247,35 +1354,45 @@ void SP2_TrackScene::Render()
 		//Draw UI (Logic and rendering done by Winston)
 		modelStack.PushMatrix();
 		{
+			//FPS counter to display on the top right
 			RenderTextOnScreen(meshList[GEO_TEXT], UpdateFrameRate(FPS), Color(1, 1, 0), 2, 72, 55);
 
-			//Player's Position (FOR DEBUG PURPOSES)
-			int vehiclePosX = static_cast<int>(Vehicle.newPosition.x); //Convert x coordinate of the vehicle to 2 digits for display
-			int vehiclePosZ = static_cast<int>(Vehicle.newPosition.z); //Convert z coordinate of the vehicle to 2 digits for display
-
-			int cameraX = static_cast<int>(cameraPos.x); //Convert x coordinate of the camera to 2 digits for display
-			int cameraY = static_cast<int>(cameraPos.y); //Convert y coordinate of the camera to 2 digits for display
-			int cameraZ = static_cast<int>(cameraPos.z); //Convert z coordinate of the camera to 2 digits for display
-
+			//Player Car's speed
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehicleSpeed), Color(1, 1, 0), 1, -1, 58);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehiclePosX), Color(1, 1, 0), 1, -1, 56);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehiclePosZ), Color(1, 1, 0), 1, -1, 54);
 
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraX), Color(1, 0, 0), 1, -1, 52);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraY), Color(1, 0, 0), 1, -1, 50);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraZ), Color(1, 0, 0), 1, -1, 48);
-
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.x), Color(1, 0, 0), 1, -1, 46);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.y), Color(1, 0, 0), 1, -1, 44);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.z), Color(1, 0, 0), 1, -1, 42);
-
-			RenderTextOnScreen(meshList[GEO_TEXT], "Durability:", Color(1, 1, 1), 1, -1, 38);
-			if (durability >= 0)
+			//Player's Position (FOR DEBUG PURPOSES)
+			if (DEBUG)
 			{
-				RenderTextOnScreen(meshList[GEO_TEXT], to_string(durability), Color(1, 1, 1), 1, 10, 38);
+				int vehiclePosX = static_cast<int>(Vehicle.newPosition.x); //Convert x coordinate of the vehicle to 2 digits for display
+				int vehiclePosZ = static_cast<int>(Vehicle.newPosition.z); //Convert z coordinate of the vehicle to 2 digits for display
+
+				int cameraX = static_cast<int>(cameraPos.x); //Convert x coordinate of the camera to 2 digits for display
+				int cameraY = static_cast<int>(cameraPos.y); //Convert y coordinate of the camera to 2 digits for display
+				int cameraZ = static_cast<int>(cameraPos.z); //Convert z coordinate of the camera to 2 digits for display
+
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehiclePosX), Color(1, 1, 0), 1, -1, 56); //Relative to orignial position, not world position
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehiclePosZ), Color(1, 1, 0), 1, -1, 54);
+
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraX), Color(1, 0, 0), 1, -1, 52);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraY), Color(1, 0, 0), 1, -1, 50);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraZ), Color(1, 0, 0), 1, -1, 48);
+
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.x), Color(1, 0, 0), 1, -1, 46);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.y), Color(1, 0, 0), 1, -1, 44);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.z), Color(1, 0, 0), 1, -1, 42);
 			}
 
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(playerInstance->getCoinCount()), Color(0, 1, 0), 1, -1, 60);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Health:", Color(1, 1, 1), 1, -1, 38);
+			if (healthLive >= 0)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(healthLive), Color(1, 1, 1), 1, 8, 38);
+			}
+
+			RenderTextOnScreen(meshList[GEO_TEXT], "Coins:", Color(1, 1, 1), 1, -1, 36);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(playerInstance->getCoinCount()), Color(1, 1, 1), 1, 8, 36);
+
+			RenderTextOnScreen(meshList[GEO_TEXT], "Laps:", Color(1, 1, 1), 1, -1, 34);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(lapCount), Color(1, 1, 1), 1, 8, 34);
 
 			int countdown = ResetTimer;
 			if (ResetTimer > 0)
@@ -1288,13 +1405,17 @@ void SP2_TrackScene::Render()
 	}
 	modelStack.PopMatrix();
 
-	if (SpeedBuff::timer > 0)
+	if (SpeedBuff::timer >= 0)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string(SpeedBuff::timer) , Color(1, 1, 0), 3, 0, 0);
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string(SpeedBuff::timer) , Color(1, 1, 0), 1, 0, 0);
 	}
-	if (SlowBuff::timer > 0)
+	if (SlowBuff::timer >= 0)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string(SlowBuff::timer), Color(1, 1, 0), 3, 0, 0);
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string(SlowBuff::timer), Color(1, 1, 0), 1, 0, 2);
+	}
+	if (ReverseBuff::timer >= 0)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string(ReverseBuff::timer), Color(1, 1, 0), 1, 0, 4);
 	}
 }
 

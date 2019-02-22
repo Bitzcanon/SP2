@@ -276,11 +276,23 @@ void SP2_NPCScene::Init()
 	NPCs[6].setCoordsNPC(-61.f, 38.f);
 	GarageDoorY = 6.685f; GarageDoorRotate = 0.f; GarageOpen = false;
 	//coins[0].SetCoinCoords(10.f, 50.f); coins[1].SetCoinCoords(100.f, 90.f);
+
+	healthUpgradeLive = playerInstance->getHealthUpgradeStatus();
+	speedUpgradeLive = playerInstance->getMaxSpeedUpgradeStatus();
+	accelerationUpgradeLive = playerInstance->getAccelerationUpgradeStatus();
+	maxAccelerationUpgradeLive = playerInstance->getMaxAccelerationUpgradeStatus();
+	steerUpgradeLive = playerInstance->getSteerUpgradeStatus();
 }
 
 void SP2_NPCScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
+
+	healthUpgradeLive = playerInstance->getHealthUpgradeStatus();
+	speedUpgradeLive = playerInstance->getMaxSpeedUpgradeStatus();
+	accelerationUpgradeLive = playerInstance->getAccelerationUpgradeStatus();
+	maxAccelerationUpgradeLive = playerInstance->getMaxAccelerationUpgradeStatus();
+	steerUpgradeLive = playerInstance->getSteerUpgradeStatus();
 
 	if (rotateAngle < 360)
 	{
@@ -358,6 +370,61 @@ void SP2_NPCScene::Update(double dt)
 	if (bounceTime > 0)
 	{
 		bounceTime -= (float)(1 * dt);
+	}
+
+	for (int i = 2; i < 7; i++)
+	{
+		if (Application::IsKeyPressed('Y') && NPCs[i].CloseToNPC(camera.position.x, camera.position.z) && NPCs[i].IsInteracting())
+		{
+			switch (i)
+			{
+			case 2:
+			{
+				if (healthUpgradeLive == false && playerInstance->getCoinCount() >= UPGRADEPRICE)
+				{
+					playerInstance->setHealthUpgradeStatus(true);
+					playerInstance->setCoinCount(playerInstance->getCoinCount() - UPGRADEPRICE);
+				}
+				break;
+			}
+			case 3:
+			{
+				if (speedUpgradeLive == false && playerInstance->getCoinCount() >= UPGRADEPRICE)
+				{
+					playerInstance->setMaxSpeedUpgradeStatus(true);
+					playerInstance->setCoinCount(playerInstance->getCoinCount() - UPGRADEPRICE);
+				}
+				break;
+			}
+			case 4:
+			{
+				if (accelerationUpgradeLive == false && playerInstance->getCoinCount() >= UPGRADEPRICE)
+				{
+					playerInstance->setAccelerationUpgradeStatus(true);
+					playerInstance->setCoinCount(playerInstance->getCoinCount() - UPGRADEPRICE);
+				}
+				break;
+			}
+			case 5:
+			{
+				if (maxAccelerationUpgradeLive == false && playerInstance->getCoinCount() >= UPGRADEPRICE)
+				{
+					playerInstance->setMaxAccelerationUpgradeStatus(true);
+					playerInstance->setCoinCount(playerInstance->getCoinCount() - UPGRADEPRICE);
+				}
+				break;
+			}
+			case 6:
+			{
+				if (steerUpgradeLive == false && playerInstance->getCoinCount() >= UPGRADEPRICE)
+				{
+					playerInstance->setSteerUpgradeStatus(true);
+					playerInstance->setCoinCount(playerInstance->getCoinCount() - UPGRADEPRICE);
+				}
+				break;
+			}
+			}
+		}
 	}
 
 	//Miscellaneous controls
@@ -763,6 +830,7 @@ void SP2_NPCScene::RenderMarketPlace()
 
 string SP2_NPCScene::NPCRandomText()
 {
+	//Addition of flavor text is possible here
 	switch (rand() % 4)
 	{
 	case 0:
@@ -777,6 +845,43 @@ string SP2_NPCScene::NPCRandomText()
 	case 3:
 		return "I hope your driving is good!";
 		break;
+	}
+}
+
+bool SP2_NPCScene::UpgradeCar(int upgradeType)
+{
+	switch (upgradeType)
+	{
+	case 1:
+	{
+		playerInstance->setHealthUpgradeStatus(true);
+		return true;
+		break;
+	}
+	case 2:
+	{
+		playerInstance->setMaxSpeedUpgradeStatus(true);
+		return true;
+		break;
+	}
+	case 3:
+	{
+		playerInstance->setAccelerationUpgradeStatus(true);
+		return true;
+		break;
+	}
+	case 4:
+	{
+		playerInstance->setMaxAccelerationUpgradeStatus(true);
+		return true;
+		break;
+	}
+	case 5:
+	{
+		playerInstance->setSteerUpgradeStatus(true);
+		return true;
+		break;
+	}
 	}
 }
 
@@ -834,8 +939,11 @@ void SP2_NPCScene::Render()
 		glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
-	//Draw Axes (For debugging purposes)
-	RenderMesh(meshList[GEO_AXES], false);
+	if (DEBUG)
+	{
+		//Draw Axes (For debugging purposes)
+		RenderMesh(meshList[GEO_AXES], false);
+	}
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0.f, 0.1f, 0.f);
@@ -925,18 +1033,25 @@ void SP2_NPCScene::Render()
 		}
 		modelStack.PopMatrix();
 
-		//Player's Position (FOR DEBUG PURPOSES)
-		modelStack.PushMatrix();
+		if (DEBUG)
 		{
-			int cameraX = static_cast<int>(camera.position.x); //Convert x coordinate of the camera to 2 digits for display
-			int cameraY = static_cast<int>(camera.position.y); //Convert y coordinate of the camera to 2 digits for display
-			int cameraZ = static_cast<int>(camera.position.z); //Convert z coordinate of the camera to 2 digits for display
+			//Player's Position (FOR DEBUG PURPOSES)
+			modelStack.PushMatrix();
+			{
+				int cameraX = static_cast<int>(camera.position.x); //Convert x coordinate of the camera to 2 digits for display
+				int cameraY = static_cast<int>(camera.position.y); //Convert y coordinate of the camera to 2 digits for display
+				int cameraZ = static_cast<int>(camera.position.z); //Convert z coordinate of the camera to 2 digits for display
 
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraX), Color(1, 1, 0), 1, -1, 58);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraY), Color(1, 1, 0), 1, -1, 56);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraZ), Color(1, 1, 0), 1, -1, 54);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraX), Color(1, 1, 0), 1, -1, 58);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraY), Color(1, 1, 0), 1, -1, 56);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraZ), Color(1, 1, 0), 1, -1, 54);
+			}
+			modelStack.PopMatrix();
 		}
-		modelStack.PopMatrix();
+
+		//Player's Coin count
+		RenderTextOnScreen(meshList[GEO_TEXT], "Coins:", Color(1, 1, 1), 1, -1, 36);
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string(playerInstance->getCoinCount()), Color(1, 1, 1), 1, 8, 36);
 	}
 	modelStack.PopMatrix();
 
@@ -987,24 +1102,66 @@ void SP2_NPCScene::Render()
 		{
 			RenderTextOnScreen(meshList[GEO_TEXT], "Press R to interact with merchant NPC", Color(1, 1, 0), 1, -1, 10);
 		}
-		if (NPCs[i].IsInteracting())
+		if (NPCs[i].CloseToNPC(camera.position.x, camera.position.z) && NPCs[i].IsInteracting())
 		{
 			switch (i)
 			{
 			case 2:
-				RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's health?", Color(1, 1, 0), 1, -1, 12);
+			{
+				if (healthUpgradeLive == true)
+				{
+					RenderTextOnScreen(meshList[GEO_TEXT], "Welcome back!, how are you enjoying your car's increased durability?", Color(1, 1, 0), 1, -1, 14);
+				}
+				else
+				{
+					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's health?", Color(1, 1, 0), 1, -1, 14);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Press 'Y' to purchase upgrade", Color(1, 1, 0), 1, -1, 12);
+				}
 				break;
+			}
 			case 3:
-				RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's max speed?", Color(1, 1, 0), 1, -1, 12);
+				if (speedUpgradeLive == true)
+				{
+					RenderTextOnScreen(meshList[GEO_TEXT], "Hello again, how's your car's max speed coming along?", Color(1, 1, 0), 1, -1, 14);
+				}
+				else
+				{
+					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's max speed?", Color(1, 1, 0), 1, -1, 14);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Press 'Y' to purchase upgrade", Color(1, 1, 0), 1, -1, 12);
+				}
 				break;
 			case 4:
-				RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's acceleration?", Color(1, 1, 0), 1, -1, 12);
+				if (accelerationUpgradeLive == true)
+				{
+					RenderTextOnScreen(meshList[GEO_TEXT], "Bonjour traveller, do you like your car's increased acceleration?", Color(1, 1, 0), 1, -1, 14);
+				}
+				else
+				{
+					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's acceleration?", Color(1, 1, 0), 1, -1, 14);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Press 'Y' to purchase upgrade", Color(1, 1, 0), 1, -1, 12);
+				}
 				break;
 			case 5:
-				RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's max acceleration?", Color(1, 1, 0), 1, -1, 12);
+				if (maxAccelerationUpgradeLive == true)
+				{
+					RenderTextOnScreen(meshList[GEO_TEXT], "Hola amigo, enjoying the increased max acceleration cap of your car?", Color(1, 1, 0), 1, -1, 14);
+				}
+				else
+				{
+					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's max acceleration?", Color(1, 1, 0), 1, -1, 14);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Press 'Y' to purchase upgrade", Color(1, 1, 0), 1, -1, 12);
+				}
 				break;
 			case 6:
-				RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's steering?", Color(1, 1, 0), 1, -1, 12);
+				if (steerUpgradeLive == true)
+				{
+					RenderTextOnScreen(meshList[GEO_TEXT], "Wassup, yer' enjoy turning your car faster?", Color(1, 1, 0), 1, -1, 14);
+				}
+				else
+				{
+					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's steering?", Color(1, 1, 0), 1, -1, 14);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Press 'Y' to purchase upgrade", Color(1, 1, 0), 1, -1, 12);
+				}
 				break;
 			}
 		}

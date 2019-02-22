@@ -13,10 +13,12 @@
 #include "RenderStrings.h"
 #include "SpeedBuff.h"
 #include "SlowBuff.h"
+#include "DamageBuff.h"
+#include "ReverseBuff.h"
+
 #include "Barrier.h"
 #include "Car.h"
 #include "Player.h"
-#include "Trap.h"
 #include "Checkpoint.h"
 
 #include <string>
@@ -114,7 +116,8 @@ private:
 
 		GEO_SPEEDBUFF,
 		GEO_SLOWBUFF,
-		GEO_TRAP,
+		GEO_DAMAGEBUFF,
+		GEO_REVERSEBUFF,
 
 		GEO_ROADBLOCK,
 
@@ -150,13 +153,16 @@ private:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	
-	void initBuff();
+	//initialize game objects
+	void initBuffs();
 	void loadSlowBuffCoordinates();
 	void loadSpeedBuffCoordinates();
-	void loadTrapCoordinates();
+	void loadDamageBuffCoordinates();
+	void loadReverseBuffCoordinates();
 
 	void initBarrier();
 	void loadBarrierCoordinates();
+	//end of initialize game objects
 
 	void initCheckpoint();
 	void loadCheckpointCoordinates();
@@ -171,7 +177,7 @@ private:
 
 	float ResetTimer;
 
-	int durability;
+	int healthLive;
 
 	Buff * Buffs[100];
 	Barrier *Barriers[ROADBLOCKCOUNT];
@@ -179,8 +185,8 @@ private:
 
 	//Declaration of class instances
 	RenderStrings texts;
-	Car Vehicle;
 	Player *playerInstance;
+	Car Vehicle;
 	RenderStrings text; // text file that stores the car locations
 
 	float bounceTime;
@@ -197,10 +203,12 @@ private:
 	int lapCount;
 	bool isWon;
 	
-	vector <float> TrapList;
+	vector <float> DamageBuffList;
 	vector <float> SpeedBuffList;
-	vector <float> BarrierList;	
 	vector <float> SlowBuffList;
+	vector <float> ReverseBuffList;
+
+	vector <float> BarrierList;
 	vector <float> CheckpointList;
 };
 

@@ -90,6 +90,11 @@ private:
 		GEO_MENU,
 		GEO_ARROW,
 		GEO_BACKGROUND,
+		GEO_TITLEBACKGROUND,
+		GEO_TITLE,
+
+		GEO_MODEL1,
+		GEO_MODEL2,
 
 		NUM_GEOMETRY,
 	};
@@ -120,7 +125,8 @@ private:
 	unsigned m_parameters[U_TOTAL];
 
 	GAMESTATE state;
-	MenuCamera camera;
+	FPSCamera camera;
+	//MenuCamera camera;
 	MS modelStack, viewStack, projectionStack;
 	Light light[3]; //array size is the number of light sources in the scene
 
@@ -134,6 +140,15 @@ private:
 	float FPS;
 
 	bool isMenu;
+	bool transition[3];
+	float rotateAngle;
+
+	float tmpAngle; //remove later
+	float tmpx;
+	float tmpy;
+	float tmpz;
+
+	float transitionTime;
 
 	int sceneNumber;
 	double arrowY;
