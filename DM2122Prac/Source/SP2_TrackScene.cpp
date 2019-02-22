@@ -840,7 +840,6 @@ void SP2_TrackScene::Update(double dt)
 			isLapCompleted = true;
 		}
 	}
-	
 
 	//Win condition done by Winston
 	if (CollisionChecker(3, 1, 45, 0, 4, 1) == true)
@@ -861,6 +860,11 @@ void SP2_TrackScene::Update(double dt)
 		if (isWon == true)
 		{
 			Application::SceneSetter = 2;
+		}
+
+		if (Application::IsKeyPressed('H'))
+		{
+			isWon = true;
 		}
 	}
 

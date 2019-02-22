@@ -1,9 +1,9 @@
-90
 0
 0
 0
 0
 0
-OBJ//Kart3.obj
-OBJ//Wheels1.obj
-Image//Colors//Orange.tga
+0
+OBJ//Kart2.obj
+OBJ//Wheels3.obj
+Image//Colors//Yellow.tga
