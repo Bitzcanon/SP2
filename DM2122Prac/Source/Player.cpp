@@ -40,6 +40,11 @@ Player* Player::getInstance()
 void Player::resetSaveFile()
 {
 	saveFile.resetSave();
+	setCoinCount(0);
+	setMaxSpeedUpgradeStatus(false);
+	setAccelerationUpgradeStatus(false);
+	setMaxAccelerationUpgradeStatus(false);
+	setSteerUpgradeStatus(false);
 }
 
 //

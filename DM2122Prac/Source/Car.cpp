@@ -14,7 +14,7 @@ Car::Car()
 	acceleration = 0;
 	maxAcceleration = 0.5f;
 
-	steerFactor = 1.8f;
+	steerFactor = 1.2f;
 	steerAngle = 0;
 
 	health = 30;
@@ -192,7 +192,7 @@ void Car::Update(double dt)
 		{
 			if (playerInstance->getSteerUpgradeStatus() == true)
 			{
-				steerFactor = 2.2f;
+				steerFactor = 1.8f;
 			}
 			if (isDrivingForward)
 			{
@@ -210,7 +210,7 @@ void Car::Update(double dt)
 		{
 			if (playerInstance->getSteerUpgradeStatus() == true)
 			{
-				steerFactor = 2.2f;
+				steerFactor = 1.8f;
 			}
 			if (isDrivingForward)
 			{
@@ -313,7 +313,7 @@ void Car::Update(double dt)
 		{
 			if (playerInstance->getSteerUpgradeStatus() == true)
 			{
-				steerFactor = 2.2f;
+				steerFactor = 1.8f;
 			}
 			if (isDrivingForward)
 			{
@@ -329,7 +329,7 @@ void Car::Update(double dt)
 		{
 			if (playerInstance->getSteerUpgradeStatus() == true)
 			{
-				steerFactor = 2.2f;
+				steerFactor = 1.8f;
 			}
 			if (isDrivingForward)
 			{
