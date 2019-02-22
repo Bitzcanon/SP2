@@ -10,6 +10,8 @@
 #include "Light.h"
 #include <string>
 
+#include "Music.h"
+
 using namespace std;
 
 class SP2_MainMenuScene : public Scene
@@ -138,7 +140,6 @@ private:
 
 	float bounceTime;
 	float FPS;
-
 	bool isMenu;
 	bool transition[3];
 	float rotateAngle;
@@ -152,6 +153,8 @@ private:
 
 	int sceneNumber;
 	double arrowY;
+
+	Music bgm;
 };
 
 #endif // ! SP2_MainMenuScene_H

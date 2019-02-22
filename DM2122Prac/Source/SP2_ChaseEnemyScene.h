@@ -166,6 +166,9 @@ private:
 
 	Coins coin[32];
 	bool coinappeared;
+	float coinrotation;
+	bool goingup;
+	float coinup;
 };
 
 #endif // ! SP2_CHASEENEMYSCENE_H

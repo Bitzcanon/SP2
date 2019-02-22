@@ -280,6 +280,9 @@ void SP2_ChaseEnemyScene::Init()
 	isWon = false;
 	coinappeared = false;
 	initCoins();
+
+	coinrotation = 0.f; coinup = 0.f;
+	goingup = false;
 }
 
 void SP2_ChaseEnemyScene::initCoins()
@@ -444,6 +447,24 @@ void SP2_ChaseEnemyScene::Update(double dt)
 			coin[i].appears();
 			break;
 		}
+	}
+
+	coinrotation += (float)dt * 40.f;
+	if (goingup && coinup < 2.f)
+	{
+		coinup += (float)dt * 1.f;
+	}
+	else if (goingup && coinup >= 2.f)
+	{
+		goingup = false;
+	}
+	if (!goingup && coinup > 0.f)
+	{
+		coinup -= (float)dt * 2.f;
+	}
+	else if (!goingup && coinup <= 0.f)
+	{
+		goingup = true;
 	}
 }
 
@@ -784,8 +805,9 @@ void SP2_ChaseEnemyScene::Render()
 		if (!coin[i].CheckTaken() && coin[i].hasAppeared())
 		{
 			modelStack.PushMatrix();
-			modelStack.Translate(coin[i].getX(), 0.f, coin[i].getZ());
+			modelStack.Translate(coin[i].getX(), coinup, coin[i].getZ());
 			modelStack.Scale(5.f, 5.f, 5.f);
+			modelStack.Rotate(coinrotation, 0.f, 1.0f, 0.f);
 			RenderMesh(meshList[GEO_COINS], true);
 			modelStack.PopMatrix();
 		}
