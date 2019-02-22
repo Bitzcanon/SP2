@@ -698,6 +698,8 @@ void SP2_TrackScene::Update(double dt)
 		}
 	}
 
+	float defaultSpeed;
+
 	if (playerInstance->getMaxSpeedUpgradeStatus() == true)
 	{
 		defaultSpeed = 0.5f;

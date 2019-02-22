@@ -24,6 +24,12 @@ void SP2_MainMenuScene::Init()
 	arrowY = 0.2;
 	isMenu = true;
 
+	for (int i = 0; i < 3; i++)
+	{
+		transition[i] = false;
+	}
+	transition[0] = false;
+	
 	transitionTime = 0;
 
 	tmpx = 0;
@@ -118,7 +124,7 @@ void SP2_MainMenuScene::Init()
 
 	//Initialise initial Camera position x y z target up
 	//camera.Init(Vector3(0, 20, 1), Vector3(0, 20, 0), Vector3(0, 1, 0)); //For MainMenu Camera
-	camera.Init(Vector3(0, 40, 120)); //For FPS Camera (Only for NPCScene, testing in TrackScene
+	camera.Init(Vector3(0, 20, 120)); //For FPS Camera (Only for NPCScene, testing in TrackScene
 
 	//Light parameters
 	//Lower floor lighting
@@ -220,21 +226,31 @@ void SP2_MainMenuScene::Update(double dt)
 
 	transitionTime += 1 * dt;
 
-	if (transitionTime < 10)
+	if (transitionTime < 6)
 	{
-		if (transitionTime < 3)
+		if (transitionTime < 2 && transition[0] == false)
 		{
-
+			transition[0] = true;
+			meshList[GEO_TITLE]->textureID = LoadTGA("Image//Title1.tga");
 		}
-		else if (transitionTime < 6)
+		if (transitionTime < 4 && transitionTime > 2 && transition[1] == false)
 		{
+			transition[1] = true;
 			meshList[GEO_TITLE]->textureID = LoadTGA("Image//Title2.tga");
 		}
-		else if (transitionTime < 9)
+		if (transitionTime < 6 && transitionTime > 4 && transition[2] == false)
 		{
+			transition[2] = true;
 			meshList[GEO_TITLE]->textureID = LoadTGA("Image//Title3.tga");
 		}
 	}
+	else if (camera.position.z > 0)
+	{
+		camera.position.z -= 250 * dt;
+	}
+	
+	
+
 
 	if (Application::IsKeyPressed('G')) //tester key
 	{
@@ -606,24 +622,18 @@ void SP2_MainMenuScene::Render()
 		modelStack.PopMatrix();
 
 		modelStack.PushMatrix();
-		modelStack.Translate(0, 1, 0);
-		modelStack.Scale(200, 200, 200);
-		RenderMesh(meshList[GEO_TITLEBACKGROUND], false); //set lighting to true once completed
-		modelStack.PopMatrix();
-
-		modelStack.PushMatrix();
 		modelStack.Translate(0, 20 , 0);
 		modelStack.Scale(100, 100, 100);
 		RenderMesh(meshList[GEO_TITLE], false); //set lighting to true once completed
 		modelStack.PopMatrix();
 
-		modelStack.PushMatrix();
-		modelStack.Translate(0 , 0 , 0);
-		modelStack.Rotate(tmpAngle, 1, 0, 0);
-		modelStack.Scale(10 , 10 , 10);
-		RenderMesh(meshList[GEO_MODEL1], true); //set lighting to true once completed
-		modelStack.PopMatrix();
-		
+		//modelStack.PushMatrix();
+		//modelStack.Translate(0 , 0 , 0);
+		//modelStack.Rotate(tmpAngle, 1, 0, 0);
+		//modelStack.Scale(10 , 10 , 10);
+		//RenderMesh(meshList[GEO_MODEL1], true); //set lighting to true once completed
+		//modelStack.PopMatrix();
+		//
 
 }
 
