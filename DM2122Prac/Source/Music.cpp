@@ -1,13 +1,13 @@
-/*#include "Music.h"
+#include "Music.h"
 
 Music::Music()
 {
-	gSoloud.init();
+	//gSoloud.init();
 }
 
 Music::~Music()
 {
-	gSoloud.deinit();
+	//gSoloud.deinit();
 }
 
 void Music::playBGM(int i)
@@ -15,6 +15,7 @@ void Music::playBGM(int i)
 	switch (i)
 	{
 	case 0:
+		PlaySound(TEXT("Sounds//Silhouette.wav"), NULL, SND_FILENAME | SND_ASYNC);
 		break;
 	}
 }
@@ -26,4 +27,4 @@ void  Music::playInstantSound(int i)
 	case 0:
 		break;
 	}
-}*/
+}

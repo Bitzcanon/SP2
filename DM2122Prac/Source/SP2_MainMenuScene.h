@@ -13,6 +13,8 @@
 
 
 
+#include "Music.h"
+
 using namespace std;
 
 class SP2_MainMenuScene : public Scene
@@ -133,7 +135,6 @@ private:
 
 	float bounceTime;
 	float FPS;
-
 	bool isMenu;
 	bool isInstructions;
 
@@ -151,6 +152,8 @@ private:
 
 	int sceneNumber;
 	double arrowY;
+
+	Music bgm;
 };
 
 #endif // ! SP2_MainMenuScene_H

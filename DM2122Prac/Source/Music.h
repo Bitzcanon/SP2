@@ -1,10 +1,16 @@
-/*#pragma once
+#pragma once
 #define WITH_WINMM
 
-#include "../../soloud20181119/include/soloud.h"
-#include "../../soloud20181119/include/soloud_wav.h"
+#pragma comment (lib, "winmm.lib")
+//#include "../../soloud20181119/include/soloud.h"
+//#include "../../soloud20181119/include/soloud_wav.h"
 
+#include <iostream>
+#include <windows.h>
+#include <mmsystem.h>
 using namespace std;
+
+
 
 class Music
 {
@@ -14,6 +20,6 @@ public:
 	void playBGM(int i);
 	void playInstantSound(int i);
 private:
-	SoLoud::Soloud gSoloud;
-	SoLoud::Wav gWave;
-};*/
+	//SoLoud::Soloud gSoloud;
+	//SoLoud::Wav gWave;
+};
