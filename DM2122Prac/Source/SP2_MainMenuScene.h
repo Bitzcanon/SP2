@@ -141,6 +141,7 @@ private:
 
 	bool isMenu;
 	bool transition[3];
+	float rotateAngle;
 
 	float tmpAngle; //remove later
 	float tmpx;

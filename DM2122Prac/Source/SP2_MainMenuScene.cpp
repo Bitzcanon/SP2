@@ -23,12 +23,12 @@ void SP2_MainMenuScene::Init()
 	bounceTime = 0;
 	arrowY = 0.2;
 	isMenu = true;
+	rotateAngle = 0;
 
 	for (int i = 0; i < 3; i++)
 	{
 		transition[i] = false;
 	}
-	transition[0] = false;
 	
 	transitionTime = 0;
 
@@ -199,7 +199,7 @@ void SP2_MainMenuScene::Init()
 	meshList[GEO_TITLE] = MeshBuilder::GenerateQuad("Title", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_TITLE]->textureID = LoadTGA("Image//Title1.tga");
 
-	meshList[GEO_MODEL1] = MeshBuilder::GenerateOBJ("Model1", "OBJ//Kart3.obj");
+	meshList[GEO_MODEL1] = MeshBuilder::GenerateOBJ("Model1", "OBJ//Kart2.obj");
 	meshList[GEO_MODEL1]->textureID = LoadTGA("Image//Colors//Blue.tga");
 
 	meshList[GEO_ARROW] = MeshBuilder::GenerateOBJ("Arrow", "OBJ//Arrow.obj");
@@ -223,9 +223,18 @@ void SP2_MainMenuScene::Init()
 void SP2_MainMenuScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
-
-	transitionTime += 1 * dt;
-
+	if (rotateAngle < 360)
+	{
+		rotateAngle += 20 * dt;
+	}
+	else 
+	{
+		rotateAngle = 0;
+	}
+	if (transitionTime < 6)
+	{
+		transitionTime += 1 * dt;
+	}
 	if (transitionTime < 6)
 	{
 		if (transitionTime < 2 && transition[0] == false)
@@ -609,9 +618,17 @@ void SP2_MainMenuScene::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-		modelStack.Translate(0, 20, -120);
+		modelStack.Translate(0, 20, -140);
 		modelStack.Scale(100 , 100 , 100);
 		RenderMesh(meshList[GEO_MENU], false);
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0.5, 0, 0.2);
+		modelStack.Rotate(10, 1, 0, 0);
+		modelStack.Rotate(rotateAngle, 0, 1, 0);
+		modelStack.Scale(0.2, 0.2 , 0.2);
+		RenderMesh(meshList[GEO_MODEL1], true); //set lighting to true once completed
+		modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 		modelStack.Translate(-0.38 , arrowY ,0.1);
@@ -627,14 +644,7 @@ void SP2_MainMenuScene::Render()
 		RenderMesh(meshList[GEO_TITLE], false); //set lighting to true once completed
 		modelStack.PopMatrix();
 
-		//modelStack.PushMatrix();
-		//modelStack.Translate(0 , 0 , 0);
-		//modelStack.Rotate(tmpAngle, 1, 0, 0);
-		//modelStack.Scale(10 , 10 , 10);
-		//RenderMesh(meshList[GEO_MODEL1], true); //set lighting to true once completed
-		//modelStack.PopMatrix();
-		//
-
+	
 }
 
 void SP2_MainMenuScene::Exit()
