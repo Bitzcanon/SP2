@@ -3,7 +3,6 @@
 
 #include "Scene.h"
 #include "MenuCamera.h"
-#include "FPSCamera.h"
 #include "Mesh.h"
 #include "MeshBuilder.h"
 #include "MatrixStack.h"
@@ -95,15 +94,9 @@ private:
 
 		GEO_MODEL1,
 		GEO_MODEL2,
+		GEO_WHEELS,
 
 		NUM_GEOMETRY,
-	};
-
-	enum GAMESTATE
-	{
-		NPC,
-		MENU,
-		RACE,
 	};
 
 public:
@@ -124,9 +117,7 @@ private:
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
 
-	GAMESTATE state;
-	FPSCamera camera;
-	//MenuCamera camera;
+	MenuCamera camera;
 	MS modelStack, viewStack, projectionStack;
 	Light light[3]; //array size is the number of light sources in the scene
 
