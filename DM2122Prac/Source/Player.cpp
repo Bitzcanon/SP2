@@ -11,7 +11,9 @@ Player::Player()
 	maxSpeedUpgrade = saveFile.dataStorage[2];
 	accelerationUpgrade = saveFile.dataStorage[3];
 	maxAccelerationUpgrade = saveFile.dataStorage[4];
-	steerUpgrade = saveFile.dataStorage[5];		
+	steerUpgrade = saveFile.dataStorage[5];
+
+	coinsEarned = 0;
 
 	//store into string array
 	kart = saveFile.dataStorageStrings[0];
@@ -45,6 +47,16 @@ void Player::resetSaveFile()
 	setAccelerationUpgradeStatus(false);
 	setMaxAccelerationUpgradeStatus(false);
 	setSteerUpgradeStatus(false);
+}
+
+void Player::setCoinsEarned(int input)
+{
+	coinsEarned = input;
+}
+
+int Player::getCoinsEarned(void)
+{
+	return coinsEarned;
 }
 
 //

@@ -1091,7 +1091,7 @@ void SP2_NPCScene::Render()
 				}
 				else
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's health?", Color(1, 1, 0), 1, -1, 14);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's health? Only 17 coins!", Color(1, 1, 0), 1, -1, 14);
 					RenderTextOnScreen(meshList[GEO_TEXT], "Press 'Y' to purchase upgrade", Color(1, 1, 0), 1, -1, 12);
 				}
 				break;
@@ -1103,7 +1103,7 @@ void SP2_NPCScene::Render()
 				}
 				else
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's max speed?", Color(1, 1, 0), 1, -1, 14);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's max speed? Only 17 coins!", Color(1, 1, 0), 1, -1, 14);
 					RenderTextOnScreen(meshList[GEO_TEXT], "Press 'Y' to purchase upgrade", Color(1, 1, 0), 1, -1, 12);
 				}
 				break;
@@ -1114,7 +1114,7 @@ void SP2_NPCScene::Render()
 				}
 				else
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's acceleration?", Color(1, 1, 0), 1, -1, 14);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's acceleration? Only 17 coins!", Color(1, 1, 0), 1, -1, 14);
 					RenderTextOnScreen(meshList[GEO_TEXT], "Press 'Y' to purchase upgrade", Color(1, 1, 0), 1, -1, 12);
 				}
 				break;
@@ -1125,7 +1125,7 @@ void SP2_NPCScene::Render()
 				}
 				else
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's max acceleration?", Color(1, 1, 0), 1, -1, 14);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's max acceleration? Only 17 coins!", Color(1, 1, 0), 1, -1, 14);
 					RenderTextOnScreen(meshList[GEO_TEXT], "Press 'Y' to purchase upgrade", Color(1, 1, 0), 1, -1, 12);
 				}
 				break;
@@ -1136,7 +1136,7 @@ void SP2_NPCScene::Render()
 				}
 				else
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's steering?", Color(1, 1, 0), 1, -1, 14);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's steering? Only 17 coins!", Color(1, 1, 0), 1, -1, 14);
 					RenderTextOnScreen(meshList[GEO_TEXT], "Press 'Y' to purchase upgrade", Color(1, 1, 0), 1, -1, 12);
 				}
 				break;

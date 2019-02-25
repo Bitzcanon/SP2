@@ -280,11 +280,18 @@ void SP2_ChaseEnemyScene::Init()
 	cameraTarget = (Vehicle.newPosition.x + 1, Vehicle.newPosition.y + 1, Vehicle.newPosition.z + 10);
 
 	isWon = false;
+	displayUpgrades = true;
 	coinappeared = false;
 	initCoins();
 
 	coinrotation = 0.f; coinup = 0.f;
 	goingup = false;
+
+	healthUpgradeLive = playerInstance->getHealthUpgradeStatus();
+	speedUpgradeLive = playerInstance->getMaxSpeedUpgradeStatus();
+	accelerationUpgradeLive = playerInstance->getAccelerationUpgradeStatus();
+	maxAccelerationUpgradeLive = playerInstance->getMaxAccelerationUpgradeStatus();
+	steerUpgradeLive = playerInstance->getSteerUpgradeStatus();
 }
 
 void SP2_ChaseEnemyScene::initCoins()
@@ -347,10 +354,18 @@ void SP2_ChaseEnemyScene::Update(double dt)
 		Application::SceneSetter = 3;
 	}
 
+	playerInstance->setCoinsEarned(countCoins());
+
 	if (bounceTime > 0) //updating bouncetime
 	{
 		bounceTime -= (float)(1 * dt);
 	}
+
+	healthUpgradeLive = playerInstance->getHealthUpgradeStatus();
+	speedUpgradeLive = playerInstance->getMaxSpeedUpgradeStatus();
+	accelerationUpgradeLive = playerInstance->getAccelerationUpgradeStatus();
+	maxAccelerationUpgradeLive = playerInstance->getMaxAccelerationUpgradeStatus();
+	steerUpgradeLive = playerInstance->getSteerUpgradeStatus();
 
 	if (playerInstance->returnChangeSomething() == true) // reload car model if something has changed.
 	{
@@ -361,6 +376,16 @@ void SP2_ChaseEnemyScene::Update(double dt)
 		meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels", playerInstance->returnWheels());
 		meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
 		playerInstance->setChangeSomething(false);
+	}
+
+	//Toggle between showing upgrades active in the UI
+	if (Application::IsKeyPressed('B'))
+	{
+		if (bounceTime <= 0)
+		{
+			bounceTime = 0.3f;
+			displayUpgrades = !displayUpgrades;
+		}
 	}
 
 	/*Maze Tile logic done by Winston*/
@@ -418,9 +443,18 @@ void SP2_ChaseEnemyScene::Update(double dt)
 	Vehicle.Update(dt);
 	vehicleSpeed = Vehicle.returnSpeed();
 
-	cameraPos.x = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * (Vehicle.returnCarScale() / 4);
-	cameraPos.y = Vehicle.newPosition.y + 10;
-	cameraPos.z = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * (Vehicle.returnCarScale() / 4);
+	if (!Application::IsKeyPressed(VK_SPACE))
+	{
+		cameraPos.x = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * (Vehicle.returnCarScale() / 4);
+		cameraPos.y = Vehicle.newPosition.y + 10;
+		cameraPos.z = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * (Vehicle.returnCarScale() / 4);
+	}
+	if (Application::IsKeyPressed(VK_SPACE))
+	{
+		cameraPos.x = (Vehicle.newPosition.x + sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * (Vehicle.returnCarScale() / 4);
+		cameraPos.y = Vehicle.newPosition.y + 10;
+		cameraPos.z = (Vehicle.newPosition.z + cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * (Vehicle.returnCarScale() / 4);
+	}
 
 	cameraTarget.x = Vehicle.newPosition.x * (Vehicle.returnCarScale() / 4);
 	cameraTarget.y = Vehicle.newPosition.y;
@@ -861,11 +895,24 @@ void SP2_ChaseEnemyScene::Render()
 				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.y), Color(1, 0, 0), 1, -1, 44);
 				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.z), Color(1, 0, 0), 1, -1, 42);
 
-				RenderTextOnScreen(meshList[GEO_TEXT], to_string(countCoins()), Color(1, 0, 0), 1, -1, 38);
+			}
 
-				RenderTextOnScreen(meshList[GEO_TEXT], to_string((int)timer), Color(1, 0, 0), 1, 25 , 25);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Coins:", Color(1, 1, 1), 1, -1, 36);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(playerInstance->getCoinCount()), Color(1, 1, 1), 1, 8, 36);
 
-				RenderTextOnScreen(meshList[GEO_TEXT], to_string(playerInstance->getCoinCount()), Color(0, 1, 0), 1, -1, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Coins Collected:", Color(1, 1, 1), 1, -1, 38);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(countCoins()), Color(1, 1, 1), 1, 15, 38);
+
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string((int)timer), Color(1, 1, 0), 4, 37, 53);
+
+			if (displayUpgrades == true)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Upgrades:", Color(1, 1, 1), 1, -1, 32);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Health Upgrade", Color(!healthUpgradeLive, healthUpgradeLive, 0), 1, -1, 30);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Max Speed Upgrade", Color(!speedUpgradeLive, speedUpgradeLive, 0), 1, -1, 28);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Acceleration Upgrade", Color(!accelerationUpgradeLive, accelerationUpgradeLive, 0), 1, -1, 26);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Max Acceleration Upgrade", Color(!maxAccelerationUpgradeLive, maxAccelerationUpgradeLive, 0), 1, -1, 24);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Steering Upgrade", Color(!steerUpgradeLive, steerUpgradeLive, 0), 1, -1, 22);
 			}
 		}
 		modelStack.PopMatrix();

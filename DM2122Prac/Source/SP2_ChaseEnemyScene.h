@@ -164,6 +164,13 @@ private:
 	Vector3 cameraTarget;
 
 	bool isWon;
+	bool displayUpgrades;
+
+	bool healthUpgradeLive;
+	bool speedUpgradeLive;
+	bool accelerationUpgradeLive;
+	bool maxAccelerationUpgradeLive;
+	bool steerUpgradeLive;
 
 	vector <float> BarrierList;
 

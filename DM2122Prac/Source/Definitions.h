@@ -18,6 +18,7 @@ constexpr auto CHECKPOINTROWCOUNT = 4; //How many elements there are in each row
 constexpr auto MAZETILECOUNT = 44;
 constexpr auto MAZETILEROWCOUNT = 3;
 
-constexpr auto UPGRADEPRICE = 10;
+constexpr auto RACEREWARD = 10;
+constexpr auto UPGRADEPRICE = 17;
 
 #endif // !DEFINITIONS_H

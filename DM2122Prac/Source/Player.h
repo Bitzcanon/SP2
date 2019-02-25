@@ -18,12 +18,14 @@ public:
 	bool getAccelerationUpgradeStatus(void);
 	bool getMaxAccelerationUpgradeStatus(void);
 	bool getSteerUpgradeStatus(void);
+	int getCoinsEarned(void);
 
 	void setHealthUpgradeStatus(bool);
 	void setMaxSpeedUpgradeStatus(bool);
 	void setAccelerationUpgradeStatus(bool);
 	void setMaxAccelerationUpgradeStatus(bool);
 	void setSteerUpgradeStatus(bool);
+	void setCoinsEarned(int);
 
 	void resetSaveFile();
 
@@ -53,6 +55,7 @@ private:
     string color; // store color address
 	
 	int coinCount;
+	int coinsEarned;
 
 	bool healthUpgrade;
 	bool maxSpeedUpgrade;

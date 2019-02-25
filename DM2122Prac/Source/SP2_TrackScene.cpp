@@ -880,7 +880,7 @@ void SP2_TrackScene::Update(double dt)
 			playerInstance->setChangeSomething(true);
 			//Set car's speed to 0 at the start of the game (fixing a bug with random boost at the start of the game)
 			Vehicle.setSpeed(0);
-			playerInstance->setCoinCount(playerInstance->getCoinCount() + 10);
+			playerInstance->setCoinCount(playerInstance->getCoinCount() + RACEREWARD);
 			Application::SceneSetter = 2;
 		}
 	}
