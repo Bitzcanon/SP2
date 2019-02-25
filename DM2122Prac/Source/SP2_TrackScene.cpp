@@ -720,7 +720,7 @@ void SP2_TrackScene::Update(double dt)
 		if (CollisionChecker(1, i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
 		{
 			music.playInstantSound(3); //Sound effect by Afiq
-			Vehicle.setHealth(healthLive - 0.5);
+			Vehicle.setHealth(healthLive - 1);
 		}
 	}
 
@@ -757,7 +757,7 @@ void SP2_TrackScene::Update(double dt)
 	if (SlowBuff::timer > 0)
 	{
 		SlowBuff::timer = SlowBuff::timer - (float)(1 * dt);
-		Vehicle.setSpeed(0.2);
+		Vehicle.setSpeed(0.2f);
 	}
 
 	if (ReverseBuff::timer > 0)
@@ -1458,7 +1458,7 @@ void SP2_TrackScene::Render()
 				RenderTextOnScreen(meshList[GEO_TEXT], "Steering Upgrade", Color(!steerUpgradeLive, steerUpgradeLive, 0), 1, -1, 22);
 			}
 
-			int countdown = ResetTimer;
+			int countdown = static_cast<int>(ResetTimer);
 			if (ResetTimer > 0)
 			{
 				RenderTextOnScreen(meshList[GEO_TEXT], to_string(countdown), Color(1, 1, 1), 3, 25, 20);

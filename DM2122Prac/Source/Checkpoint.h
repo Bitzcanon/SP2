@@ -19,7 +19,7 @@ public:
 	void setyPos(float);
 	void setzPos(float);
 
-	int returnCheckpointRotation();
+	float returnCheckpointRotation();
 	void setCheckpointRotation(float);
 
 	bool returnIsPassedThrough();

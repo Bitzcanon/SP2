@@ -22,11 +22,11 @@ public:
 	float returnTimer();
 	void setTimer(float);
 
-	int returnBarrierRotation();
+	float returnBarrierRotation();
 	void setBarrierRotation(float);
 
-	int returnBarrierScale();
-	void setBarrierScale(int);
+	float returnBarrierScale();
+	void setBarrierScale(float);
 
 	int returnBarrierQuantity(void);
 

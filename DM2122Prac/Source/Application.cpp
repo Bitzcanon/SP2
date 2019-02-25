@@ -86,7 +86,7 @@ void Application::Init()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
 	//Create a window and create its OpenGL context
-	m_window = glfwCreateWindow(800 * 1.5, 600 * 1.5, "Computer Graphics", NULL, NULL);
+	m_window = glfwCreateWindow(1200, 900, "Computer Graphics", NULL, NULL); //800, 600 default
 
 	//Register callback for window size (New to Scene 2)
 	glfwSetWindowSizeCallback(m_window, resize_callback);

@@ -41,7 +41,6 @@ void Save::writeTo(int coinCount, int healthUpgrade, int maxSpeedUpgrade, int ac
 {
 	ofstream saveFile("TextFiles//save.txt"); //Open text file to read
 	string row;
-	int tmp;
 
 	if (saveFile.is_open())
 	{

@@ -80,19 +80,19 @@ void FPSCamera::Update(double dt)
 	
 	if (Application::IsKeyPressed('A'))
 	{
-		position -= right * FPSCamera_SPEED * dt;
+		position -= right * FPSCamera_SPEED * (float)(dt);
 	}
 	if (Application::IsKeyPressed('D'))
 	{
-		position += right * FPSCamera_SPEED * dt;
+		position += right * FPSCamera_SPEED * (float)(dt);
 	}
 	if (Application::IsKeyPressed('W'))
 	{
-		position += front * FPSCamera_SPEED * dt;
+		position += front * FPSCamera_SPEED * (float)(dt);
 	}
 	if (Application::IsKeyPressed('S'))
 	{
-		position -= front * FPSCamera_SPEED * dt;
+		position -= front * FPSCamera_SPEED * (float)(dt);
 	}
 	if (Application::IsKeyPressed('Q'))
 	{

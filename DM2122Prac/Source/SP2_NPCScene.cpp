@@ -309,69 +309,72 @@ void SP2_NPCScene::Update(double dt)
 		Application::SceneSetter = 0;
 	}
 
-	if (Application::IsKeyPressed(VK_RIGHT))
+	if (GarageOpen)
 	{
-		if (bounceTime <= 0)
+		if (Application::IsKeyPressed(VK_RIGHT))
 		{
-			transitionColor += 1;
-			if (transitionColor > 4)
+			if (bounceTime <= 0)
 			{
-				transitionColor = 0;
+				transitionColor += 1;
+				if (transitionColor > 4)
+				{
+					transitionColor = 0;
+				}
+				//delete meshList[10];
+				meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
+				meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
+				//EDIT STATIC PLAYER VAR
+
+				playerInstance->setColor(text.returnColorString(transitionColor));
+				playerInstance->setChangeSomething(true);
+
+				playerInstance->writeSave();
+
+				bounceTime = 0.2f;
 			}
-			//delete meshList[10];
-			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
-			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
-			//EDIT STATIC PLAYER VAR
-			
-			playerInstance->setColor(text.returnColorString(transitionColor));
-			playerInstance->setChangeSomething(true);
-
-			playerInstance->writeSave();
-
-			bounceTime = 0.2f;
 		}
-	}
-	if (Application::IsKeyPressed(VK_UP))
-	{
-		if (bounceTime <= 0)
+		if (Application::IsKeyPressed(VK_UP))
 		{
-			transitionBody += 1;
-			if (transitionBody > 2)
+			if (bounceTime <= 0)
 			{
-				transitionBody = 0;
+				transitionBody += 1;
+				if (transitionBody > 2)
+				{
+					transitionBody = 0;
+				}
+				//delete meshList[10];
+				meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
+				meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
+				//EDIT STATIC PLAYER VAR
+				playerInstance->setKart(text.returnKartString(transitionBody));
+				playerInstance->setChangeSomething(true);
+
+				playerInstance->writeSave();
+
+				bounceTime = 0.2f;
 			}
-			//delete meshList[10];
-			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
-			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
-			//EDIT STATIC PLAYER VAR
-			playerInstance->setKart(text.returnKartString(transitionBody));
-			playerInstance->setChangeSomething(true);
-
-			playerInstance->writeSave();
-
-			bounceTime = 0.2f;
 		}
-	}
 
-	if (Application::IsKeyPressed(VK_DOWN))
-	{
-		if (bounceTime <= 0)
+		if (Application::IsKeyPressed(VK_DOWN))
 		{
-			transitionWheels += 1;
-			if (transitionWheels > 2)
+			if (bounceTime <= 0)
 			{
-				transitionWheels = 0;
+				transitionWheels += 1;
+				if (transitionWheels > 2)
+				{
+					transitionWheels = 0;
+				}
+				//delete meshList[16];
+				meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels", text.returnWheelsString(transitionWheels));
+				meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
+				//EDIT STATIC PLAYER VAR
+				playerInstance->setWheels(text.returnWheelsString(transitionWheels));
+				playerInstance->setChangeSomething(true);
+
+				playerInstance->writeSave();
+
+				bounceTime = 0.2f;
 			}
-			//delete meshList[16];
-			meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels", text.returnWheelsString(transitionWheels));
-			meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
-			//EDIT STATIC PLAYER VAR
-			playerInstance->setWheels(text.returnWheelsString(transitionWheels));
-			playerInstance->setChangeSomething(true);
-
-			playerInstance->writeSave();
-
-			bounceTime = 0.2f;
 		}
 	}
 
@@ -853,6 +856,9 @@ string SP2_NPCScene::NPCRandomText()
 	case 5:
 		return "Your car may be quite fast, but it will not outrun a blue hedgehog.";
 		break;
+	default:
+		return "Have a nice day!";
+		break;
 	}
 }
 
@@ -1050,7 +1056,7 @@ void SP2_NPCScene::Render()
 		}
 		else if (NPCs[0].IsInteracting() || NPCs[1].IsInteracting())
 		{
-			RenderTextOnScreen(meshList[GEO_TEXT], "Press R to exit interact with NPC", Color(1, 1, 0), 1, -1, 10);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press R to exit interaction with NPC", Color(1, 1, 0), 1, -1, 10);
 		}
 	}
 	if (CloseToDoor() && !GarageOpen)
@@ -1062,7 +1068,7 @@ void SP2_NPCScene::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to close garage door", Color(1, 1, 0), 1, -1, 10);
 	}
 
-	if (NPCs[0].IsInteracting() || NPCs[1].IsInteracting())
+	if ((NPCs[0].IsInteracting() && NPCs[0].CloseToNPC(camera.position.x, camera.position.z)) || (NPCs[1].IsInteracting() && NPCs[1].CloseToNPC(camera.position.x, camera.position.z)))
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], NPCtext, Color(1, 1, 0), 1, -1, 12);
 	}

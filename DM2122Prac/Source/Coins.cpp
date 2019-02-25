@@ -7,8 +7,8 @@
 Coins::Coins()
 {
 	taken = false; appeared = false;
-	x = rand() % 990 - 495;
-	z = rand() % 990 - 495;
+	x = (float)(rand() % 990 - 495);
+	z = (float)(rand() % 990 - 495);
 }
 
 Coins::~Coins()

@@ -43,6 +43,7 @@ void Player::resetSaveFile()
 {
 	saveFile.resetSave();
 	setCoinCount(0);
+	setHealthUpgradeStatus(false);
 	setMaxSpeedUpgradeStatus(false);
 	setAccelerationUpgradeStatus(false);
 	setMaxAccelerationUpgradeStatus(false);

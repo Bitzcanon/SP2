@@ -114,7 +114,7 @@ void NPCS::setCoordsNPC(float npcx, float npcz)
 	x = npcx; z = npcz;
 }
 
-void NPCS::setDirection(int i)
+void NPCS::setDirection(float i)
 {
 	direction = i;
 }
