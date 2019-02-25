@@ -1,3 +1,42 @@
-﻿D:\visual studio 2017\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (DM2122Prac.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (DM2122Prac.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   Application.cpp
-  DM2122Prac.vcxproj -> C:\Users\Gary Quah\Documents\GitHub\SP2\Debug\Studio Project 2.exe
+  Barrier.cpp
+  Buff.cpp
+  Car.cpp
+  Checkpoint.cpp
+  Coins.cpp
+  DamageBuff.cpp
+  FPSCamera.cpp
+  Location.cpp
+  MenuCamera.cpp
+  Music.cpp
+  Camera.cpp
+  Camera3.cpp
+  LoadOBJ.cpp
+  LoadTGA.cpp
+  main.cpp
+  Mesh.cpp
+  MeshBuilder.cpp
+  NPCS.cpp
+  Player.cpp
+  Generating Code...
+  Compiling...
+  RenderStrings.cpp
+  ReverseBuff.cpp
+  Save.cpp
+  shader.cpp
+  SlowBuff.cpp
+  Source.cpp
+  SP2_CoinCollectionScene.cpp
+  SP2_MainMenuScene.cpp
+  SP2_NPCScene.cpp
+  SP2_SurvivalScene.cpp
+  SP2_TrackScene.cpp
+  SP2_WinScene.cpp
+  SpeedBuff.cpp
+  Utility.cpp
+  WinCamera.cpp
+  Generating Code...
+  LINK : D:\Documents\GitHub\SP2\Debug\Studio Project 2.exe not found or not built by the last incremental link; performing full link
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  DM2122Prac.vcxproj -> D:\Documents\GitHub\SP2\Debug\Studio Project 2.exe
