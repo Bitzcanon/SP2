@@ -315,7 +315,6 @@ void SP2_TrackScene::initBarrier()
 			Barriers[loc]->setxPos(BarrierList[i]);
 			counter += 1;
 		}
-		
 	}
 }
 
@@ -373,17 +372,13 @@ void SP2_TrackScene::Init()
 	loadDamageBuffCoordinates();
 	loadReverseBuffCoordinates();
 	loadBarrierCoordinates();
+	loadCheckpointCoordinates();
 
 	//Loads Buff coordinates
 	initBuffs();
-
-	
-
 	//Loads Barrier coordinates
 	initBarrier();
-
 	//Loads Checkpoint coordinates
-	loadCheckpointCoordinates();
 	initCheckpoint();
 
 	tmpBool = false;
@@ -552,7 +547,6 @@ void SP2_TrackScene::Init()
 	meshList[GEO_PROMPT] = MeshBuilder::GenerateText("prompt", 16, 16);
 	meshList[GEO_PROMPT]->textureID = LoadTGA("Image//calibri.tga");
 
-
 	//remove later
 	meshList[GEO_TESTCAR] = MeshBuilder::GenerateCube("Car", Color(0, 1, 0), 5, 1, 1);
 
@@ -692,7 +686,7 @@ void SP2_TrackScene::Update(double dt)
 
 	if (playerInstance->returnChangeSomething() == true) // reload car model if something has changed.
 	{
-	//	cout << Player::color << endl;
+		cout << "change detected" << endl;
 		meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", playerInstance->returnKart());
 		meshList[GEO_KART]->textureID = LoadTGA(playerInstance->returnColor().c_str());
 
@@ -727,7 +721,7 @@ void SP2_TrackScene::Update(double dt)
 		if (CollisionChecker(1, i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
 		{
 			music.playInstantSound(3); //Sound effect by Afiq
-			Vehicle.setHealth(healthLive - 0.5);
+			Vehicle.setHealth(healthLive - 1);
 		}
 	}
 
@@ -764,7 +758,7 @@ void SP2_TrackScene::Update(double dt)
 	if (SlowBuff::timer > 0)
 	{
 		SlowBuff::timer = SlowBuff::timer - (float)(1 * dt);
-		Vehicle.setSpeed(0.2);
+		Vehicle.setSpeed(0.2f);
 	}
 
 	if (ReverseBuff::timer > 0)
@@ -879,9 +873,10 @@ void SP2_TrackScene::Update(double dt)
 		}
 		if (isWon == true)
 		{
+			playerInstance->setChangeSomething(true);
 			//Set car's speed to 0 at the start of the game (fixing a bug with random boost at the start of the game)
 			Vehicle.setSpeed(0);
-			playerInstance->setCoinCount(playerInstance->getCoinCount() + 10);
+			playerInstance->setCoinCount(playerInstance->getCoinCount() + RACEREWARD);
 			Application::SceneSetter = 2;
 		}
 	}
@@ -890,6 +885,7 @@ void SP2_TrackScene::Update(double dt)
 		if (Application::IsKeyPressed('H'))
 		{
 			isWon = true;
+			playerInstance->setChangeSomething(true);
 		}
 	}
 
@@ -1463,7 +1459,7 @@ void SP2_TrackScene::Render()
 				RenderTextOnScreen(meshList[GEO_TEXT], "Steering Upgrade", Color(!steerUpgradeLive, steerUpgradeLive, 0), 1, -1, 22);
 			}
 
-			int countdown = ResetTimer;
+			int countdown = static_cast<int>(ResetTimer);
 			if (ResetTimer > 0)
 			{
 				RenderTextOnScreen(meshList[GEO_TEXT], to_string(countdown), Color(1, 1, 1), 3, 25, 20);

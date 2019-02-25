@@ -18,7 +18,7 @@ Barrier::~Barrier()
 
 }
 
-int Barrier::returnBarrierRotation()
+float Barrier::returnBarrierRotation()
 {
 	return rotateBy;
 }
@@ -28,12 +28,12 @@ void Barrier::setBarrierRotation(float angle)
 	rotateBy = angle;
 }
 
-int Barrier::returnBarrierScale()
+float Barrier::returnBarrierScale()
 {
 	return scaleBy;
 }
 
-void Barrier::setBarrierScale(int scaleFactor)
+void Barrier::setBarrierScale(float scaleFactor)
 {
 	scaleBy = scaleFactor;
 }

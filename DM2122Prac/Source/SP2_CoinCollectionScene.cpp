@@ -1,4 +1,4 @@
-#include "SP2_ChaseEnemyScene.h"
+#include "SP2_CoinCollectionScene.h"
 #include "GL\glew.h"
 
 #include "shader.hpp"
@@ -8,17 +8,17 @@
 #include "LoadTGA.h"
 #include "LoadOBJ.h"
 
-SP2_ChaseEnemyScene::SP2_ChaseEnemyScene()
+SP2_CoinCollectionScene::SP2_CoinCollectionScene()
 {
 	playerInstance = Player::getInstance();
 }
 
-SP2_ChaseEnemyScene::~SP2_ChaseEnemyScene()
+SP2_CoinCollectionScene::~SP2_CoinCollectionScene()
 {
 
 }
 
-void SP2_ChaseEnemyScene::loadBarrierCoordinates()
+void SP2_CoinCollectionScene::loadBarrierCoordinates()
 {
 	ifstream myfile("TextFiles//MazeTileCoordinates.txt"); //File directory
 
@@ -37,7 +37,7 @@ void SP2_ChaseEnemyScene::loadBarrierCoordinates()
 	}
 }
 
-void SP2_ChaseEnemyScene::initBarrier()
+void SP2_CoinCollectionScene::initBarrier()
 {
 	for (int i = 0; i < MAZETILECOUNT; i++) //Init array container to NULL
 	{
@@ -75,7 +75,7 @@ void SP2_ChaseEnemyScene::initBarrier()
 	}
 }
 
-void SP2_ChaseEnemyScene::Init()
+void SP2_CoinCollectionScene::Init()
 {
 	//Loads Barrier coordinates
 	loadBarrierCoordinates();
@@ -280,14 +280,21 @@ void SP2_ChaseEnemyScene::Init()
 	cameraTarget = (Vehicle.newPosition.x + 1, Vehicle.newPosition.y + 1, Vehicle.newPosition.z + 10);
 
 	isWon = false;
+	displayUpgrades = true;
 	coinappeared = false;
 	initCoins();
 
 	coinrotation = 0.f; coinup = 0.f;
 	goingup = false;
+
+	healthUpgradeLive = playerInstance->getHealthUpgradeStatus();
+	speedUpgradeLive = playerInstance->getMaxSpeedUpgradeStatus();
+	accelerationUpgradeLive = playerInstance->getAccelerationUpgradeStatus();
+	maxAccelerationUpgradeLive = playerInstance->getMaxAccelerationUpgradeStatus();
+	steerUpgradeLive = playerInstance->getSteerUpgradeStatus();
 }
 
-void SP2_ChaseEnemyScene::initCoins()
+void SP2_CoinCollectionScene::initCoins()
 {
 	coin[0].SetCoinCoords(150.f, 175.f);
 	coin[1].SetCoinCoords(150.f, -175.f);	
@@ -323,7 +330,7 @@ void SP2_ChaseEnemyScene::initCoins()
 	coin[31].SetCoinCoords(-50.f, -175.f);
 }
 
-int SP2_ChaseEnemyScene::countCoins()
+int SP2_CoinCollectionScene::countCoins()
 {
 	int count = 0;
 	for (int i = 0; i < 32; i++)
@@ -336,22 +343,8 @@ int SP2_ChaseEnemyScene::countCoins()
 	return count;
 }
 
-int SP2_ChaseEnemyScene::randomCoins()
-{
-	while (true)
-	{
-		int i = rand() % 32;
-		if (!coin[i].hasAppeared())
-		{
-			coin[i].appears();
-			currentcoin = i;
-			return i;
-		}
-	}
-	return false;
-}
 
-void SP2_ChaseEnemyScene::Update(double dt)
+void SP2_CoinCollectionScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
 	
@@ -363,9 +356,38 @@ void SP2_ChaseEnemyScene::Update(double dt)
 		Application::SceneSetter = 3;
 	}
 
+	playerInstance->setCoinsEarned(countCoins());
+
 	if (bounceTime > 0) //updating bouncetime
 	{
 		bounceTime -= (float)(1 * dt);
+	}
+
+	healthUpgradeLive = playerInstance->getHealthUpgradeStatus();
+	speedUpgradeLive = playerInstance->getMaxSpeedUpgradeStatus();
+	accelerationUpgradeLive = playerInstance->getAccelerationUpgradeStatus();
+	maxAccelerationUpgradeLive = playerInstance->getMaxAccelerationUpgradeStatus();
+	steerUpgradeLive = playerInstance->getSteerUpgradeStatus();
+
+	if (playerInstance->returnChangeSomething() == true) // reload car model if something has changed.
+	{
+		cout << "something changed " << endl;
+		meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", playerInstance->returnKart());
+		meshList[GEO_KART]->textureID = LoadTGA(playerInstance->returnColor().c_str());
+
+		meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels", playerInstance->returnWheels());
+		meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
+		playerInstance->setChangeSomething(false);
+	}
+
+	//Toggle between showing upgrades active in the UI
+	if (Application::IsKeyPressed('B'))
+	{
+		if (bounceTime <= 0)
+		{
+			bounceTime = 0.3f;
+			displayUpgrades = !displayUpgrades;
+		}
 	}
 
 	/*Maze Tile logic done by Winston*/
@@ -423,9 +445,18 @@ void SP2_ChaseEnemyScene::Update(double dt)
 	Vehicle.Update(dt);
 	vehicleSpeed = Vehicle.returnSpeed();
 
-	cameraPos.x = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * (Vehicle.returnCarScale() / 4);
-	cameraPos.y = Vehicle.newPosition.y + 10;
-	cameraPos.z = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * (Vehicle.returnCarScale() / 4);
+	if (!Application::IsKeyPressed(VK_SPACE))
+	{
+		cameraPos.x = (Vehicle.newPosition.x - sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * (Vehicle.returnCarScale() / 4);
+		cameraPos.y = Vehicle.newPosition.y + 10;
+		cameraPos.z = (Vehicle.newPosition.z - cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * (Vehicle.returnCarScale() / 4);
+	}
+	if (Application::IsKeyPressed(VK_SPACE))
+	{
+		cameraPos.x = (Vehicle.newPosition.x + sin(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * (Vehicle.returnCarScale() / 4);
+		cameraPos.y = Vehicle.newPosition.y + 10;
+		cameraPos.z = (Vehicle.newPosition.z + cos(Math::DegreeToRadian(Vehicle.steerAngle)) * 6) * (Vehicle.returnCarScale() / 4);
+	}
 
 	cameraTarget.x = Vehicle.newPosition.x * (Vehicle.returnCarScale() / 4);
 	cameraTarget.y = Vehicle.newPosition.y;
@@ -468,18 +499,6 @@ void SP2_ChaseEnemyScene::Update(double dt)
 			coin[i].appears();
 			break;
 		}
-		/*if (currentcoin == i)
-		{
-			if (coin[i].hasAppeared() && !coin[i].CheckTaken())
-			{
-				break;
-			}
-			if (coin[i].hasAppeared() && coin[i].CheckTaken())
-			{
-				coin[randomCoins()].appears();
-				break;
-			}
-		}*/
 	}
 
 	coinrotation += (float)dt * 40.f;
@@ -502,7 +521,7 @@ void SP2_ChaseEnemyScene::Update(double dt)
 }
 
 /*Original logic done by Gary, Function and code organization done by Winston*/
-bool SP2_ChaseEnemyScene::CollisionChecker(int type, int index, float objX, float objZ, float length, float width)
+bool SP2_CoinCollectionScene::CollisionChecker(int type, int index, float objX, float objZ, float length, float width)
 {
 	float minimumXObj = objX / (Vehicle.returnCarScale() / 4);
 	float minimumZObj = objZ / (Vehicle.returnCarScale() / 4);
@@ -550,7 +569,7 @@ bool SP2_ChaseEnemyScene::CollisionChecker(int type, int index, float objX, floa
 static const float SKYBOXSIZE = 500.f;
 
 /*FPS counter done by Winston*/
-string SP2_ChaseEnemyScene::UpdateFrameRate(float fps)
+string SP2_CoinCollectionScene::UpdateFrameRate(float fps)
 {
 	int IntFPS = static_cast<int>(fps); //Convert FPS to 2 digits for display
 	string fpsCount = to_string(IntFPS);
@@ -558,7 +577,7 @@ string SP2_ChaseEnemyScene::UpdateFrameRate(float fps)
 	return fpsCount;
 }
 
-void SP2_ChaseEnemyScene::RenderMesh(Mesh *mesh, bool enableLight) //Pass in mesh name to go through this to enable lighting for that mesh
+void SP2_CoinCollectionScene::RenderMesh(Mesh *mesh, bool enableLight) //Pass in mesh name to go through this to enable lighting for that mesh
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
 
@@ -603,7 +622,7 @@ void SP2_ChaseEnemyScene::RenderMesh(Mesh *mesh, bool enableLight) //Pass in mes
 	}
 }
 
-void SP2_ChaseEnemyScene::RenderText(Mesh* mesh, std::string text, Color color)
+void SP2_CoinCollectionScene::RenderText(Mesh* mesh, std::string text, Color color)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -629,7 +648,7 @@ void SP2_ChaseEnemyScene::RenderText(Mesh* mesh, std::string text, Color color)
 	glEnable(GL_DEPTH_TEST);
 }
 
-void SP2_ChaseEnemyScene::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
+void SP2_CoinCollectionScene::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -671,7 +690,7 @@ void SP2_ChaseEnemyScene::RenderTextOnScreen(Mesh* mesh, std::string text, Color
 	glEnable(GL_DEPTH_TEST);
 }
 
-void SP2_ChaseEnemyScene::RenderSkybox()
+void SP2_CoinCollectionScene::RenderSkybox()
 {
 	//Left side of Skybox
 	modelStack.PushMatrix();
@@ -747,7 +766,7 @@ void SP2_ChaseEnemyScene::RenderSkybox()
 	//Bottom of Skybox
 }
 
-void SP2_ChaseEnemyScene::Render()
+void SP2_CoinCollectionScene::Render()
 {
 	//Clear color & depth buffer every time
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -878,11 +897,24 @@ void SP2_ChaseEnemyScene::Render()
 				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.y), Color(1, 0, 0), 1, -1, 44);
 				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.z), Color(1, 0, 0), 1, -1, 42);
 
-				RenderTextOnScreen(meshList[GEO_TEXT], to_string(countCoins()), Color(1, 0, 0), 1, -1, 38);
+			}
 
-				RenderTextOnScreen(meshList[GEO_TEXT], to_string((int)timer), Color(1, 0, 0), 1, 25 , 25);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Coins:", Color(1, 1, 1), 1, -1, 36);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(playerInstance->getCoinCount()), Color(1, 1, 1), 1, 8, 36);
 
-				RenderTextOnScreen(meshList[GEO_TEXT], to_string(playerInstance->getCoinCount()), Color(0, 1, 0), 1, -1, 40);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Coins Collected:", Color(1, 1, 1), 1, -1, 38);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(countCoins()), Color(1, 1, 1), 1, 15, 38);
+
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string((int)timer), Color(1, 1, 0), 4, 37, 53);
+
+			if (displayUpgrades == true)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], "Upgrades:", Color(1, 1, 1), 1, -1, 32);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Health Upgrade", Color(!healthUpgradeLive, healthUpgradeLive, 0), 1, -1, 30);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Max Speed Upgrade", Color(!speedUpgradeLive, speedUpgradeLive, 0), 1, -1, 28);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Acceleration Upgrade", Color(!accelerationUpgradeLive, accelerationUpgradeLive, 0), 1, -1, 26);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Max Acceleration Upgrade", Color(!maxAccelerationUpgradeLive, maxAccelerationUpgradeLive, 0), 1, -1, 24);
+				RenderTextOnScreen(meshList[GEO_TEXT], "Steering Upgrade", Color(!steerUpgradeLive, steerUpgradeLive, 0), 1, -1, 22);
 			}
 		}
 		modelStack.PopMatrix();
@@ -891,7 +923,7 @@ void SP2_ChaseEnemyScene::Render()
 	modelStack.PopMatrix();
 }
 
-void SP2_ChaseEnemyScene::Exit()
+void SP2_CoinCollectionScene::Exit()
 {
 	playerInstance->setCoinCount(playerInstance->getCoinCount() + countCoins());
 	playerInstance->writeSave();

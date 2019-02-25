@@ -425,8 +425,8 @@ void SP2_WinScene::Render()
 	RenderMesh(meshList[GEO_WINSCREEN], false); //set lighting to true once completed
 	modelStack.PopMatrix();
 
-	RenderTextOnScreen(meshList[GEO_TEXT], "coins earned : " , Color(1, 1, 0), 2, 18, 39);
-	RenderTextOnScreen(meshList[GEO_TEXT], "10", Color(1, 1, 0), 2, 50 , 39);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Coins earned : " , Color(1, 1, 0), 2, 18, 39);
+	RenderTextOnScreen(meshList[GEO_TEXT], to_string(playerInstance->getCoinsEarned() + RACEREWARD), Color(1, 1, 0), 2, 50 , 39);
 	
 }
 

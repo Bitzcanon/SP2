@@ -12,7 +12,7 @@
 
 #include "SP2_TrackScene.h"
 #include "SP2_NPCScene.h"
-#include "SP2_ChaseEnemyScene.h"
+#include "SP2_CoinCollectionScene.h"
 #include "SP2_WinScene.h"
 
 //Framework prepared by Winston
@@ -86,7 +86,7 @@ void Application::Init()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
 	//Create a window and create its OpenGL context
-	m_window = glfwCreateWindow(800 * 1.5, 600 * 1.5, "Computer Graphics", NULL, NULL);
+	m_window = glfwCreateWindow(1200, 900, "Computer Graphics", NULL, NULL); //800, 600 default
 
 	//Register callback for window size (New to Scene 2)
 	glfwSetWindowSizeCallback(m_window, resize_callback);
@@ -121,7 +121,6 @@ void Application::Init()
 	}
 }
 
-
 void Application::Run()
 {
 	//Main Loop
@@ -134,7 +133,7 @@ void Application::Run()
 
 	scene[0] = new SP2_MainMenuScene();
 	scene[1] = new SP2_TrackScene();
-	scene[2] = new SP2_ChaseEnemyScene(); // rename later
+	scene[2] = new SP2_CoinCollectionScene(); // rename later
 	scene[3] = new SP2_WinScene();
 	scene[4] = new SP2_NPCScene();
 
@@ -164,7 +163,7 @@ void Application::Run()
 			}
 			else if (i == 2)
 			{
-				scene[2] = new SP2_ChaseEnemyScene;
+				scene[2] = new SP2_CoinCollectionScene;
 				scene[2]->Init();
 			}
 			/*else if (i == 3)
@@ -186,7 +185,7 @@ void Application::Run()
 			delete scene[2];
 
 			scene[1] = new SP2_TrackScene();
-			scene[2] = new SP2_ChaseEnemyScene();
+			scene[2] = new SP2_CoinCollectionScene();
 
 			scene[1]->Init();
 			scene[2]->Init();

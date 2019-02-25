@@ -1,5 +1,5 @@
-#ifndef SP2_CHASEENEMYSCENE_H
-#define	SP2_CHASEENEMYSCENE_H
+#ifndef SP2_COINCOLLECTIONSCENE_H
+#define	SP2_COINCOLLECTIONSCENE_H
 
 #include "Scene.h"
 #include "Camera3.h"
@@ -20,7 +20,7 @@
 #include <string>
 using namespace std;
 
-class SP2_ChaseEnemyScene : public Scene
+class SP2_CoinCollectionScene : public Scene
 {
 private:
 	enum UNIFORM_TYPE
@@ -109,8 +109,8 @@ private:
 	};
 
 public:
-	SP2_ChaseEnemyScene();
-	~SP2_ChaseEnemyScene();
+	SP2_CoinCollectionScene();
+	~SP2_CoinCollectionScene();
 
 	virtual void Init();
 
@@ -165,6 +165,13 @@ private:
 	Vector3 cameraTarget;
 
 	bool isWon;
+	bool displayUpgrades;
+
+	bool healthUpgradeLive;
+	bool speedUpgradeLive;
+	bool accelerationUpgradeLive;
+	bool maxAccelerationUpgradeLive;
+	bool steerUpgradeLive;
 
 	vector <float> BarrierList;
 
@@ -178,4 +185,4 @@ private:
 	Music sounds;
 };
 
-#endif // ! SP2_CHASEENEMYSCENE_H
+#endif // ! SP2_CoinCollectionScene_H

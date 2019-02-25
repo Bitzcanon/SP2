@@ -31,7 +31,7 @@ void Checkpoint::resetCheckpoint()
 	passedThrough = false;
 }
 
-int Checkpoint::returnCheckpointRotation()
+float Checkpoint::returnCheckpointRotation()
 {
 	return rotateBy;
 }

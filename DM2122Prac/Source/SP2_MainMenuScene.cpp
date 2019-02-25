@@ -232,7 +232,7 @@ void SP2_MainMenuScene::Update(double dt)
 	FPS = 1.f / (float)dt;
 	if (rotateAngle < 360)
 	{
-		rotateAngle += (float)20 * dt;
+		rotateAngle += (float)(20 * dt);
 	}
 	else 
 	{
@@ -240,7 +240,7 @@ void SP2_MainMenuScene::Update(double dt)
 	}
 	if (transitionTime < 8)
 	{
-		transitionTime += 1 * dt;
+		transitionTime += (float)(1 * dt);
 	}
 
 	if (transitionTime < 6)
@@ -263,26 +263,26 @@ void SP2_MainMenuScene::Update(double dt)
 	}
 	else if (camera.position.z > 120)
 	{
-		camera.position.z -= 100 * dt;
+		camera.position.z -= (float)(100 * dt);
 	}
 
 	if (transitionTime > 7)
 	{
 		if (Application::IsKeyPressed(VK_UP))
 		{
-			tmpy += 1 * dt;
+			tmpy += (float)(1 * dt);
 		}
 		else if (Application::IsKeyPressed(VK_LEFT))
 		{
-			tmpz -= 1 * dt;
+			tmpz -= (float)(1 * dt);
 		}
 		else if (Application::IsKeyPressed(VK_DOWN))
 		{
-			tmpy -= 1 * dt;
+			tmpy -= (float)(1 * dt);
 		}
 		else if (Application::IsKeyPressed(VK_RIGHT))
 		{
-			tmpz += 1 * dt;
+			tmpz += (float)(1 * dt);
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN))
@@ -290,7 +290,7 @@ void SP2_MainMenuScene::Update(double dt)
 			
 			if (bounceTime <= 0)
 			{
-				bounceTime = 0.2;
+				bounceTime = 0.2f;
 				
 				if (isInstructions == true)
 				{
@@ -336,12 +336,14 @@ void SP2_MainMenuScene::Update(double dt)
 						if (arrowY == 0.1)
 						{
 							bgm.stopMusic();
+
 							Application::SceneSetter = sceneNumber;
 							Application::resetScene = false;
 						}
 						else if (arrowY == 0)
 						{
 							bgm.stopMusic();
+
 							Application::SceneSetter = sceneNumber;
 							Application::resetScene = true;
 						}
@@ -638,10 +640,10 @@ void SP2_MainMenuScene::Render()
 		RenderMesh(meshList[GEO_MENU], false);
 
 		modelStack.PushMatrix();
-		modelStack.Translate(0.5, 0, 0.2);
+		modelStack.Translate(0.5f, 0, 0.2f);
 		modelStack.Rotate(10, 1, 0, 0);
 		modelStack.Rotate(rotateAngle, 0, 1, 0);
-		modelStack.Scale(0.2, 0.2 , 0.2);
+		modelStack.Scale(0.2f, 0.2f , 0.2f);
 		RenderMesh(meshList[GEO_MODEL1], true); //set lighting to true once completed
 
 			modelStack.PushMatrix();
@@ -651,15 +653,15 @@ void SP2_MainMenuScene::Render()
 		modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-		modelStack.Translate(-0.38 , arrowY ,0.1);
+		modelStack.Translate(-0.38f , (float)(arrowY) ,0.1f);
 		modelStack.Rotate(270, 0, 1, 0);
-		modelStack.Scale(0.05 , 0.05 , 0.05);
+		modelStack.Scale(0.05f , 0.05f , 0.05f);
 		RenderMesh(meshList[GEO_ARROW], false); //set lighting to true once completed
 		modelStack.PopMatrix();
 		modelStack.PopMatrix();
 
 		modelStack.PushMatrix();
-		modelStack.Translate(0, 20, 119.9);
+		modelStack.Translate(0, 20, 119.9f);
 		modelStack.Scale(300, 300, 10);
 		RenderMesh(meshList[GEO_TITLEBACKGROUND], false); //set lighting to true once completed
 		modelStack.PopMatrix();

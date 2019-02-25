@@ -28,7 +28,7 @@ void SP2_NPCScene::Init()
 	bounceTime = 0;
 
 	transitionColor = 0;
-	transitionBody = 0;
+	transitionKart = 0;
 	transitionWheels = 0;
 
 	//Set background color to dark blue (Before this are initialized variables, after is the rest)
@@ -233,10 +233,10 @@ void SP2_NPCScene::Init()
 	meshList[GEO_CHOCO] = MeshBuilder::GenerateOBJ("choco", "OBJ//NPC scene chocolates.obj");
 	meshList[GEO_CHOCO]->textureID = LoadTGA("Image//Texture.tga");
 
-	meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(0));
-	meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(0).c_str());
+	meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", playerInstance->returnKart());
+	meshList[GEO_KART]->textureID = LoadTGA(playerInstance->returnColor().c_str());
 
-	meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Car", text.returnWheelsString(0));
+	meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Car", playerInstance->returnWheels());
 	meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
 
 	meshList[GEO_MENU] = MeshBuilder::GenerateQuad("Menu", Color(1, 1, 1), 1.f, 1.f);
@@ -310,61 +310,72 @@ void SP2_NPCScene::Update(double dt)
 		Application::SceneSetter = 0;
 	}
 
-	if (Application::IsKeyPressed(VK_RIGHT))
+	if (GarageOpen)
 	{
-		if (bounceTime <= 0)
+		if (Application::IsKeyPressed(VK_RIGHT))
 		{
-			transitionColor += 1;
-			if (transitionColor > 4)
+			if (bounceTime <= 0)
 			{
-				transitionColor = 0;
-			}
-			//delete meshList[10];
-			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
-			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
-			//EDIT STATIC PLAYER VAR
-			
-			playerInstance->setColor(text.returnColorString(transitionColor));
-			playerInstance->setChangeSomething(true);
+				transitionColor += 1;
+				if (transitionColor > 4)
+				{
+					transitionColor = 0;
+				}
+				//delete meshList[10];
+				meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionKart));
+				meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
+				//EDIT STATIC PLAYER VAR
 
-			bounceTime = 0.2f;
-		}
-	}
-	if (Application::IsKeyPressed(VK_UP))
-	{
-		if (bounceTime <= 0)
-		{
-			transitionBody += 1;
-			if (transitionBody > 2)
-			{
-				transitionBody = 0;
-			}
-			//delete meshList[10];
-			meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
-			meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
-			//EDIT STATIC PLAYER VAR
-			playerInstance->setKart(text.returnKartString(transitionBody));
-			playerInstance->setChangeSomething(true);
-			bounceTime = 0.2f;
-		}
-	}
+				playerInstance->setColor(text.returnColorString(transitionColor));
+				playerInstance->setChangeSomething(true);
 
-	if (Application::IsKeyPressed(VK_DOWN))
-	{
-		if (bounceTime <= 0)
-		{
-			transitionWheels += 1;
-			if (transitionWheels > 2)
-			{
-				transitionWheels = 0;
+				playerInstance->writeSave();
+
+				bounceTime = 0.2f;
 			}
-			//delete meshList[16];
-			meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels", text.returnWheelsString(transitionWheels));
-			meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
-			//EDIT STATIC PLAYER VAR
-			playerInstance->setWheels(text.returnWheelsString(transitionWheels));
-			playerInstance->setChangeSomething(true);
-			bounceTime = 0.2f;
+		}
+		if (Application::IsKeyPressed(VK_UP))
+		{
+			if (bounceTime <= 0)
+			{
+				transitionKart += 1;
+				if (transitionKart > 2)
+				{
+					transitionKart = 0;
+				}
+				//delete meshList[10];
+				meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionKart));
+				meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
+				//EDIT STATIC PLAYER VAR
+				playerInstance->setKart(text.returnKartString(transitionKart));
+				playerInstance->setChangeSomething(true);
+
+				playerInstance->writeSave();
+
+				bounceTime = 0.2f;
+			}
+		}
+
+		if (Application::IsKeyPressed(VK_DOWN))
+		{
+			if (bounceTime <= 0)
+			{
+				transitionWheels += 1;
+				if (transitionWheels > 2)
+				{
+					transitionWheels = 0;
+				}
+				//delete meshList[16];
+				meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels", text.returnWheelsString(transitionWheels));
+				meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
+				//EDIT STATIC PLAYER VAR
+				playerInstance->setWheels(text.returnWheelsString(transitionWheels));
+				playerInstance->setChangeSomething(true);
+
+				playerInstance->writeSave();
+
+				bounceTime = 0.2f;
+			}
 		}
 	}
 
@@ -469,15 +480,9 @@ void SP2_NPCScene::Update(double dt)
 	{
 		camera.position.z = -498.f;
 	}
-	else if (camera.position.y <= 0.f)
+	if (camera.position.y > 3.f)
 	{
-		camera.position.y = 1.f;
-		camera.target.y = 1.f;
-	}
-	else if (camera.position.y >= 699.f)
-	{
-		camera.position.y = 698.f;
-		camera.target.y = 0.f;
+		camera.position.y = 30.f;
 	}
 	
 	for (int i = 0; i < 2; i++)
@@ -854,6 +859,9 @@ string SP2_NPCScene::NPCRandomText()
 	case 5:
 		return "Your car may be quite fast, but it will not outrun a blue hedgehog.";
 		break;
+	default:
+		return "Have a nice day!";
+		break;
 	}
 }
 
@@ -1051,7 +1059,7 @@ void SP2_NPCScene::Render()
 		}
 		else if (NPCs[0].IsInteracting() || NPCs[1].IsInteracting())
 		{
-			RenderTextOnScreen(meshList[GEO_TEXT], "Press R to exit interact with NPC", Color(1, 1, 0), 1, -1, 10);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Press R to exit interaction with NPC", Color(1, 1, 0), 1, -1, 10);
 		}
 	}
 	if (CloseToDoor() && !GarageOpen)
@@ -1063,7 +1071,7 @@ void SP2_NPCScene::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to close garage door", Color(1, 1, 0), 1, -1, 10);
 	}
 
-	if (NPCs[0].IsInteracting() || NPCs[1].IsInteracting())
+	if ((NPCs[0].IsInteracting() && NPCs[0].CloseToNPC(camera.position.x, camera.position.z)) || (NPCs[1].IsInteracting() && NPCs[1].CloseToNPC(camera.position.x, camera.position.z)))
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], NPCtext, Color(1, 1, 0), 1, -1, 12);
 	}
@@ -1086,7 +1094,7 @@ void SP2_NPCScene::Render()
 				}
 				else
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's health?", Color(1, 1, 0), 1, -1, 14);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's health? Only 17 coins!", Color(1, 1, 0), 1, -1, 14);
 					RenderTextOnScreen(meshList[GEO_TEXT], "Press 'Y' to purchase upgrade", Color(1, 1, 0), 1, -1, 12);
 				}
 				break;
@@ -1098,7 +1106,7 @@ void SP2_NPCScene::Render()
 				}
 				else
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's max speed?", Color(1, 1, 0), 1, -1, 14);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's max speed? Only 17 coins!", Color(1, 1, 0), 1, -1, 14);
 					RenderTextOnScreen(meshList[GEO_TEXT], "Press 'Y' to purchase upgrade", Color(1, 1, 0), 1, -1, 12);
 				}
 				break;
@@ -1109,7 +1117,7 @@ void SP2_NPCScene::Render()
 				}
 				else
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's acceleration?", Color(1, 1, 0), 1, -1, 14);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's acceleration? Only 17 coins!", Color(1, 1, 0), 1, -1, 14);
 					RenderTextOnScreen(meshList[GEO_TEXT], "Press 'Y' to purchase upgrade", Color(1, 1, 0), 1, -1, 12);
 				}
 				break;
@@ -1120,7 +1128,7 @@ void SP2_NPCScene::Render()
 				}
 				else
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's max acceleration?", Color(1, 1, 0), 1, -1, 14);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's max acceleration? Only 17 coins!", Color(1, 1, 0), 1, -1, 14);
 					RenderTextOnScreen(meshList[GEO_TEXT], "Press 'Y' to purchase upgrade", Color(1, 1, 0), 1, -1, 12);
 				}
 				break;
@@ -1131,7 +1139,7 @@ void SP2_NPCScene::Render()
 				}
 				else
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's steering?", Color(1, 1, 0), 1, -1, 14);
+					RenderTextOnScreen(meshList[GEO_TEXT], "Hi! Would you like to upgrade your car's steering? Only 17 coins!", Color(1, 1, 0), 1, -1, 14);
 					RenderTextOnScreen(meshList[GEO_TEXT], "Press 'Y' to purchase upgrade", Color(1, 1, 0), 1, -1, 12);
 				}
 				break;

@@ -154,7 +154,7 @@ private:
 	float FPS;
 	float rotateAngle;
 	int transitionColor;
-	int transitionBody;
+	int transitionKart;
 	int transitionWheels;
 	float bounceTime;
 	bool interact;

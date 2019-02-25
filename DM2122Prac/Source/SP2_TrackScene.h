@@ -188,7 +188,7 @@ private:
 
 	bool displayUpgrades;
 
-	Buff * Buffs[100];
+	Buff * Buffs[BUFFCOUNT];
 	Barrier *Barriers[ROADBLOCKCOUNT];
 	Checkpoint *Checkpoints[CHECKPOINTCOUNT];
 
