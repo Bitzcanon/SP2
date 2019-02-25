@@ -1,4 +1,6 @@
 #pragma once
+#include "Music.h"
+
 class Coins
 {
 public:
@@ -15,5 +17,6 @@ private:
 	float x, z;
 	bool taken;
 	bool appeared;
+	Music music;
 };
 

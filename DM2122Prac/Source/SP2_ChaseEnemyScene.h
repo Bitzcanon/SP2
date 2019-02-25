@@ -15,6 +15,7 @@
 #include "Car.h"
 #include "Player.h"
 #include "Coins.h"
+#include "Music.h"
 
 #include <string>
 using namespace std;
@@ -171,6 +172,8 @@ private:
 	float coinrotation;
 	bool goingup;
 	float coinup;
+
+	Music sounds;
 };
 
 #endif // ! SP2_CHASEENEMYSCENE_H

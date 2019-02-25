@@ -831,7 +831,7 @@ void SP2_NPCScene::RenderMarketPlace()
 string SP2_NPCScene::NPCRandomText()
 {
 	//Addition of flavor text is possible here
-	switch (rand() % 4)
+	switch (rand() % 6)
 	{
 	case 0:
 		return "Hi there! I can see that you have potential as a driver!";
@@ -844,6 +844,12 @@ string SP2_NPCScene::NPCRandomText()
 		break;
 	case 3:
 		return "I hope your driving is good!";
+		break;
+	case 4:
+		return "If the car goes 88 mph, I think we can time travel!";
+		break;
+	case 5:
+		return "Your car may be quite fast, but it will not outrun a blue hedgehog.";
 		break;
 	}
 }
