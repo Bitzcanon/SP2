@@ -142,7 +142,6 @@ private:
 
 	void initCoins();
 	int countCoins();
-	int randomCoins();
 
 	string UpdateFrameRate(float string);
 
