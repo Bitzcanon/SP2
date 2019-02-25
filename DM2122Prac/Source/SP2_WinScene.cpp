@@ -408,7 +408,10 @@ void SP2_WinScene::Render()
 	}
 
 	//Draw Axes (For debugging purposes)
-	RenderMesh(meshList[GEO_AXES], false);
+	if (DEBUG)
+	{
+		RenderMesh(meshList[GEO_AXES], false);
+	}
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 20, -50);
