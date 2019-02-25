@@ -357,6 +357,7 @@ void SP2_ChaseEnemyScene::Update(double dt)
 	{
 		if (CollisionChecker(1, i, Barriers[i]->returnxPos(), Barriers[i]->returnzPos(), 1.9f, 1.9f) == true)
 		{
+			sounds.playInstantSound(2); //Added by Afiq. For sound when car crashes into barrier
 			Barrier::BarrierDelay = 0.2f;
 			Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
 			Vehicle.setIsCollided(true);

@@ -697,6 +697,7 @@ void SP2_TrackScene::Update(double dt)
 	{
 		if (CollisionChecker(1, i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
 		{
+			music.playInstantSound(0); //Sound effect made by Afiq
 			SpeedBuff::timer = 1;
 		}
 	}
@@ -705,6 +706,7 @@ void SP2_TrackScene::Update(double dt)
 	{
 		if (CollisionChecker(1 , i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
 		{
+			music.playInstantSound(6); //Sound effect by Afiq
 			SlowBuff::timer = 2;
 		}
 	}
@@ -713,6 +715,7 @@ void SP2_TrackScene::Update(double dt)
 	{
 		if (CollisionChecker(1, i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
 		{
+			music.playInstantSound(3); //Sound effect by Afiq
 			Vehicle.setHealth(healthLive - 0.5);
 		}
 	}
@@ -721,6 +724,7 @@ void SP2_TrackScene::Update(double dt)
 	{
 		if (CollisionChecker(1, i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
 		{
+			music.playInstantSound(5); //Sound effect by Afiq
 			ReverseBuff::timer = 5;
 			Vehicle.setInverseControls(true);
 		}

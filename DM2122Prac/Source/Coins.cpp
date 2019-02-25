@@ -23,6 +23,7 @@ void Coins::CoinCollision(float playerx, float playerz)
 		{
 			if (appeared)
 			{
+				music.playInstantSound(1);
 				taken = true;
 			}
 		}
