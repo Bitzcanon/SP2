@@ -39,7 +39,7 @@ void  Music::playInstantSound(int i)
 		PlaySound(TEXT("Sounds//Damage.wav"), NULL, SND_FILENAME | SND_ASYNC);
 		break;
 	case 4:
-		PlaySound(TEXT("Sounds//LoseSound.wav"), NULL, SND_FILENAME | SND_ASYNC);
+		PlaySound(TEXT("Sounds//Losesound.wav"), NULL, SND_FILENAME | SND_ASYNC);
 		break;
 	case 5:
 		PlaySound(TEXT("Sounds//Reverse.wav"), NULL, SND_FILENAME | SND_ASYNC);
@@ -55,5 +55,5 @@ void  Music::playInstantSound(int i)
 
 void Music::stopMusic()
 {
-	PlaySound(TEXT("MyAppSound"), NULL, SND_APPLICATION);
+	PlaySound(TEXT("Sounds//Silence.wav"), NULL, SND_FILENAME | SND_ASYNC);
 }

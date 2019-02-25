@@ -437,7 +437,7 @@ void SP2_ChaseEnemyScene::Update(double dt)
 	{
 		if (coin[i].hasAppeared() && !coin[i].CheckTaken())
 		{
-			coin[i].CoinCollision(cameraPos.x, cameraPos.z);
+			coin[i].CoinCollision(Vehicle.newPosition.x * (Vehicle.returnCarScale() / 4), Vehicle.newPosition.z * (Vehicle.returnCarScale() / 4));
 		}
 	}
 

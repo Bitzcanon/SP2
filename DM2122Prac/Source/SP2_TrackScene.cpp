@@ -697,6 +697,7 @@ void SP2_TrackScene::Update(double dt)
 	{
 		if (CollisionChecker(1, i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
 		{
+			music.stopMusic();
 			music.playInstantSound(0); //Sound effect made by Afiq
 			SpeedBuff::timer = 1;
 		}
@@ -706,6 +707,7 @@ void SP2_TrackScene::Update(double dt)
 	{
 		if (CollisionChecker(1 , i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
 		{
+			music.stopMusic();
 			music.playInstantSound(6); //Sound effect by Afiq
 			SlowBuff::timer = 2;
 		}
@@ -724,6 +726,7 @@ void SP2_TrackScene::Update(double dt)
 	{
 		if (CollisionChecker(1, i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
 		{
+			music.stopMusic();
 			music.playInstantSound(5); //Sound effect by Afiq
 			ReverseBuff::timer = 5;
 			Vehicle.setInverseControls(true);
@@ -772,6 +775,8 @@ void SP2_TrackScene::Update(double dt)
 		{
 			if (CollisionChecker(2, i, Barriers[i]->returnxPos(), Barriers[i]->returnzPos(), 1.4f, 0.9f) == true)
 			{
+				music.stopMusic();
+				music.playInstantSound(2);
 				Barrier::BarrierDelay = 0.4f;
 				Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
 				Vehicle.setIsCollided(true);
@@ -781,6 +786,8 @@ void SP2_TrackScene::Update(double dt)
 		{
 			if (CollisionChecker(2, i, Barriers[i]->returnxPos(), Barriers[i]->returnzPos(), 0.9f, 1.4f) == true)
 			{
+				music.stopMusic();
+				music.playInstantSound(2);
 				Barrier::BarrierDelay = 0.4f;
 				Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
 				Vehicle.setIsCollided(true);
