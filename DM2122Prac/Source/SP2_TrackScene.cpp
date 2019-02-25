@@ -372,17 +372,13 @@ void SP2_TrackScene::Init()
 	loadDamageBuffCoordinates();
 	loadReverseBuffCoordinates();
 	loadBarrierCoordinates();
+	loadCheckpointCoordinates();
 
 	//Loads Buff coordinates
 	initBuffs();
-
-	
-
 	//Loads Barrier coordinates
 	initBarrier();
-
 	//Loads Checkpoint coordinates
-	loadCheckpointCoordinates();
 	initCheckpoint();
 
 	tmpBool = false;
@@ -550,7 +546,6 @@ void SP2_TrackScene::Init()
 
 	meshList[GEO_PROMPT] = MeshBuilder::GenerateText("prompt", 16, 16);
 	meshList[GEO_PROMPT]->textureID = LoadTGA("Image//calibri.tga");
-
 
 	//remove later
 	meshList[GEO_TESTCAR] = MeshBuilder::GenerateCube("Car", Color(0, 1, 0), 5, 1, 1);
