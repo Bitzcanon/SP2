@@ -28,7 +28,7 @@ void SP2_NPCScene::Init()
 	bounceTime = 0;
 
 	transitionColor = 0;
-	transitionBody = 0;
+	transitionKart = 0;
 	transitionWheels = 0;
 
 	//Set background color to dark blue (Before this are initialized variables, after is the rest)
@@ -321,7 +321,7 @@ void SP2_NPCScene::Update(double dt)
 					transitionColor = 0;
 				}
 				//delete meshList[10];
-				meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
+				meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionKart));
 				meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
 				//EDIT STATIC PLAYER VAR
 
@@ -337,16 +337,16 @@ void SP2_NPCScene::Update(double dt)
 		{
 			if (bounceTime <= 0)
 			{
-				transitionBody += 1;
-				if (transitionBody > 2)
+				transitionKart += 1;
+				if (transitionKart > 2)
 				{
-					transitionBody = 0;
+					transitionKart = 0;
 				}
 				//delete meshList[10];
-				meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionBody));
+				meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(transitionKart));
 				meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(transitionColor).c_str());
 				//EDIT STATIC PLAYER VAR
-				playerInstance->setKart(text.returnKartString(transitionBody));
+				playerInstance->setKart(text.returnKartString(transitionKart));
 				playerInstance->setChangeSomething(true);
 
 				playerInstance->writeSave();

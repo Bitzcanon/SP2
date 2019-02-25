@@ -172,7 +172,7 @@
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SlowBuff.cpp" />
     <ClCompile Include="Source\Source.cpp" />
-    <ClCompile Include="Source\SP2_ChaseEnemyScene.cpp" />
+    <ClCompile Include="Source\SP2_CoinCollectionScene.cpp" />
     <ClCompile Include="Source\SP2_MainMenuScene.cpp" />
     <ClCompile Include="Source\SP2_NPCScene.cpp" />
     <ClCompile Include="Source\SP2_SurvivalScene.cpp" />
@@ -192,7 +192,7 @@
     <ClInclude Include="Source\Definitions.h" />
     <ClInclude Include="Source\ReverseBuff.h" />
     <ClInclude Include="Source\Save.h" />
-    <ClInclude Include="Source\SP2_ChaseEnemyScene.h" />
+    <ClInclude Include="Source\SP2_CoinCollectionScene.h" />
     <ClInclude Include="Source\Coins.h" />
     <ClInclude Include="Source\FPSCamera.h" />
     <ClInclude Include="Source\Location.h" />
