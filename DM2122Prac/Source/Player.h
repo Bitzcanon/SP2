@@ -39,8 +39,6 @@ public:
 
 	void loadSave();
 	void writeSave();
-
-	
 	
 private:
 	Player();

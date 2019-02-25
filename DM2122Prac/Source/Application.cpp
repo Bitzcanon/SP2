@@ -13,10 +13,11 @@
 #include "SP2_TrackScene.h"
 #include "SP2_NPCScene.h"
 #include "SP2_ChaseEnemyScene.h"
+#include "SP2_WinScene.h"
 
 //Framework prepared by Winston
 
-int::Application::SceneSetter = 0 ;
+int::Application::SceneSetter = 0;
 bool::Application::resetScene = false;
 
 Application::Application()
@@ -132,10 +133,9 @@ void Application::Run()
 	}
 
 	scene[0] = new SP2_MainMenuScene();
-
 	scene[1] = new SP2_TrackScene();
-	scene[2] = new SP2_ChaseEnemyScene();
-//	scene[3] = new SP2_SurvivalScene();
+	scene[2] = new SP2_ChaseEnemyScene(); // rename later
+	scene[3] = new SP2_WinScene();
 	scene[4] = new SP2_NPCScene();
 
 	for (int i = 0; i < 5; i++)
@@ -177,6 +177,21 @@ void Application::Run()
 		else if (SceneSetter == 10) // ENSURE THIS IS BEFORE RENDER SO IT WONT OVERLOAD RENDER
 		{
 			break;
+		}
+		else if (SceneSetter == 20)
+		{
+			scene[1]->Exit();
+			delete scene[1];
+			scene[2]->Exit();
+			delete scene[2];
+
+			scene[1] = new SP2_TrackScene();
+			scene[2] = new SP2_ChaseEnemyScene();
+
+			scene[1]->Init();
+			scene[2]->Init();
+
+			SceneSetter = 0;
 		}
 
 		scene[SceneSetter]->Render();

@@ -223,7 +223,7 @@ void SP2_MainMenuScene::Init()
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 500.f);
 	projectionStack.LoadMatrix(projection);
 
-	bgm.playBGM(0);
+	//bgm.playBGM(0);
 }
 
 void SP2_MainMenuScene::Update(double dt)
@@ -241,6 +241,7 @@ void SP2_MainMenuScene::Update(double dt)
 	{
 		transitionTime += 1 * dt;
 	}
+
 	if (transitionTime < 6)
 	{
 		if (transitionTime < 2 && transition[0] == false)

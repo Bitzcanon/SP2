@@ -344,7 +344,7 @@ void SP2_ChaseEnemyScene::Update(double dt)
 
 	if (timer <= 0)
 	{
-		Application::SceneSetter = 0;
+		Application::SceneSetter = 3;
 	}
 
 	if (bounceTime > 0) //updating bouncetime
@@ -851,6 +851,8 @@ void SP2_ChaseEnemyScene::Render()
 				RenderTextOnScreen(meshList[GEO_TEXT], to_string(cameraTarget.z), Color(1, 0, 0), 1, -1, 42);
 
 				RenderTextOnScreen(meshList[GEO_TEXT], to_string(countCoins()), Color(1, 0, 0), 1, -1, 38);
+
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string((int)timer), Color(1, 0, 0), 1, 25 , 25);
 
 				RenderTextOnScreen(meshList[GEO_TEXT], to_string(playerInstance->getCoinCount()), Color(0, 1, 0), 1, -1, 40);
 			}
