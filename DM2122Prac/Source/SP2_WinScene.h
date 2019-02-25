@@ -2,7 +2,9 @@
 #define	SP2_WinScene_H
 
 #include "Scene.h"
-#include "FPSCamera.h"
+//#include "FPSCamera.h"
+//#include "MenuCamera.h"
+#include "WinCamera.h"
 #include "Mesh.h"
 #include "MeshBuilder.h"
 #include "MatrixStack.h"
@@ -122,7 +124,7 @@ private:
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
 
-	FPSCamera camera; //Switch to Camera3 once implementations are done
+	WinCamera camera; //Switch to Camera3 once implementations are done
 
 	MS modelStack, viewStack, projectionStack;
 	Light light[3]; //array size is the number of light sources in the scene

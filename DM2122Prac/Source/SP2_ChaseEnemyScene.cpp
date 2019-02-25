@@ -357,6 +357,7 @@ void SP2_ChaseEnemyScene::Update(double dt)
 	{
 		if (CollisionChecker(1, i, Barriers[i]->returnxPos(), Barriers[i]->returnzPos(), 1.9f, 1.9f) == true)
 		{
+			sounds.playInstantSound(2); //Added by Afiq. For sound when car crashes into barrier
 			Barrier::BarrierDelay = 0.2f;
 			Vehicle.setSpeed(Vehicle.returnSpeed() * (-1.f - 0.2f));
 			Vehicle.setIsCollided(true);
@@ -436,7 +437,7 @@ void SP2_ChaseEnemyScene::Update(double dt)
 	{
 		if (coin[i].hasAppeared() && !coin[i].CheckTaken())
 		{
-			coin[i].CoinCollision(cameraPos.x, cameraPos.z);
+			coin[i].CoinCollision(Vehicle.newPosition.x * (Vehicle.returnCarScale() / 4), Vehicle.newPosition.z * (Vehicle.returnCarScale() / 4));
 		}
 	}
 
@@ -864,6 +865,7 @@ void SP2_ChaseEnemyScene::Render()
 
 void SP2_ChaseEnemyScene::Exit()
 {
+	playerInstance->setCoinCount(playerInstance->getCoinCount() + countCoins());
 	playerInstance->writeSave();
 	// Cleanup here
 	for (int i = 0; i < NUM_GEOMETRY; ++i)

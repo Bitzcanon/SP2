@@ -21,6 +21,8 @@
 #include "Player.h"
 #include "Checkpoint.h"
 
+#include "Music.h"
+
 #include <string>
 using namespace std;
 
@@ -219,6 +221,7 @@ private:
 
 	vector <float> BarrierList;
 	vector <float> CheckpointList;
+	Music music;
 };
 
 #endif // ! SP2_TrackScene_H

@@ -10,8 +10,6 @@
 #include <mmsystem.h>
 using namespace std;
 
-
-
 class Music
 {
 public:

@@ -31,5 +31,5 @@ void  Music::playInstantSound(int i)
 
 void Music::stopMusic()
 {
-	PlaySound(TEXT("MyAppSound"), NULL, SND_APPLICATION);
+	PlaySound(TEXT("Sounds//Crash.wav"), NULL, SND_APPLICATION);
 }

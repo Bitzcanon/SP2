@@ -208,8 +208,9 @@ void SP2_MainMenuScene::Init()
 
 	meshList[GEO_ARROW] = MeshBuilder::GenerateOBJ("Arrow", "OBJ//Arrow.obj");
 
-	meshList[GEO_BACKGROUND] = MeshBuilder::GenerateQuad("Background", Color(0, 0, 0), 1.f, 1.f);
-	meshList[GEO_TITLEBACKGROUND] = MeshBuilder::GenerateQuad("Background", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_BACKGROUND] = MeshBuilder::GenerateQuad("Background", Color(0, 0, 0), 1.f, 1.f); // black background
+
+	meshList[GEO_TITLEBACKGROUND] = MeshBuilder::GenerateQuad("Background", Color(1, 1, 1), 1.f, 1.f); // white background
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
@@ -223,7 +224,7 @@ void SP2_MainMenuScene::Init()
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 500.f);
 	projectionStack.LoadMatrix(projection);
 
-	//bgm.playBGM(0);
+	bgm.playBGM(0);
 }
 
 void SP2_MainMenuScene::Update(double dt)
@@ -231,7 +232,7 @@ void SP2_MainMenuScene::Update(double dt)
 	FPS = 1.f / (float)dt;
 	if (rotateAngle < 360)
 	{
-		rotateAngle += 20 * dt;
+		rotateAngle += (float)20 * dt;
 	}
 	else 
 	{
@@ -333,13 +334,13 @@ void SP2_MainMenuScene::Update(double dt)
 					{
 						if (arrowY == 0.1)
 						{
-							bgm.stopMusic();
+							//bgm.stopMusic(); causing lag. remove until solved
 							Application::SceneSetter = sceneNumber;
 							Application::resetScene = false;
 						}
 						else if (arrowY == 0)
 						{
-							bgm.stopMusic();
+							//bgm.stopMusic(); causing lag. remove until solved.
 							Application::SceneSetter = sceneNumber;
 							Application::resetScene = true;
 						}
@@ -654,6 +655,12 @@ void SP2_MainMenuScene::Render()
 		modelStack.Scale(0.05 , 0.05 , 0.05);
 		RenderMesh(meshList[GEO_ARROW], false); //set lighting to true once completed
 		modelStack.PopMatrix();
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 20, 119.9);
+		modelStack.Scale(300, 300, 10);
+		RenderMesh(meshList[GEO_TITLEBACKGROUND], false); //set lighting to true once completed
 		modelStack.PopMatrix();
 
 		modelStack.PushMatrix();

@@ -171,6 +171,7 @@
     <ClCompile Include="Source\Save.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SlowBuff.cpp" />
+    <ClCompile Include="Source\Source.cpp" />
     <ClCompile Include="Source\SP2_ChaseEnemyScene.cpp" />
     <ClCompile Include="Source\SP2_MainMenuScene.cpp" />
     <ClCompile Include="Source\SP2_NPCScene.cpp" />
@@ -179,6 +180,7 @@
     <ClCompile Include="Source\SP2_WinScene.cpp" />
     <ClCompile Include="Source\SpeedBuff.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
+    <ClCompile Include="Source\WinCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h" />
@@ -218,6 +220,7 @@
     <ClInclude Include="Source\SpeedBuff.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />
+    <ClInclude Include="Source\WinCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\Text.fragmentshader" />
