@@ -352,6 +352,17 @@ void SP2_ChaseEnemyScene::Update(double dt)
 		bounceTime -= (float)(1 * dt);
 	}
 
+	if (playerInstance->returnChangeSomething() == true) // reload car model if something has changed.
+	{
+		cout << "something changed " << endl;
+		meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", playerInstance->returnKart());
+		meshList[GEO_KART]->textureID = LoadTGA(playerInstance->returnColor().c_str());
+
+		meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Wheels", playerInstance->returnWheels());
+		meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
+		playerInstance->setChangeSomething(false);
+	}
+
 	/*Maze Tile logic done by Winston*/
 	for (size_t i = 0; i < BarrierList.size() / MAZETILEROWCOUNT; i++)
 	{

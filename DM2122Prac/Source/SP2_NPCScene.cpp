@@ -326,6 +326,8 @@ void SP2_NPCScene::Update(double dt)
 			playerInstance->setColor(text.returnColorString(transitionColor));
 			playerInstance->setChangeSomething(true);
 
+			playerInstance->writeSave();
+
 			bounceTime = 0.2f;
 		}
 	}
@@ -344,6 +346,9 @@ void SP2_NPCScene::Update(double dt)
 			//EDIT STATIC PLAYER VAR
 			playerInstance->setKart(text.returnKartString(transitionBody));
 			playerInstance->setChangeSomething(true);
+
+			playerInstance->writeSave();
+
 			bounceTime = 0.2f;
 		}
 	}
@@ -363,6 +368,9 @@ void SP2_NPCScene::Update(double dt)
 			//EDIT STATIC PLAYER VAR
 			playerInstance->setWheels(text.returnWheelsString(transitionWheels));
 			playerInstance->setChangeSomething(true);
+
+			playerInstance->writeSave();
+
 			bounceTime = 0.2f;
 		}
 	}

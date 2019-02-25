@@ -315,7 +315,6 @@ void SP2_TrackScene::initBarrier()
 			Barriers[loc]->setxPos(BarrierList[i]);
 			counter += 1;
 		}
-		
 	}
 }
 
@@ -685,7 +684,7 @@ void SP2_TrackScene::Update(double dt)
 
 	if (playerInstance->returnChangeSomething() == true) // reload car model if something has changed.
 	{
-	//	cout << Player::color << endl;
+		cout << "change detected" << endl;
 		meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", playerInstance->returnKart());
 		meshList[GEO_KART]->textureID = LoadTGA(playerInstance->returnColor().c_str());
 
@@ -872,12 +871,14 @@ void SP2_TrackScene::Update(double dt)
 		}
 		if (isWon == true)
 		{
+			playerInstance->setChangeSomething(true);
 			Application::SceneSetter = 2;
 		}
 
 		if (Application::IsKeyPressed('H'))
 		{
 			isWon = true;
+			playerInstance->setChangeSomething(true);
 		}
 	}
 
