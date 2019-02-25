@@ -233,10 +233,10 @@ void SP2_NPCScene::Init()
 	meshList[GEO_CHOCO] = MeshBuilder::GenerateOBJ("choco", "OBJ//NPC scene chocolates.obj");
 	meshList[GEO_CHOCO]->textureID = LoadTGA("Image//Texture.tga");
 
-	meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", text.returnKartString(0));
-	meshList[GEO_KART]->textureID = LoadTGA(text.returnColorString(0).c_str());
+	meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", playerInstance->returnKart());
+	meshList[GEO_KART]->textureID = LoadTGA(playerInstance->returnColor().c_str());
 
-	meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Car", text.returnWheelsString(0));
+	meshList[GEO_WHEELS] = MeshBuilder::GenerateOBJ("Car", playerInstance->returnWheels());
 	meshList[GEO_WHEELS]->textureID = LoadTGA("Image//Colors//Gray.tga");
 
 	meshList[GEO_MENU] = MeshBuilder::GenerateQuad("Menu", Color(1, 1, 1), 1.f, 1.f);
