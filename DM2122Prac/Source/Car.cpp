@@ -96,7 +96,10 @@ float Car::getZpos(void)
 
 void Car::Update(double dt)
 {
-
+	if (speed > maxSpeed * 1.3f)
+	{
+		speed = maxSpeed * 1.3f;
+	}
 	if (playerInstance->getHealthUpgradeStatus() == true && init == false)
 	{
 		health = 40;

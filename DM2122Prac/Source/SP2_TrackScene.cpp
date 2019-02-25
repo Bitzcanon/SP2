@@ -374,6 +374,7 @@ void SP2_TrackScene::Init()
 	loadReverseBuffCoordinates();
 	loadBarrierCoordinates();
 
+	//Loads Buff coordinates
 	initBuffs();
 
 	//Loads Barrier coordinates
@@ -627,14 +628,14 @@ void SP2_TrackScene::Init()
 	
 	displayUpgrades = true;
 
-	timer = 0.f;
+	timer = 180.f;
 }
 
 void SP2_TrackScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
 
-	timer += (float)(1 * dt);
+	timer -= (float)(1 * dt);
 
 	healthUpgradeLive = playerInstance->getHealthUpgradeStatus();
 	speedUpgradeLive = playerInstance->getMaxSpeedUpgradeStatus();
@@ -652,6 +653,7 @@ void SP2_TrackScene::Update(double dt)
 	healthLive = Vehicle.returnHealth();
 	propellerRotation += (float)(180 * dt);
 
+	//Timer to reset the game if the player loses
 	if (healthLive <= 0 && ResetStart == true) // causes the reset timer to trigger once
 	{
 		ResetTimer = 4;
@@ -661,8 +663,12 @@ void SP2_TrackScene::Update(double dt)
 	{
 		ResetTimer -= (float)(1 * dt);
 	}
-	if (ResetTimer < 0)
+	if (ResetTimer < 0 || timer < 0)
 	{
+		if (DEBUG)
+		{
+			cout << "YOU LOST";
+		}
 		Application::resetScene = true;
 	}
 
@@ -721,7 +727,7 @@ void SP2_TrackScene::Update(double dt)
 	{
 		if (CollisionChecker(1, i, Buffs[i]->returnxPos(), Buffs[i]->returnzPos(), 1, 1) == true)
 		{
-			ReverseBuff::timer = 5;
+			ReverseBuff::timer = 6;
 			Vehicle.setInverseControls(true);
 		}
 	}
@@ -859,9 +865,14 @@ void SP2_TrackScene::Update(double dt)
 		}
 		if (isWon == true)
 		{
+			//Set car's speed to 0 at the start of the game (fixing a bug with random boost at the start of the game)
+			Vehicle.setSpeed(0);
+			playerInstance->setCoinCount(playerInstance->getCoinCount() + 10);
 			Application::SceneSetter = 2;
 		}
-
+	}
+	if (DEBUG)
+	{
 		if (Application::IsKeyPressed('H'))
 		{
 			isWon = true;
@@ -1388,7 +1399,8 @@ void SP2_TrackScene::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], UpdateFrameRate(FPS), Color(1, 1, 0), 2, 72, 55);
 
 			//Timer
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(timer), Color(1, 1, 0), 1, 72, 53);
+			int displayTrackTimer = static_cast<int>(timer);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(displayTrackTimer), Color(1, 1, 0), 4, 37, 53);
 
 			//Player Car's speed
 			RenderTextOnScreen(meshList[GEO_TEXT], to_string(vehicleSpeed), Color(1, 1, 0), 1, -1, 58);
@@ -1442,24 +1454,24 @@ void SP2_TrackScene::Render()
 			{
 				RenderTextOnScreen(meshList[GEO_TEXT], to_string(countdown), Color(1, 1, 1), 3, 25, 20);
 			}
+
+			if (SpeedBuff::timer > 0)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(SpeedBuff::timer), Color(1, 1, 0), 1, -1, 0);
+			}
+			if (SlowBuff::timer > 0)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(SlowBuff::timer), Color(1, 1, 0), 1, -1, 2);
+			}
+			if (ReverseBuff::timer > 0)
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(ReverseBuff::timer), Color(1, 1, 0), 1, -1, 4);
+			}
 		}
 		modelStack.PopMatrix();
 
 	}
 	modelStack.PopMatrix();
-
-	if (SpeedBuff::timer >= 0)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string(SpeedBuff::timer) , Color(1, 1, 0), 1, 0, 0);
-	}
-	if (SlowBuff::timer >= 0)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string(SlowBuff::timer), Color(1, 1, 0), 1, 0, 2);
-	}
-	if (ReverseBuff::timer >= 0)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string(ReverseBuff::timer), Color(1, 1, 0), 1, 0, 4);
-	}
 }
 
 void SP2_TrackScene::Exit()
