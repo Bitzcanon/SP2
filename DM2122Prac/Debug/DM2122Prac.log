@@ -1,4 +1,38 @@
 ﻿D:\visual studio 2017\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (DM2122Prac.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   Application.cpp
 c:\users\gary quah\documents\github\sp2\dm2122prac\source\application.cpp(89): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  Car.cpp
+  Player.cpp
+  SP2_ChaseEnemyScene.cpp
+  SP2_MainMenuScene.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_mainmenuscene.cpp(235): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_mainmenuscene.cpp(243): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_mainmenuscene.cpp(266): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_mainmenuscene.cpp(273): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_mainmenuscene.cpp(277): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_mainmenuscene.cpp(281): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_mainmenuscene.cpp(285): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_mainmenuscene.cpp(293): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_mainmenuscene.cpp(640): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_mainmenuscene.cpp(643): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_mainmenuscene.cpp(653): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_mainmenuscene.cpp(653): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_mainmenuscene.cpp(655): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_mainmenuscene.cpp(661): warning C4305: 'argument': truncation from 'double' to 'float'
+  SP2_NPCScene.cpp
+  SP2_SurvivalScene.cpp
+  SP2_TrackScene.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(295): warning C4244: 'argument': conversion from '_Ty' to 'int', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(718): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(753): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_trackscene.cpp(1442): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  SP2_WinScene.cpp
+  Save.cpp
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\save.cpp(44): warning C4101: 'tmp': unreferenced local variable
+  Generating Code...
+c:\users\gary quah\documents\github\sp2\dm2122prac\source\sp2_npcscene.cpp(849): warning C4715: 'SP2_NPCScene::NPCRandomText': not all control paths return a value
   DM2122Prac.vcxproj -> C:\Users\Gary Quah\Documents\GitHub\SP2\Debug\Studio Project 2.exe

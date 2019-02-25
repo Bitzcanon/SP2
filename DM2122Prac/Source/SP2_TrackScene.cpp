@@ -376,6 +376,8 @@ void SP2_TrackScene::Init()
 
 	initBuffs();
 
+	
+
 	//Loads Barrier coordinates
 	initBarrier();
 

@@ -107,8 +107,8 @@ void SP2_WinScene::Init()
 	glUseProgram(m_programID);
 
 	//Initialise initial Camera position x y z target up
-	//camera.Init(Vector3(0, 20, 120), Vector3(0, 20, 0), Vector3(0, 1, 0)); //For MainMenu Camera
-	camera.Init(Vector3(0, 20, 120)); //For FPS Camera (Only for NPCScene, testing in TrackScene
+	camera.Init(Vector3(0, 20, 120), Vector3(0, 20, 0), Vector3(0, 1, 0)); //For MainMenu Camera
+	//camera.Init(Vector3(0, 20, 120)); //For FPS Camera (Only for NPCScene, testing in TrackScene
 
 	//Light parameters
 	//Lower floor lighting
