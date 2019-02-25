@@ -14,6 +14,7 @@
 #include "Coins.h"
 #include "NPCS.h"
 #include "Definitions.h"
+#include "Music.h"
 
 #include <string>
 using namespace std;
@@ -160,7 +161,6 @@ private:
 	NPCS NPCs[7];
 	float GarageDoorY, GarageDoorRotate;
 	bool GarageOpen;
-	Coins coins[2];
 	string NPCtext;
 
 	bool healthUpgradeLive;
@@ -170,6 +170,8 @@ private:
 	bool steerUpgradeLive;
 
 	bool doMenu;
+
+	Music sounds;
 };
 
 #endif // ! SP2_NPCScene_H

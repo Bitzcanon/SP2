@@ -306,6 +306,7 @@ void SP2_NPCScene::Update(double dt)
 	// just to test , remove later
 	if (Application::IsKeyPressed('M'))
 	{
+		sounds.playBGM(0);
 		Application::SceneSetter = 0;
 	}
 
@@ -494,6 +495,8 @@ void SP2_NPCScene::Update(double dt)
 	{
 		if (Application::IsKeyPressed('R') && NPCs[i].CloseToNPC(camera.position.x, camera.position.z) && !NPCs[i].IsInteracting() && bounceTime <= 0)
 		{
+			sounds.stopMusic();
+			sounds.playInstantSound(8);
 			NPCtext = NPCRandomText();
 			NPCs[i].Interacts(1);
 			bounceTime = 0.2f;

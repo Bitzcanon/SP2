@@ -336,6 +336,21 @@ int SP2_ChaseEnemyScene::countCoins()
 	return count;
 }
 
+int SP2_ChaseEnemyScene::randomCoins()
+{
+	while (true)
+	{
+		int i = rand() % 32;
+		if (!coin[i].hasAppeared())
+		{
+			coin[i].appears();
+			currentcoin = i;
+			return i;
+		}
+	}
+	return false;
+}
+
 void SP2_ChaseEnemyScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
@@ -344,6 +359,7 @@ void SP2_ChaseEnemyScene::Update(double dt)
 
 	if (timer <= 0)
 	{
+		sounds.playBGM(0);
 		Application::SceneSetter = 3;
 	}
 
@@ -452,6 +468,18 @@ void SP2_ChaseEnemyScene::Update(double dt)
 			coin[i].appears();
 			break;
 		}
+		/*if (currentcoin == i)
+		{
+			if (coin[i].hasAppeared() && !coin[i].CheckTaken())
+			{
+				break;
+			}
+			if (coin[i].hasAppeared() && coin[i].CheckTaken())
+			{
+				coin[randomCoins()].appears();
+				break;
+			}
+		}*/
 	}
 
 	coinrotation += (float)dt * 40.f;

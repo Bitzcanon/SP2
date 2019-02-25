@@ -17,7 +17,7 @@
 
 //Framework prepared by Winston
 
-int::Application::SceneSetter = 1;
+int::Application::SceneSetter = 0;
 bool::Application::resetScene = false;
 
 Application::Application()

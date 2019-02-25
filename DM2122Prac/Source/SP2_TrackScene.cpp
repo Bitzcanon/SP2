@@ -676,6 +676,7 @@ void SP2_TrackScene::Update(double dt)
 
 	if (Application::IsKeyPressed('M'))
 	{
+		music.playBGM(0);
 		Application::SceneSetter = 0;
 	}
 

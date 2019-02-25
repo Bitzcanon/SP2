@@ -136,12 +136,13 @@ private:
 	void RenderSkybox();
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
-
+	
 	void initBarrier();
 	void loadBarrierCoordinates();
 
 	void initCoins();
 	int countCoins();
+	int randomCoins();
 
 	string UpdateFrameRate(float string);
 
@@ -172,6 +173,7 @@ private:
 	float coinrotation;
 	bool goingup;
 	float coinup;
+	int currentcoin;
 
 	Music sounds;
 };
