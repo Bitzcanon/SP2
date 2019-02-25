@@ -476,15 +476,9 @@ void SP2_NPCScene::Update(double dt)
 	{
 		camera.position.z = -498.f;
 	}
-	else if (camera.position.y <= 0.f)
+	if (camera.position.y > 3.f)
 	{
-		camera.position.y = 1.f;
-		camera.target.y = 1.f;
-	}
-	else if (camera.position.y >= 699.f)
-	{
-		camera.position.y = 698.f;
-		camera.target.y = 0.f;
+		camera.position.y = 30.f;
 	}
 	
 	for (int i = 0; i < 2; i++)

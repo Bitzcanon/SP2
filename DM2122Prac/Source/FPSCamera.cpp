@@ -104,12 +104,6 @@ void FPSCamera::Update(double dt)
 	}
 
 	UpdateMouse();
-
-	/*if (position.y > 3.f)
-	{
-		position.y = 30.f;
-	}*/
-
 }
 
 Mtx44 FPSCamera::LookAt()

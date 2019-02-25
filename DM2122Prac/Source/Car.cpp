@@ -108,7 +108,7 @@ void Car::Update(double dt)
 
 	if (isInversedControlled == false)
 	{
-		if (Application::IsKeyPressed(VK_UP) && isDrivingBackward == false)
+		if (Application::IsKeyPressed('W') && isDrivingBackward == false)
 		{
 			if (playerInstance->getAccelerationUpgradeStatus() == true)
 			{
@@ -145,12 +145,12 @@ void Car::Update(double dt)
 		}
 		if (isDrivingForward)
 		{
-			if (!Application::IsKeyPressed(VK_UP))
+			if (!Application::IsKeyPressed('W'))
 			{
 				decelerateCar(dt);
 			}
 		}
-		if (Application::IsKeyPressed(VK_DOWN) && isDrivingForward == false)
+		if (Application::IsKeyPressed('S') && isDrivingForward == false)
 		{
 			if (playerInstance->getAccelerationUpgradeStatus() == true)
 			{
@@ -186,12 +186,12 @@ void Car::Update(double dt)
 		}
 		if (isDrivingBackward)
 		{
-			if (!Application::IsKeyPressed(VK_DOWN))
+			if (!Application::IsKeyPressed('S'))
 			{
 				decelerateCar(dt);
 			}
 		}
-		if (Application::IsKeyPressed(VK_RIGHT))
+		if (Application::IsKeyPressed('D'))
 		{
 			if (playerInstance->getSteerUpgradeStatus() == true)
 			{
@@ -209,7 +209,7 @@ void Car::Update(double dt)
 			}
 			speed *= 0.97f;
 		}
-		if (Application::IsKeyPressed(VK_LEFT))
+		if (Application::IsKeyPressed('A'))
 		{
 			if (playerInstance->getSteerUpgradeStatus() == true)
 			{
@@ -229,7 +229,7 @@ void Car::Update(double dt)
 
 	if (isInversedControlled == true)
 	{
-		if (Application::IsKeyPressed(VK_DOWN) && isDrivingBackward == false)
+		if (Application::IsKeyPressed('S') && isDrivingBackward == false)
 		{
 			if (playerInstance->getAccelerationUpgradeStatus() == true)
 			{
@@ -266,12 +266,12 @@ void Car::Update(double dt)
 		}
 		if (isDrivingForward)
 		{
-			if (!Application::IsKeyPressed(VK_DOWN))
+			if (!Application::IsKeyPressed('S'))
 			{
 				decelerateCar(dt);
 			}
 		}
-		if (Application::IsKeyPressed(VK_UP) && isDrivingForward == false)
+		if (Application::IsKeyPressed('W') && isDrivingForward == false)
 		{
 			if (playerInstance->getAccelerationUpgradeStatus() == true)
 			{
@@ -307,12 +307,12 @@ void Car::Update(double dt)
 		}
 		if (isDrivingBackward)
 		{
-			if (!Application::IsKeyPressed(VK_UP))
+			if (!Application::IsKeyPressed('W'))
 			{
 				decelerateCar(dt);
 			}
 		}
-		if (Application::IsKeyPressed(VK_LEFT))
+		if (Application::IsKeyPressed('A'))
 		{
 			if (playerInstance->getSteerUpgradeStatus() == true)
 			{
@@ -328,7 +328,7 @@ void Car::Update(double dt)
 			}
 			speed *= 0.97f;
 		}
-		if (Application::IsKeyPressed(VK_RIGHT))
+		if (Application::IsKeyPressed('D'))
 		{
 			if (playerInstance->getSteerUpgradeStatus() == true)
 			{
