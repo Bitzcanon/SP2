@@ -175,7 +175,6 @@
     <ClCompile Include="Source\SP2_ChaseEnemyScene.cpp" />
     <ClCompile Include="Source\SP2_MainMenuScene.cpp" />
     <ClCompile Include="Source\SP2_NPCScene.cpp" />
-    <ClCompile Include="Source\SP2_SurvivalScene.cpp" />
     <ClCompile Include="Source\SP2_TrackScene.cpp" />
     <ClCompile Include="Source\SP2_WinScene.cpp" />
     <ClCompile Include="Source\SpeedBuff.cpp" />
@@ -214,7 +213,6 @@
     <ClInclude Include="Source\SlowBuff.h" />
     <ClInclude Include="Source\SP2_MainMenuScene.h" />
     <ClInclude Include="Source\SP2_NPCScene.h" />
-    <ClInclude Include="Source\SP2_SurvivalScene.h" />
     <ClInclude Include="Source\SP2_TrackScene.h" />
     <ClInclude Include="Source\SP2_WinScene.h" />
     <ClInclude Include="Source\SpeedBuff.h" />
