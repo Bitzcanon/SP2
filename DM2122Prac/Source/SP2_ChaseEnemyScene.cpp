@@ -865,6 +865,7 @@ void SP2_ChaseEnemyScene::Render()
 
 void SP2_ChaseEnemyScene::Exit()
 {
+	playerInstance->setCoinCount(playerInstance->getCoinCount() + countCoins());
 	playerInstance->writeSave();
 	// Cleanup here
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
