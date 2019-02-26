@@ -150,10 +150,10 @@ void SP2_MainMenuScene::Init()
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
 
-	meshList[GEO_MENU] = MeshBuilder::GenerateQuad("Menu", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_MENU] = MeshBuilder::GenerateOBJ("DamageBuff", "OBJ//Quad2.obj");
 	meshList[GEO_MENU]->textureID = LoadTGA("Image//MainMenu.tga");
 
-	meshList[GEO_TITLE] = MeshBuilder::GenerateQuad("Title", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_TITLE] = MeshBuilder::GenerateOBJ("DamageBuff", "OBJ//Quad2.obj");
 	meshList[GEO_TITLE]->textureID = LoadTGA("Image//Title1.tga");
 
 	meshList[GEO_MODEL1] = MeshBuilder::GenerateOBJ("Model1", "OBJ//Kart2.obj");
@@ -269,7 +269,7 @@ void SP2_MainMenuScene::Update(double dt)
 						else if (arrowY == 0.1)
 						{
 							meshList[GEO_MENU]->textureID = LoadTGA("Image//Controls.tga");
-							arrowY = -0.4;
+							arrowY = 1;
 							isMenu = false;
 							isInstructions = true;
 						}
@@ -592,10 +592,9 @@ void SP2_MainMenuScene::Render()
 
 		modelStack.PushMatrix();
 		{
-
 			modelStack.Translate(-0.38f, (float)(arrowY), 0.1f);
-			modelStack.Rotate(270, 0, 1, 0);
 			modelStack.Scale(0.05f, 0.05f, 0.05f);
+			modelStack.Rotate(270, 0, 1, 0);
 			RenderMesh(meshList[GEO_ARROW], false);
 		}
 		modelStack.PopMatrix();

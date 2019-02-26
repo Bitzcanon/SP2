@@ -22,6 +22,7 @@ void MenuCamera::Update(double dt)
 	static const float CAMERA_SPEED = 50.f;
 	Vector3 view = (target - position).Normalized();
 	Vector3 right = view.Cross(up);
+	
 	if (Application::IsKeyPressed('R'))
 	{
 		Reset();
