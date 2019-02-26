@@ -578,7 +578,7 @@ void SP2_TrackScene::Init()
 	
 	displayUpgrades = true;
 
-	timer = 180.f;
+	timer = 137.f;
 }
 
 void SP2_TrackScene::Update(double dt)
@@ -802,6 +802,7 @@ void SP2_TrackScene::Update(double dt)
 		if (Checkpoints[i]->returnIsPassedThrough() == false)
 		{
 			isLapCompleted = false;
+			break;
 		}
 		else
 		{
@@ -1329,13 +1330,13 @@ void SP2_TrackScene::Render()
 			modelStack.Translate(Checkpoints[i]->returnxPos(), Checkpoints[i]->returnyPos(), Checkpoints[i]->returnzPos());
 			modelStack.Scale(checkpointScale, checkpointScale, checkpointScale);
 			modelStack.Rotate((float)(Checkpoints[i]->returnCheckpointRotation()), 0, 1, 0);
-			RenderMesh(meshList[GEO_CHECKPOINT], true);
+			RenderMesh(meshList[GEO_CHECKPOINT], false);
 
 			//Draw Checkpoint Propeller (Modelled and rendered by Winston)
 			modelStack.PushMatrix();
 			{
 				modelStack.Rotate(propellerRotation, 0, 1, 0);
-				RenderMesh(meshList[GEO_PROPELLERCHECKPOINT], true);
+				RenderMesh(meshList[GEO_PROPELLERCHECKPOINT], false);
 			}
 			modelStack.PopMatrix();
 		}

@@ -94,14 +94,6 @@ void FPSCamera::Update(double dt)
 	{
 		position -= front * FPSCamera_SPEED * (float)(dt);
 	}
-	if (Application::IsKeyPressed('Q'))
-	{
-		position += Vector3(0, 1, 0) * 0.75f;
-	}
-	if (Application::IsKeyPressed('E'))
-	{
-		position += Vector3(0, -1, 0) * 0.75f;
-	}
 
 	UpdateMouse();
 }
