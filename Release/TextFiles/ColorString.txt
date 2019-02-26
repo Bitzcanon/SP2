@@ -1,0 +1,5 @@
+Image//Colors//Red.tga
+Image//Colors//Orange.tga
+Image//Colors//Yellow.tga
+Image//Colors//Green.tga
+Image//Colors//Blue.tga
