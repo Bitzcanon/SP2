@@ -142,37 +142,11 @@ void SP2_CoinCollectionScene::Init()
 	m_parameters[U_LIGHT0_COSINNER] = glGetUniformLocation(m_programID, "lights[0].cosInner");
 	m_parameters[U_LIGHT0_EXPONENT] = glGetUniformLocation(m_programID, "lights[0].exponent");
 
-	m_parameters[U_LIGHT1_POSITION] = glGetUniformLocation(m_programID, "lights[1].position_cameraspace");
-	m_parameters[U_LIGHT1_COLOR] = glGetUniformLocation(m_programID, "lights[1].color");
-	m_parameters[U_LIGHT1_POWER] = glGetUniformLocation(m_programID, "lights[1].power");
-	m_parameters[U_LIGHT1_KC] = glGetUniformLocation(m_programID, "lights[1].kC");
-	m_parameters[U_LIGHT1_KL] = glGetUniformLocation(m_programID, "lights[1].kL");
-	m_parameters[U_LIGHT1_KQ] = glGetUniformLocation(m_programID, "lights[1].kQ");
-	m_parameters[U_LIGHT1_TYPE] = glGetUniformLocation(m_programID, "lights[1].type");
-	m_parameters[U_LIGHT1_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[1].spotDirection");
-	m_parameters[U_LIGHT1_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[1].cosCutoff");
-	m_parameters[U_LIGHT1_COSINNER] = glGetUniformLocation(m_programID, "lights[1].cosInner");
-	m_parameters[U_LIGHT1_EXPONENT] = glGetUniformLocation(m_programID, "lights[1].exponent");
-
-	m_parameters[U_LIGHT2_POSITION] = glGetUniformLocation(m_programID, "lights[2].position_cameraspace");
-	m_parameters[U_LIGHT2_COLOR] = glGetUniformLocation(m_programID, "lights[2].color");
-	m_parameters[U_LIGHT2_POWER] = glGetUniformLocation(m_programID, "lights[2].power");
-	m_parameters[U_LIGHT2_KC] = glGetUniformLocation(m_programID, "lights[2].kC");
-	m_parameters[U_LIGHT2_KL] = glGetUniformLocation(m_programID, "lights[2].kL");
-	m_parameters[U_LIGHT2_KQ] = glGetUniformLocation(m_programID, "lights[2].kQ");
-	m_parameters[U_LIGHT2_TYPE] = glGetUniformLocation(m_programID, "lights[2].type");
-	m_parameters[U_LIGHT2_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[2].spotDirection");
-	m_parameters[U_LIGHT2_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[2].cosCutoff");
-	m_parameters[U_LIGHT2_COSINNER] = glGetUniformLocation(m_programID, "lights[2].cosInner");
-	m_parameters[U_LIGHT2_EXPONENT] = glGetUniformLocation(m_programID, "lights[2].exponent");
-
-
 	//Use our shader
 	glUseProgram(m_programID);
 
 	//Initialise initial Camera position
-	camera.Init(Vector3(0, 20, 1), Vector3(0, 20, 0), Vector3(0, 1, 0)); //For Camera3
-	//camera.Init(Vector3(0, 20, 0)); //For FPS Camera (Only for NPCScene, testing in TrackScene
+	camera.Init(Vector3(0, 20, 1), Vector3(0, 20, 0), Vector3(0, 1, 0));
 
 	//Light parameters
 	//Lower floor lighting
@@ -199,26 +173,7 @@ void SP2_CoinCollectionScene::Init()
 	glUniform1f(m_parameters[U_LIGHT0_COSINNER], light[0].cosInner);
 	glUniform1f(m_parameters[U_LIGHT0_EXPONENT], light[0].exponent);
 
-	glUniform1i(m_parameters[U_LIGHT1_TYPE], light[1].type);
-	glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1, &light[1].color.r);
-	glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
-	glUniform1f(m_parameters[U_LIGHT1_KC], light[1].kC);
-	glUniform1f(m_parameters[U_LIGHT1_KL], light[1].kL);
-	glUniform1f(m_parameters[U_LIGHT1_KQ], light[1].kQ);
-	glUniform1f(m_parameters[U_LIGHT1_COSCUTOFF], light[1].cosCutoff);
-	glUniform1f(m_parameters[U_LIGHT1_COSINNER], light[1].cosInner);
-	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
-
-	glUniform1i(m_parameters[U_LIGHT2_TYPE], light[2].type);
-	glUniform3fv(m_parameters[U_LIGHT2_COLOR], 1, &light[2].color.r);
-	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
-	glUniform1f(m_parameters[U_LIGHT2_KC], light[2].kC);
-	glUniform1f(m_parameters[U_LIGHT2_KL], light[2].kL);
-	glUniform1f(m_parameters[U_LIGHT2_KQ], light[2].kQ);
-	glUniform1f(m_parameters[U_LIGHT2_COSCUTOFF], light[2].cosCutoff);
-	glUniform1f(m_parameters[U_LIGHT2_COSINNER], light[2].cosInner);
-	glUniform1f(m_parameters[U_LIGHT2_EXPONENT], light[2].exponent);
-	glUniform1i(m_parameters[U_NUMLIGHTS], 3); //This value is the number of lights in the scene
+	glUniform1i(m_parameters[U_NUMLIGHTS], 1); //This value is the number of lights in the scene
 
 	//Initialise all meshes to NULL
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
@@ -343,7 +298,6 @@ int SP2_CoinCollectionScene::countCoins()
 	return count;
 }
 
-
 void SP2_CoinCollectionScene::Update(double dt)
 {
 	FPS = 1.f / (float)dt;
@@ -352,7 +306,6 @@ void SP2_CoinCollectionScene::Update(double dt)
 
 	if (timer <= 0)
 	{
-		sounds.playBGM(0);
 		Application::SceneSetter = 3;
 	}
 
@@ -528,7 +481,7 @@ bool SP2_CoinCollectionScene::CollisionChecker(int type, int index, float objX, 
 	float maximumXObj = NULL;
 	float maximumZObj = NULL;
 
-	switch (type) //1 == MazeTile, 2 == AI Car
+	switch (type) //1 == MazeTile
 	{
 	case 1:
 	{
@@ -536,10 +489,12 @@ bool SP2_CoinCollectionScene::CollisionChecker(int type, int index, float objX, 
 		maximumZObj = objZ / (Vehicle.returnCarScale() / 4) + width;
 		break;
 	}
-	/*case 2:
+	default:
 	{
-		
-	}*/
+		maximumXObj = objX / (Vehicle.returnCarScale() / 4) + length;
+		maximumZObj = objZ / (Vehicle.returnCarScale() / 4) + width;
+		break;
+	}
 	}
 
 	//tmp var for car pos
@@ -561,7 +516,10 @@ bool SP2_CoinCollectionScene::CollisionChecker(int type, int index, float objX, 
 	}
 	else
 	{
-		cout << "Collide" << endl;
+		if (DEBUG)
+		{
+			cout << "Collide" << endl;
+		}
 		return true;
 	}
 }
@@ -773,9 +731,7 @@ void SP2_CoinCollectionScene::Render()
 
 	//Define the view/ camera lookat and load the view matrix
 	viewStack.LoadIdentity();
-	//viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z, camera.target.x, camera.target.y, camera.target.z, camera.up.x, camera.up.y, camera.up.z);
-	//viewStack.LookAt(cameraPosX, cameraPosY, cameraPosZ, cameraTargetX, cameraTargetY, cameraTargetZ, 0, 1, 0); //Switch to this once all implementations are done
-	viewStack.LookAt(cameraPos.x, cameraPos.y, cameraPos.z, cameraTarget.x, cameraTarget.y, cameraTarget.z, 0, 1, 0); //Switch to this once all implementations are done
+	viewStack.LookAt(cameraPos.x, cameraPos.y, cameraPos.z, cameraTarget.x, cameraTarget.y, cameraTarget.z, 0, 1, 0);
 
 	modelStack.LoadIdentity();
 	if (light[0].type == Light::LIGHT_DIRECTIONAL)
@@ -783,14 +739,6 @@ void SP2_CoinCollectionScene::Render()
 		Vector3 lightDir(light[0].position.x, light[0].position.y, light[0].position.z);
 		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
 		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightDirection_cameraspace.x);
-
-		lightDir.Set(light[1].position.x, light[1].position.y, light[1].position.z);
-		lightDirection_cameraspace = viewStack.Top() * lightDir;
-		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightDirection_cameraspace.x);
-
-		lightDir.Set(light[2].position.x, light[2].position.y, light[2].position.z);
-		lightDirection_cameraspace = viewStack.Top() * lightDir;
-		glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightDirection_cameraspace.x);
 	}
 	else if (light[0].type == Light::LIGHT_SPOT)
 	{
@@ -798,27 +746,11 @@ void SP2_CoinCollectionScene::Render()
 		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
 		Vector3 spotDirection_cameraspace = viewStack.Top() * light[0].spotDirection;
 		glUniform3fv(m_parameters[U_LIGHT0_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
-
-		lightPosition_cameraspace = viewStack.Top() * light[1].position;
-		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
-		spotDirection_cameraspace = viewStack.Top() * light[1].spotDirection;
-		glUniform3fv(m_parameters[U_LIGHT1_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
-
-		lightPosition_cameraspace = viewStack.Top() * light[2].position;
-		glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightPosition_cameraspace.x);
-		spotDirection_cameraspace = viewStack.Top() * light[2].spotDirection;
-		glUniform3fv(m_parameters[U_LIGHT2_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
 	}
 	else
 	{
 		Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
 		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
-
-		lightPosition_cameraspace = viewStack.Top() * light[1].position;
-		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
-
-		lightPosition_cameraspace = viewStack.Top() * light[2].position;
-		glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
 	//Draw Axes (For debugging purposes)
@@ -844,10 +776,11 @@ void SP2_CoinCollectionScene::Render()
 	for (size_t i = 0; i < BarrierList.size() / MAZETILEROWCOUNT; i++)
 	{
 		modelStack.PushMatrix();
-
-		modelStack.Translate(Barriers[i]->returnxPos(), Barriers[i]->returnyPos(), Barriers[i]->returnzPos());
-		modelStack.Scale(Vehicle.returnCarScale() / 4, Vehicle.returnCarScale() / 4, Vehicle.returnCarScale() / 4);
-		RenderMesh(meshList[GEO_MAZETILE], true); //set lighting to true once completed
+		{
+			modelStack.Translate(Barriers[i]->returnxPos(), Barriers[i]->returnyPos(), Barriers[i]->returnzPos());
+			modelStack.Scale(Vehicle.returnCarScale() / 4, Vehicle.returnCarScale() / 4, Vehicle.returnCarScale() / 4);
+			RenderMesh(meshList[GEO_MAZETILE], true);
+		}
 		modelStack.PopMatrix();
 	}
 
@@ -857,10 +790,12 @@ void SP2_CoinCollectionScene::Render()
 		if (!coin[i].CheckTaken() && coin[i].hasAppeared())
 		{
 			modelStack.PushMatrix();
-			modelStack.Translate(coin[i].getX(), coinup, coin[i].getZ());
-			modelStack.Scale(5.f, 5.f, 5.f);
-			modelStack.Rotate(coinrotation, 0.f, 1.0f, 0.f);
-			RenderMesh(meshList[GEO_COINS], true);
+			{
+				modelStack.Translate(coin[i].getX(), coinup, coin[i].getZ());
+				modelStack.Scale(5.f, 5.f, 5.f);
+				modelStack.Rotate(coinrotation, 0.f, 1.0f, 0.f);
+				RenderMesh(meshList[GEO_COINS], true);
+			}
 			modelStack.PopMatrix();
 		}
 	}

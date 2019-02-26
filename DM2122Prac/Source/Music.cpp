@@ -16,9 +16,6 @@ void Music::playBGM(int i)
 	{
 	case 0:
 		PlaySound(TEXT("Sounds//Silhouette.wav"), NULL, SND_FILENAME | SND_ASYNC);
-		break;	
-	case 1:
-		PlaySound(TEXT("Sounds//Snow Halation.wav"), NULL, SND_FILENAME | SND_ASYNC);
 		break;
 	}
 }
@@ -50,9 +47,6 @@ void  Music::playInstantSound(int i)
 		break;
 	case 7:
 		PlaySound(TEXT("Sounds//WinSound.wav"), NULL, SND_FILENAME | SND_ASYNC);
-		break;
-	case 8:
-		PlaySound(TEXT("Sounds//Villager.wav"), NULL, SND_FILENAME | SND_ASYNC);
 		break;
 	}
 }
