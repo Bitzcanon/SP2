@@ -146,6 +146,7 @@ private:
 	bool steerUpgradeLive;
 
 	bool doMenu;
+	Music music;
 };
 
 #endif // ! SP2_NPCScene_H

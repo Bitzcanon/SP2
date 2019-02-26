@@ -111,9 +111,6 @@
     <ClCompile Include="Source\SP2_WinScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Source.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\WinCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

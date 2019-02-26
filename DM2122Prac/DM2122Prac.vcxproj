@@ -171,7 +171,6 @@
     <ClCompile Include="Source\Save.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SlowBuff.cpp" />
-    <ClCompile Include="Source\Source.cpp" />
     <ClCompile Include="Source\SP2_CoinCollectionScene.cpp" />
     <ClCompile Include="Source\SP2_MainMenuScene.cpp" />
     <ClCompile Include="Source\SP2_NPCScene.cpp" />

@@ -453,7 +453,7 @@ void SP2_TrackScene::Init()
 	light[0].type = Light::LIGHT_DIRECTIONAL;
 	light[0].position.Set(998, 998, -998);
 	light[0].color.Set(1, 1, 1);
-	light[0].power = 3.f;
+	light[0].power = 1.f;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
@@ -578,7 +578,7 @@ void SP2_TrackScene::Init()
 	
 	displayUpgrades = true;
 
-	timer = 180.f;
+	timer = 137.f;
 }
 
 void SP2_TrackScene::Update(double dt)
@@ -624,6 +624,7 @@ void SP2_TrackScene::Update(double dt)
 
 	if (Application::IsKeyPressed('M'))
 	{
+		music.playBGM(0);
 		Application::SceneSetter = 0;
 	}
 
@@ -801,6 +802,7 @@ void SP2_TrackScene::Update(double dt)
 		if (Checkpoints[i]->returnIsPassedThrough() == false)
 		{
 			isLapCompleted = false;
+			break;
 		}
 		else
 		{
@@ -1328,13 +1330,13 @@ void SP2_TrackScene::Render()
 			modelStack.Translate(Checkpoints[i]->returnxPos(), Checkpoints[i]->returnyPos(), Checkpoints[i]->returnzPos());
 			modelStack.Scale(checkpointScale, checkpointScale, checkpointScale);
 			modelStack.Rotate((float)(Checkpoints[i]->returnCheckpointRotation()), 0, 1, 0);
-			RenderMesh(meshList[GEO_CHECKPOINT], true);
+			RenderMesh(meshList[GEO_CHECKPOINT], false);
 
 			//Draw Checkpoint Propeller (Modelled and rendered by Winston)
 			modelStack.PushMatrix();
 			{
 				modelStack.Rotate(propellerRotation, 0, 1, 0);
-				RenderMesh(meshList[GEO_PROPELLERCHECKPOINT], true);
+				RenderMesh(meshList[GEO_PROPELLERCHECKPOINT], false);
 			}
 			modelStack.PopMatrix();
 		}
@@ -1406,19 +1408,23 @@ void SP2_TrackScene::Render()
 			int countdown = static_cast<int>(ResetTimer);
 			if (ResetTimer > 0)
 			{
-				RenderTextOnScreen(meshList[GEO_TEXT], to_string(countdown), Color(1, 1, 1), 3, 25, 20);
+				//death counter
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(countdown), Color(1, 0, 0), 4, 40, 40);
 			}
 
 			if (SpeedBuff::timer > 0)
 			{
+				//speedBuff timer
 				RenderTextOnScreen(meshList[GEO_TEXT], to_string(SpeedBuff::timer), Color(1, 1, 0), 1, -1, 0);
 			}
 			if (SlowBuff::timer > 0)
 			{
+				//slowBuff timer
 				RenderTextOnScreen(meshList[GEO_TEXT], to_string(SlowBuff::timer), Color(1, 1, 0), 1, -1, 2);
 			}
 			if (ReverseBuff::timer > 0)
 			{
+				//reverseBuff timer
 				RenderTextOnScreen(meshList[GEO_TEXT], to_string(ReverseBuff::timer), Color(1, 1, 0), 1, -1, 4);
 			}
 		}
