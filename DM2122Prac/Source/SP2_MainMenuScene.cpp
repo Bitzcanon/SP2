@@ -164,9 +164,11 @@ void SP2_MainMenuScene::Init()
 
 	meshList[GEO_ARROW] = MeshBuilder::GenerateOBJ("Arrow", "OBJ//Arrow.obj");
 
-	meshList[GEO_BACKGROUND] = MeshBuilder::GenerateQuad("Background", Color(0, 0, 0), 1.f, 1.f); // black background
+	meshList[GEO_BACKGROUND] = MeshBuilder::GenerateOBJ("DamageBuff", "OBJ//Quad2.obj");
+	meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image//Colors//Black.tga");
 
-	meshList[GEO_TITLEBACKGROUND] = MeshBuilder::GenerateQuad("Background", Color(1, 1, 1), 1.f, 1.f); // white background
+	meshList[GEO_TITLEBACKGROUND] = MeshBuilder::GenerateOBJ("DamageBuff", "OBJ//Quad2.obj");
+	meshList[GEO_TITLEBACKGROUND]->textureID = LoadTGA("Image//Colors//White.tga");
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
