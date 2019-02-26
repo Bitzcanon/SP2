@@ -206,6 +206,7 @@ void SP2_NPCScene::Init()
 	NPCs[6].setCoordsNPC(-61.f, 38.f);
 	GarageDoorY = 6.685f; GarageDoorRotate = 0.f; GarageOpen = false;
 	//coins[0].SetCoinCoords(10.f, 50.f); coins[1].SetCoinCoords(100.f, 90.f);
+	interact = false;
 
 	healthUpgradeLive = playerInstance->getHealthUpgradeStatus();
 	speedUpgradeLive = playerInstance->getMaxSpeedUpgradeStatus();
@@ -236,10 +237,11 @@ void SP2_NPCScene::Update(double dt)
 	// just to test , remove later
 	if (Application::IsKeyPressed('M'))
 	{
+		music.playBGM(0);
 		Application::SceneSetter = 0;
 	}
 
-	if (GarageOpen)
+	if (GarageOpen && interact)
 	{
 		if (Application::IsKeyPressed(VK_RIGHT))
 		{
@@ -428,9 +430,14 @@ void SP2_NPCScene::Update(double dt)
 		NPCs[i].MoveNPC(dt, i);
 	}
 
-	if (Application::IsKeyPressed('E') && CloseToNPC() && !interact)
+	if (Application::IsKeyPressed('E') && CloseToNPC() && !interact && bounceTime <= 0.f)
 	{
 		interact = true;
+		bounceTime = 0.2f;
+	}
+	if (Application::IsKeyPressed('E') && CloseToNPC() && interact && bounceTime <= 0.f)
+	{
+		interact = false;
 		bounceTime = 0.2f;
 	}
 
@@ -972,6 +979,14 @@ void SP2_NPCScene::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Press R to exit interaction with NPC", Color(1, 1, 0), 1, -1, 10);
 		}
 	}
+
+	if (interact)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press the UP key to change car's colour", Color(1, 1, 0), 1, -1, 12);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press the down key to change car's wheels", Color(1, 1, 0), 1, -1, 14);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press the right key to change car's frame", Color(1, 1, 0), 1, -1, 16);
+	}
+
 	if (CloseToDoor() && !GarageOpen)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to open garage door", Color(1, 1, 0), 1, -1, 10);
