@@ -453,7 +453,7 @@ void SP2_TrackScene::Init()
 	light[0].type = Light::LIGHT_DIRECTIONAL;
 	light[0].position.Set(998, 998, -998);
 	light[0].color.Set(1, 1, 1);
-	light[0].power = 1.f;
+	light[0].power = 2.f;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
