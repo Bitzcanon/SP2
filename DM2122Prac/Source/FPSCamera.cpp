@@ -74,7 +74,7 @@ void FPSCamera::UpdateMouse()
 void FPSCamera::Update(double dt)
 {
 
-	static const float FPSCamera_SPEED = 50.f;
+	static const float FPSCamera_SPEED = 100.f;
 
 	Vector3 right = front.Cross(up).Normalize();
 	

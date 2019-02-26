@@ -3,7 +3,7 @@
 
 //Done by Winston
 
-constexpr auto DEBUG = 0;
+constexpr auto DEBUG = 1;
 
 constexpr auto CAMERABOUNDSORIGINAL = 4998.f;
 constexpr auto CAMERABOUNDSCHASE = 248.f;

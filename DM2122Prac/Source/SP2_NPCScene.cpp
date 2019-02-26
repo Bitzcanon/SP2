@@ -128,17 +128,17 @@ void SP2_NPCScene::Init()
 		meshList[i] = NULL;
 	}
 	//Skyboxes: http://www.custommapmakers.org/skyboxes.php
-	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_LEFT] = MeshBuilder::GenerateOBJ("LEFT", "OBJ//Quad.obj");
 	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
-	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("RIGHT", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_RIGHT] = MeshBuilder::GenerateOBJ("RIGHT", "OBJ//Quad.obj");
 	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
-	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("TOP", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_TOP] = MeshBuilder::GenerateOBJ("TOP", "OBJ//Quad.obj");
 	meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
-	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("BOTTOM", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_BOTTOM] = MeshBuilder::GenerateOBJ("BOTTOM", "OBJ//Quad.obj");
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
-	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("FRONT", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_FRONT] = MeshBuilder::GenerateOBJ("FRONT", "OBJ//Quad.obj");
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
-	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_BACK] = MeshBuilder::GenerateOBJ("BACK", "OBJ//Quad.obj");
 	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
