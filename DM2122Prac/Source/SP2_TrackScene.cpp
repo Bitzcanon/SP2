@@ -447,8 +447,7 @@ void SP2_TrackScene::Init()
 	glUseProgram(m_programID);
 
 	//Initialise initial Camera position
-	//camera.Init(Vector3(0, 20, 1), Vector3(0, 20, 0), Vector3(0, 1, 0));
-	camera.Init(Vector3(0, 30, 1));
+	camera.Init(Vector3(0, 20, 1), Vector3(0, 20, 0), Vector3(0, 1, 0));
 
 	//Light parameters
 	light[0].type = Light::LIGHT_DIRECTIONAL;
@@ -578,7 +577,7 @@ void SP2_TrackScene::Init()
 	
 	displayUpgrades = true;
 
-	timer = 137.f;
+	timer = 143.f;
 }
 
 void SP2_TrackScene::Update(double dt)
@@ -1175,8 +1174,7 @@ void SP2_TrackScene::Render()
 
 	//Define the view/ camera lookat and load the view matrix
 	viewStack.LoadIdentity();
-	//viewStack.LookAt(cameraPos.x, cameraPos.y, cameraPos.z, cameraTarget.x, cameraTarget.y, cameraTarget.z, 0, 1, 0);
-	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z, camera.target.x, camera.target.y, camera.target.z, camera.up.x, camera.up.y, camera.up.z);
+	viewStack.LookAt(cameraPos.x, cameraPos.y, cameraPos.z, cameraTarget.x, cameraTarget.y, cameraTarget.z, 0, 1, 0);
 
 	modelStack.LoadIdentity();
 	if (light[0].type == Light::LIGHT_DIRECTIONAL)

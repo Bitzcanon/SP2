@@ -121,8 +121,7 @@ private:
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
 
-	//Camera3 camera;
-	FPSCamera camera;
+	Camera3 camera;
 	MS modelStack, viewStack, projectionStack;
 	Light light[1]; //array size is the number of light sources in the scene
 
