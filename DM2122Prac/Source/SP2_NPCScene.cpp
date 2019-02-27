@@ -966,7 +966,7 @@ void SP2_NPCScene::Render()
 
 	if (CloseToNPC())
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press E to build car", Color(1, 1, 0), 1, -1, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press E to build car", Color(0, 0, 1), 1, -1, 10);
 	}
 	if (NPCs[0].CloseToNPC(camera.position.x, camera.position.z) || NPCs[1].CloseToNPC(camera.position.x, camera.position.z))
 	{
@@ -982,9 +982,9 @@ void SP2_NPCScene::Render()
 
 	if (interact && CloseToNPC())
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press the right key to change car's colour", Color(1, 1, 0), 1, -1, 12);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press the down key to change car's wheels", Color(1, 1, 0), 1, -1, 14);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press the up key to change car's frame", Color(1, 1, 0), 1, -1, 16);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press the right key to change car's colour", Color(0, 0, 1), 1, -1, 12);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press the down key to change car's wheels", Color(0, 0, 1), 1, -1, 14);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press the up key to change car's frame", Color(0, 0, 1), 1, -1, 16);
 	}
 
 	if (CloseToDoor() && !GarageOpen)
