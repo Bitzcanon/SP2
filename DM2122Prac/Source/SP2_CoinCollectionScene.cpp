@@ -753,7 +753,10 @@ void SP2_CoinCollectionScene::Render()
 	}
 
 	//Draw Axes (For debugging purposes)
-	RenderMesh(meshList[GEO_AXES], false);
+	if (DEBUG)
+	{
+		RenderMesh(meshList[GEO_AXES], false);
+	}
 
 	//Draw Test Car (Modelled by Gary, rendered by Winston)
 	modelStack.PushMatrix();

@@ -199,7 +199,7 @@ void SP2_MainMenuScene::Update(double dt)
 		transitionTime += (float)(1 * dt);
 	}
 
-	if (transitionTime < 6)
+	if (transitionTime < 7.5f)
 	{
 		if (transitionTime < 2 && transition[0] == false)
 		{
@@ -227,7 +227,7 @@ void SP2_MainMenuScene::Update(double dt)
 		camera.position.z -= (float)(100 * dt);
 	}
 
-	if (transitionTime > 7)
+	if (transitionTime > 8)
 	{
 		if (Application::IsKeyPressed(VK_UP))
 		{
