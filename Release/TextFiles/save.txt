@@ -1,4 +1,4 @@
-0
+12
 0
 0
 0
@@ -6,4 +6,4 @@
 0
 OBJ//Kart2.obj
 OBJ//Wheels2.obj
-Image//Colors//Orange.tga
+Image//Colors//Blue.tga
