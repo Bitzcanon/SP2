@@ -72,7 +72,6 @@ private:
 		GEO_PROPELLERFINISH,
 		GEO_CHECKPOINT,
 		GEO_PROPELLERCHECKPOINT,
-		GEO_TESTCAR,
 
 		GEO_TESTTRACK,
 
@@ -114,9 +113,6 @@ private:
 	string UpdateFrameRate(float string);
 
 	float FPS;
-
-	bool conditionTester;
-
 
 	float ResetTimer;
 

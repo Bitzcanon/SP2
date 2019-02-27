@@ -82,10 +82,7 @@ private:
 		GEO_PROPELLERFINISH,
 		GEO_CHECKPOINT,
 		GEO_PROPELLERCHECKPOINT,
-		GEO_TESTCAR,
 
-		GEO_TESTTRACK,
-		
 		GEO_TREE,
 
 		GEO_KART,
@@ -184,7 +181,6 @@ private:
 
 	float timer;
 
-	bool tmpBool;
 	bool isLapCompleted;
 	int lapCount;
 	bool isWon;

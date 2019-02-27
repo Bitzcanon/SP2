@@ -71,8 +71,6 @@ private:
 		GEO_FRONT,
 		GEO_BACK,
 
-		GEO_TESTCAR,
-
 		GEO_KART,
 		GEO_WHEELS,
 		GEO_COLOR,

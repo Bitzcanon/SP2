@@ -33,11 +33,6 @@ void SP2_MainMenuScene::Init()
 	
 	transitionTime = 0;
 
-	tmpx = 0;
-	tmpy = 0;
-	tmpz = 0;
-
-	tmpAngle = 25;
 	//Set background color to dark blue (Before this are initialized variables, after is the rest)
 	glClearColor(0.0f, 0.0f, 0.3f, 0.0f);
 
@@ -229,23 +224,6 @@ void SP2_MainMenuScene::Update(double dt)
 
 	if (transitionTime > 8)
 	{
-		if (Application::IsKeyPressed(VK_UP))
-		{
-			tmpy += (float)(1 * dt);
-		}
-		else if (Application::IsKeyPressed(VK_LEFT))
-		{
-			tmpz -= (float)(1 * dt);
-		}
-		else if (Application::IsKeyPressed(VK_DOWN))
-		{
-			tmpy -= (float)(1 * dt);
-		}
-		else if (Application::IsKeyPressed(VK_RIGHT))
-		{
-			tmpz += (float)(1 * dt);
-		}
-
 		if (Application::IsKeyPressed(VK_RETURN))
 		{
 			

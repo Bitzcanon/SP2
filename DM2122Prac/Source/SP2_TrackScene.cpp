@@ -381,8 +381,6 @@ void SP2_TrackScene::Init()
 	//Loads Checkpoint coordinates
 	initCheckpoint();
 
-	tmpBool = false;
-
 	bounceTime = 0;
 	conditionTester = false;
 
@@ -500,9 +498,6 @@ void SP2_TrackScene::Init()
 	meshList[GEO_PROMPT] = MeshBuilder::GenerateText("prompt", 16, 16);
 	meshList[GEO_PROMPT]->textureID = LoadTGA("Image//calibri.tga");
 
-	//remove later
-	meshList[GEO_TESTCAR] = MeshBuilder::GenerateCube("Car", Color(0, 1, 0), 5, 1, 1);
-
 	//Default init for kart
 	meshList[GEO_KART] = MeshBuilder::GenerateOBJ("Car", playerInstance->returnKart());
 	meshList[GEO_KART]->textureID = LoadTGA(playerInstance->returnColor().c_str());
@@ -541,10 +536,6 @@ void SP2_TrackScene::Init()
 	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//Plant.obj");
 	meshList[GEO_TREE]->textureID = LoadTGA("Image//Plant.tga");
 
-
-	meshList[GEO_TESTTRACK] = MeshBuilder::GenerateOBJ("TestTrack", "OBJ//TestTrack.obj");
-
-	//
 	meshList[GEO_ROADBLOCK] = MeshBuilder::GenerateOBJ("RoadBlock", "OBJ//RoadBlock.obj");
 
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);

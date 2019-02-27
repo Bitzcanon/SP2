@@ -72,7 +72,6 @@ private:
 		GEO_TITLE,
 
 		GEO_MODEL1,
-		GEO_MODEL2,
 		GEO_WHEELS,
 
 		NUM_GEOMETRY,
@@ -114,11 +113,6 @@ private:
 	bool transition[4];
 	float rotateAngle;
 
-	float tmpAngle; //remove later
-	float tmpx;
-	float tmpy;
-	float tmpz;
-	
 	Player * playerInstance;
 
 	float transitionTime;
