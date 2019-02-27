@@ -26,7 +26,7 @@ void SP2_MainMenuScene::Init()
 	isInstructions = false;
 	rotateAngle = 0;
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		transition[i] = false;
 	}
@@ -211,7 +211,12 @@ void SP2_MainMenuScene::Update(double dt)
 			transition[1] = true;
 			meshList[GEO_TITLE]->textureID = LoadTGA("Image//Title2.tga");
 		}
-		if (transitionTime < 6 && transitionTime > 4 && transition[2] == false)
+		if (transitionTime < 5 && transitionTime > 4 && transition[2] == false)
+		{
+			transition[2] = true;
+			meshList[GEO_TITLE]->textureID = LoadTGA("Image//Title4.tga");
+		}
+		if (transitionTime < 6 && transitionTime > 5 && transition[3] == false)
 		{
 			transition[2] = true;
 			meshList[GEO_TITLE]->textureID = LoadTGA("Image//Title3.tga");

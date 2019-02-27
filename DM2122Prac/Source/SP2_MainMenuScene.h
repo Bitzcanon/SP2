@@ -111,7 +111,7 @@ private:
 	bool isMenu;
 	bool isInstructions;
 
-	bool transition[3];
+	bool transition[4];
 	float rotateAngle;
 
 	float tmpAngle; //remove later
